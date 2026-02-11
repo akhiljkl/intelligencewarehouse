@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligence Warehouse | The Foundation AI Agents Need</title>
+    <meta name="description" content="Data warehouses solved data fragmentation. Intelligence Warehouse solves context fragmentation. The foundational infrastructure layer where AI agents query understanding, not just data.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">
+                <div class="logo-mark">
+                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                        <rect x="2" y="8" width="28" height="4" rx="1" fill="white" opacity="0.9"/>
+                        <rect x="5" y="15" width="22" height="4" rx="1" fill="white" opacity="0.6"/>
+                        <rect x="8" y="22" width="16" height="4" rx="1" fill="white" opacity="0.3"/>
+                    </svg>
+                </div>
+                <span class="logo-text">Intelligence Warehouse</span>
+            </a>
+            <div class="nav-links">
+                <a href="#thesis">Thesis</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#platform">Platform</a>
+                <a href="#domains">Domains</a>
+                <a href="#team">Team</a>
+                <a href="#partners">Partners</a>
+            </div>
+            <div class="nav-actions">
+                <a href="#contact" class="btn btn-ghost">Contact</a>
+                <a href="#contact" class="btn btn-primary">Request Demo</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#thesis">Thesis</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#platform">Platform</a>
+        <a href="#domains">Domains</a>
+        <a href="#team">Team</a>
+        <a href="#partners">Partners</a>
+        <a href="#contact" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Request Demo</a>
+    </div>
+
+    <!-- ============================== -->
+    <!-- HERO: Bold Dark Landing -->
+    <!-- ============================== -->
+    <section class="hero" id="hero">
+        <div class="hero-glow hero-glow-1"></div>
+        <div class="hero-glow hero-glow-2"></div>
+        <div class="hero-glow hero-glow-3"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-bg">
+            <canvas id="heroCanvas"></canvas>
+        </div>
+        <div class="hero-content">
+            <div class="hero-eyebrow">
+                <span class="eyebrow-dot"></span>
+                Foundational AI Infrastructure
+            </div>
+            <h1 class="hero-title">
+                Intelligence<br>Warehouse
+            </h1>
+            <p class="hero-subtitle">
+                Data warehouses solved data fragmentation.<br>
+                We solve <em>context fragmentation</em>&thinsp;&mdash;&thinsp;the structured<br>
+                layer where AI agents query understanding, not just data.
+            </p>
+            <div class="hero-actions">
+                <a href="#contact" class="btn btn-hero-primary btn-lg">
+                    Request a Demo
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                </a>
+                <a href="#ontology" class="btn btn-hero-outline btn-lg">
+                    Explore the Graph
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+                </a>
+            </div>
+            <div class="hero-trust">
+                <span class="hero-trust-label">Built for</span>
+                <div class="hero-trust-items">
+                    <span>Enterprise AI</span>
+                    <span class="trust-sep"></span>
+                    <span>Decision Intelligence</span>
+                    <span class="trust-sep"></span>
+                    <span>Agentic Workflows</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual" id="heroVisual">
+            <canvas id="heroGraphCanvas"></canvas>
+            <div class="hero-visual-label" id="heroVisualLabel">
+                <span class="hvl-dot"></span>
+                <span class="hvl-text">Fragmented Data</span>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- ============================== -->
+    <!-- KNOWLEDGE GRAPH: Full-Width Interactive Section -->
+    <!-- ============================== -->
+    <section class="graph-section" id="ontology">
+        <div class="graph-section-header">
+            <div class="section-label">THE INTELLIGENCE WAREHOUSE</div>
+            <h2 class="section-title">The Intelligence Graph</h2>
+            <p class="section-desc" style="max-width:720px;margin:0 auto 0;">
+                Context, decisions, ontology, and metrics&thinsp;&mdash;&thinsp;unified into a single traversable graph. That&rsquo;s the Intelligence Warehouse. Click any node to inspect.
+            </p>
+        </div>
+
+        <div class="graph-container">
+            <!-- The graph canvas -->
+            <canvas id="ontologyCanvas"></canvas>
+
+            <!-- Floating legend bar -->
+            <div class="graph-legend" id="graphLegend">
+                <div class="legend-items">
+                    <button class="legend-chip active" data-layer="all"><span class="legend-dot" style="background:#6366f1;"></span> All</button>
+                    <button class="legend-chip" data-layer="supply-chain"><span class="legend-dot" style="background:#3b82f6;"></span> Supply Chain</button>
+                    <button class="legend-chip" data-layer="sales"><span class="legend-dot" style="background:#10b981;"></span> Sales</button>
+                    <button class="legend-chip" data-layer="pricing"><span class="legend-dot" style="background:#8b5cf6;"></span> Pricing</button>
+                    <button class="legend-chip" data-layer="marketing"><span class="legend-dot" style="background:#f59e0b;"></span> Marketing</button>
+                    <button class="legend-chip" data-layer="assortment"><span class="legend-dot" style="background:#ef4444;"></span> Assortment</button>
+                    <button class="legend-chip" data-layer="metrics"><span class="legend-dot legend-dot-ring" style="border-color:#14b8a6;"></span> Metrics</button>
+                    <button class="legend-chip" data-layer="decisions"><span class="legend-dot legend-dot-triangle"></span> Decisions</button>
+                </div>
+            </div>
+
+            <!-- Node Detail Panel (right sidebar - appears on node click) -->
+            <div class="node-detail-panel" id="nodeDetailPanel">
+                <button class="ndp-close" id="ndpClose">&times;</button>
+                <div class="ndp-header">
+                    <div class="ndp-icon" id="ndpIcon"></div>
+                    <div>
+                        <h3 class="ndp-title" id="ndpTitle">Fill Rate</h3>
+                        <div class="ndp-badges" id="ndpBadges"></div>
+                    </div>
+                </div>
+
+                <div class="ndp-section">
+                    <div class="ndp-label">BUSINESS INTENT</div>
+                    <p class="ndp-text" id="ndpIntent"></p>
+                </div>
+
+                <div class="ndp-section ndp-formula-section" id="ndpFormulaSection">
+                    <div class="ndp-label">FORMULA</div>
+                    <pre class="ndp-formula" id="ndpFormula"></pre>
+                </div>
+
+                <div class="ndp-section ndp-rule-section" id="ndpRuleSection">
+                    <div class="ndp-label">DECISION RULE</div>
+                    <pre class="ndp-formula" id="ndpRule"></pre>
+                </div>
+
+                <div class="ndp-meta-row">
+                    <div class="ndp-meta" id="ndpMetaLeft"></div>
+                    <div class="ndp-meta" id="ndpMetaRight"></div>
+                </div>
+
+                <div class="ndp-section">
+                    <div class="ndp-label">DEFAULT GRAIN</div>
+                    <p class="ndp-grain" id="ndpGrain"></p>
+                </div>
+
+                <div class="ndp-section">
+                    <div class="ndp-label">COMPONENT NODES (INPUT)</div>
+                    <div class="ndp-components" id="ndpComponents"></div>
+                </div>
+
+                <div class="ndp-section">
+                    <div class="ndp-label">DIMENSIONS (GROUPED BY)</div>
+                    <div class="ndp-dimensions" id="ndpDimensions"></div>
+                </div>
+            </div>
+
+            <!-- Traversal Reasoning Panel -->
+            <div class="traversal-panel" id="traversalPanel">
+                <button class="tp-close" id="tpClose">&times;</button>
+                <div class="tp-header" id="tpHeader">
+                    <div class="tp-question-badge">Q1</div>
+                    <div>
+                        <h3 class="tp-question-title" id="tpTitle"></h3>
+                        <p class="tp-question-text" id="tpQuestion"></p>
+                    </div>
+                </div>
+                <div class="tp-progress" id="tpProgress">
+                    <span class="tp-iteration" id="tpIteration">Iteration 1 / 6</span>
+                    <span class="tp-status"><span class="tp-status-dot"></span> Auto-playing</span>
+                </div>
+                <div class="tp-steps" id="tpSteps"></div>
+            </div>
+
+            <!-- Tooltip (hover) -->
+            <div class="ontology-tooltip" id="ontologyTooltip"></div>
+
+            <!-- Data source badges -->
+            <div class="ont-source-badges">
+                <div class="ont-badge" style="top:8%;left:3%;">ERP</div>
+                <div class="ont-badge" style="bottom:10%;right:3%;">CRM</div>
+                <div class="ont-badge" style="top:55%;left:2%;">WMS</div>
+                <div class="ont-badge" style="bottom:5%;left:40%;">POS</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Thesis -->
+    <section class="section section-bg-img section-bg-thesis" id="thesis">
+        <div class="container">
+            <div class="section-label">THE THESIS</div>
+            <div class="thesis-block" data-animate>
+                <div class="thesis-comparison">
+                    <div class="thesis-era">
+                        <div class="era-label">PRE-AI ERA</div>
+                        <div class="era-flow">
+                            <div class="era-node">Fragmented Data</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node era-highlight">Data Warehouse</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node">Dashboards &amp; Reports</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node era-dim">Human Interprets &rarr; Decides &rarr; Acts</div>
+                        </div>
+                    </div>
+                    <div class="thesis-divider">
+                        <div class="divider-line"></div>
+                        <div class="divider-label">PARADIGM SHIFT</div>
+                        <div class="divider-line"></div>
+                    </div>
+                    <div class="thesis-era">
+                        <div class="era-label">AI ERA</div>
+                        <div class="era-flow">
+                            <div class="era-node">Data Warehouses Still Exist</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node era-highlight era-glow">Intelligence Warehouse</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node">Outcome Agents</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node era-bright">Autonomous Action + Human Oversight</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="thesis-statement" data-animate>
+                <h2>Data warehouses let you ask <span class="text-dim">"what happened?"</span> reliably.<br>
+                Intelligence Warehouse lets agents ask <span class="text-gradient">"what should I do?"</span> reliably.</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="section" id="architecture">
+        <div class="container">
+            <div class="section-label">THE ARCHITECTURE</div>
+            <h2 class="section-title">What's Being Warehoused</h2>
+            <p class="section-desc" style="max-width:680px;margin:0 auto 1rem;">
+                Not data. <strong>Understanding of the business</strong>&thinsp;&mdash;&thinsp;structured, queryable, executable.
+            </p>
+            <div class="architecture-compare" data-animate>
+                <div class="arch-col">
+                    <div class="arch-header arch-header-dim">DATA WAREHOUSE</div>
+                    <div class="arch-items">
+                        <div class="arch-item">Facts</div>
+                        <div class="arch-item">Transactions</div>
+                        <div class="arch-item">Dimensions</div>
+                        <div class="arch-item">The <strong>"what"</strong></div>
+                    </div>
+                    <div class="arch-footer">ETL loads it. SQL queries it.</div>
+                </div>
+                <div class="arch-vs">
+                    <div class="arch-vs-line"></div>
+                    <span>vs</span>
+                    <div class="arch-vs-line"></div>
+                </div>
+                <div class="arch-col arch-col-highlight">
+                    <div class="arch-header">INTELLIGENCE WAREHOUSE</div>
+                    <div class="arch-items">
+                        <div class="arch-item">Ontology <span class="arch-detail">what things mean, how they relate</span></div>
+                        <div class="arch-item">Metrics <span class="arch-detail">how we measure, with calculation logic</span></div>
+                        <div class="arch-item">Decisions <span class="arch-detail">how we decide, with rules &amp; thresholds</span></div>
+                        <div class="arch-item">The <strong>"why"</strong> and the <strong>"how"</strong></div>
+                    </div>
+                    <div class="arch-footer">Blueprint Capture loads it. Agents traverse it.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Flow (o9-inspired) -->
+    <section class="section section-dark section-bg-img section-bg-process" id="process">
+        <div class="container">
+            <div class="section-label">HOW IT WORKS</div>
+            <h2 class="section-title">Load. Traverse. Execute.</h2>
+            <p class="section-desc" style="max-width:680px;margin:0 auto 4rem;">
+                Data warehouses have ETL and SQL. Intelligence Warehouse has Blueprint Capture and Agent Traversal.
+            </p>
+            <div class="process-flow" data-animate>
+                <div class="process-step">
+                    <div class="process-icon-wrap">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10a7 7 0 0 0-14 0"/><path d="M12 14v8"/><path d="M8 18h8"/></svg>
+                    </div>
+                    <div class="process-num">01</div>
+                    <h3>Capture</h3>
+                    <p>AI-driven interviews extract decision logic from domain experts</p>
+                </div>
+                <div class="process-connector"><div class="pc-line"></div><div class="pc-arrow"></div></div>
+                <div class="process-step">
+                    <div class="process-icon-wrap">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><line x1="6.5" y1="7.5" x2="10" y2="10"/><line x1="17.5" y1="7.5" x2="14" y2="10"/><line x1="6.5" y1="16.5" x2="10" y2="14"/><line x1="17.5" y1="16.5" x2="14" y2="14"/></svg>
+                    </div>
+                    <div class="process-num">02</div>
+                    <h3>Structure</h3>
+                    <p>Knowledge populates a unified graph of ontology, metrics &amp; decisions</p>
+                </div>
+                <div class="process-connector"><div class="pc-line"></div><div class="pc-arrow"></div></div>
+                <div class="process-step">
+                    <div class="process-icon-wrap">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <div class="process-num">03</div>
+                    <h3>Traverse</h3>
+                    <p>Agents query the intelligence graph following decision paths</p>
+                </div>
+                <div class="process-connector"><div class="pc-line"></div><div class="pc-arrow"></div></div>
+                <div class="process-step">
+                    <div class="process-icon-wrap">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <div class="process-num">04</div>
+                    <h3>Execute</h3>
+                    <p>90% autonomous. 10% human-in-the-loop with full traces</p>
+                </div>
+            </div>
+
+            <!-- Terminal demo -->
+            <div class="terminal-demo" data-animate>
+                <div class="detail-terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dots"><span></span><span></span><span></span></div>
+                        <div class="terminal-title">blueprint-capture.sh</div>
+                    </div>
+                    <div class="terminal-content">
+                        <div class="t-line"><span class="t-prompt">&gt;</span> How do you calculate safety stock for A-class SKUs?</div>
+                        <div class="t-line"><span class="t-response">We use 1.65 service factor &times; forecast error &times; lead time...</span></div>
+                        <div class="t-line"><span class="t-system">&#x2192; Rule extracted: IF service_level = 98% THEN safety_factor = 1.65</span></div>
+                        <div class="t-line"><span class="t-system">&#x2192; Node created: SafetyStock &rarr; links_to &rarr; ServiceLevel, ForecastError</span></div>
+                        <div class="t-line t-line-dim"><span class="t-prompt">&gt;</span> <span class="t-cursor">|</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Stack -->
+    <section class="section" id="platform">
+        <div class="container">
+            <div class="section-label">THE PLATFORM</div>
+            <h2 class="section-title">The Full Stack</h2>
+            <p class="section-desc" style="max-width:650px;margin:0 auto 4rem;">
+                Two products. One unified architecture. From functional execution to enterprise-wide orchestration.
+            </p>
+            <div class="stack-diagram" data-animate>
+                <div class="stack-tier stack-tier-top">
+                    <div class="stack-tier-badge">TIER 2</div>
+                    <div class="stack-tier-content">
+                        <h3>Strategy Command</h3>
+                        <p class="stack-tier-tagline">Cross-functional orchestration for the strategy team</p>
+                        <div class="stack-features">
+                            <div class="stack-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Parameters flow down to functional teams</div>
+                            <div class="stack-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Escalations and signals surface up</div>
+                            <div class="stack-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Strategy team command interface</div>
+                        </div>
+                        <div class="stack-buyer">BUYER: CEO / COO / Chief Strategy Officer</div>
+                    </div>
+                    <div class="stack-tier-visual">
+                        <div class="cmd-visual">
+                            <div class="cmd-node cmd-center">Strategy</div>
+                            <div class="cmd-node cmd-orbit cmd-orbit-1">Supply Chain</div>
+                            <div class="cmd-node cmd-orbit cmd-orbit-2">Sales</div>
+                            <div class="cmd-node cmd-orbit cmd-orbit-3">Marketing</div>
+                            <div class="cmd-node cmd-orbit cmd-orbit-4">Pricing</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stack-connector">
+                    <div class="connector-line"></div>
+                    <div class="connector-label">Orchestrates</div>
+                    <div class="connector-line"></div>
+                </div>
+                <div class="stack-tier stack-tier-bottom">
+                    <div class="stack-tier-badge stack-tier-badge-primary">TIER 1 &mdash; FOUNDATION</div>
+                    <div class="stack-tier-content">
+                        <h3>Intelligence Warehouse</h3>
+                        <p class="stack-tier-tagline">Structure + Execution for every function</p>
+                        <div class="stack-two-col">
+                            <div>
+                                <div class="stack-col-label">STRUCTURE</div>
+                                <div class="stack-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Business ontology (entities &amp; relationships)</div>
+                                <div class="stack-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Metrics as first-class nodes</div>
+                                <div class="stack-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Decisions with rules &amp; thresholds</div>
+                            </div>
+                            <div>
+                                <div class="stack-col-label">EXECUTION</div>
+                                <div class="stack-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Functional outcome agents (built-in)</div>
+                                <div class="stack-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>90% automated decisions</div>
+                                <div class="stack-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>10% human-in-the-loop with traces</div>
+                            </div>
+                        </div>
+                        <div class="stack-buyer">BUYER: CDO / CIO / Functional VPs</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stack-analogy" data-animate>
+                <p>An intelligence warehouse without agents is like a data warehouse without SQL.<br>
+                <strong>Execution comes built-in. Not sold separately.</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Functional Domains (Palantir sidebar style) -->
+    <section class="section section-dark section-bg-img section-bg-domains" id="domains">
+        <div class="container-wide">
+            <div class="domains-layout">
+                <div class="domains-sidebar" data-animate>
+                    <div class="section-label" style="text-align:left;">FUNCTIONAL COVERAGE</div>
+                    <h2 class="domains-title">Every Function.<br>One Warehouse.</h2>
+                    <p class="domains-desc">Each function is a separate engagement. Each populates the same unified intelligence graph.</p>
+                </div>
+                <div class="domains-content">
+                    <div class="domain-card" data-animate>
+                        <div class="domain-card-header">
+                            <div class="domain-icon" style="--domain-color: var(--blue);">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                            </div>
+                            <div><span class="domain-num">01</span><h4>Supply Chain</h4></div>
+                        </div>
+                        <p>Demand sensing, inventory optimization, ordering, distribution, safety stock calculations, and supply risk management.</p>
+                        <div class="domain-agents"><span class="agent-tag">Demand Agent</span><span class="agent-tag">Inventory Agent</span><span class="agent-tag">Reorder Agent</span></div>
+                    </div>
+                    <div class="domain-card" data-animate>
+                        <div class="domain-card-header">
+                            <div class="domain-icon" style="--domain-color: var(--green);">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            </div>
+                            <div><span class="domain-num">02</span><h4>Sales</h4></div>
+                        </div>
+                        <p>Territory planning, account scoring, pipeline logic, quota allocation, and revenue forecasting with decision traces.</p>
+                        <div class="domain-agents"><span class="agent-tag">Territory Agent</span><span class="agent-tag">Pipeline Agent</span><span class="agent-tag">Forecast Agent</span></div>
+                    </div>
+                    <div class="domain-card" data-animate>
+                        <div class="domain-card-header">
+                            <div class="domain-icon" style="--domain-color: var(--purple);">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                            </div>
+                            <div><span class="domain-num">03</span><h4>Pricing</h4></div>
+                        </div>
+                        <p>Markdown optimization, promotion rules, competitive pricing, elasticity models, and margin protection thresholds.</p>
+                        <div class="domain-agents"><span class="agent-tag">Markdown Agent</span><span class="agent-tag">Promo Agent</span><span class="agent-tag">Elasticity Agent</span></div>
+                    </div>
+                    <div class="domain-card" data-animate>
+                        <div class="domain-card-header">
+                            <div class="domain-icon" style="--domain-color: var(--amber);">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                            </div>
+                            <div><span class="domain-num">04</span><h4>Marketing</h4></div>
+                        </div>
+                        <p>Campaign optimization, channel allocation, budget distribution, attribution models, and audience segmentation rules.</p>
+                        <div class="domain-agents"><span class="agent-tag">Campaign Agent</span><span class="agent-tag">Channel Agent</span><span class="agent-tag">Budget Agent</span></div>
+                    </div>
+                    <div class="domain-card" data-animate>
+                        <div class="domain-card-header">
+                            <div class="domain-icon" style="--domain-color: var(--red);">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                            </div>
+                            <div><span class="domain-num">05</span><h4>Assortment</h4></div>
+                        </div>
+                        <p>Range planning, planogram logic, localization rules, new product introduction criteria, and delisting thresholds.</p>
+                        <div class="domain-agents"><span class="agent-tag">Range Agent</span><span class="agent-tag">Planogram Agent</span><span class="agent-tag">NPI Agent</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="section" id="problem">
+        <div class="container">
+            <div class="section-label">THE PROBLEM</div>
+            <h2 class="section-title">Why AI Agent Projects Fail</h2>
+            <p class="section-desc" style="max-width:680px;margin:0 auto 4rem;">
+                You're building agents directly on fragmented context. That's like building dashboards on raw CSV files.
+            </p>
+            <div class="problem-grid">
+                <div class="problem-card" data-animate>
+                    <div class="problem-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                    <h3>No Shared Ontology</h3>
+                    <p>Every team defines "revenue," "margin," and "demand" differently. Agents inherit these inconsistencies and amplify them.</p>
+                </div>
+                <div class="problem-card" data-animate>
+                    <div class="problem-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+                    <h3>Tribal Knowledge</h3>
+                    <p>Critical decision rules live in people's heads. When they leave, institutional knowledge walks out the door.</p>
+                </div>
+                <div class="problem-card" data-animate>
+                    <div class="problem-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+                    <h3>No Decision Layer</h3>
+                    <p>Data warehouses store facts. But nobody structured the <em>logic</em> that drives actual operations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners -->
+    <section class="section section-dark" id="partners">
+        <div class="container">
+            <div class="section-label">PARTNER MODEL</div>
+            <h2 class="section-title">We Provide the Platform.<br>You Provide the Transformation.</h2>
+            <p class="section-desc" style="max-width:700px;margin:0 auto 4rem;">
+                Every enterprise will need an Intelligence Warehouse. It's the foundation for AI agents&thinsp;&mdash;&thinsp;just like data warehouses were the foundation for BI.
+            </p>
+            <div class="partner-engagement" data-animate>
+                <div class="engage-step"><div class="engage-num">1</div><div class="engage-text"><strong>Assess Readiness</strong><span>Data warehouse maturity, process documentation, AI readiness</span></div></div>
+                <div class="engage-step"><div class="engage-num">2</div><div class="engage-text"><strong>Build Intelligence Warehouse</strong><span>Blueprint capture per function, ontology design, metrics layer</span></div></div>
+                <div class="engage-step"><div class="engage-num">3</div><div class="engage-text"><strong>Deploy Outcome Agents</strong><span>Supply chain, sales, pricing, marketing &mdash; each function goes live</span></div></div>
+                <div class="engage-step"><div class="engage-num">4</div><div class="engage-text"><strong>Set Up Strategy Command</strong><span>Cross-functional orchestration for the executive team</span></div></div>
+                <div class="engage-step"><div class="engage-num">5</div><div class="engage-text"><strong>Staff &amp; Train</strong><span>Build the AI strategy function. Ongoing operational partnership.</span></div></div>
+            </div>
+            <div class="domain-economics" data-animate>
+                <div class="econ-item"><div class="econ-value">$300&ndash;700K</div><div class="econ-label">per function engagement</div></div>
+                <div class="econ-divider"></div>
+                <div class="econ-item"><div class="econ-value">5&ndash;10</div><div class="econ-label">functions per enterprise</div></div>
+                <div class="econ-divider"></div>
+                <div class="econ-item"><div class="econ-value">Repeat</div><div class="econ-label">expansion engagement model</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Positioning -->
+    <section class="section">
+        <div class="container">
+            <div class="section-label">WHY US</div>
+            <h2 class="section-title">They're Adding AI to Data.<br>We Built Intelligence from Scratch.</h2>
+            <div class="positioning-grid" data-animate>
+                <div class="pos-card pos-them">
+                    <div class="pos-label">OTHERS</div>
+                    <p>Data warehouses with conversation layers bolted on. Adding AI to data. No ontology. No decision nodes.</p>
+                    <div class="pos-approach">Data &rarr; trying to make it intelligent</div>
+                </div>
+                <div class="pos-card pos-us">
+                    <div class="pos-label">INTELLIGENCE WAREHOUSE</div>
+                    <p>Purpose-built intelligence infrastructure. Ontology, metrics, and decisions as first-class traversable nodes.</p>
+                    <div class="pos-approach">Intelligence &rarr; built as the foundation</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote -->
+    <section class="section section-quote">
+        <div class="container">
+            <div class="quote-block" data-animate>
+                <div class="quote-mark">&ldquo;</div>
+                <blockquote>You need an intelligence warehouse before AI agents work. Building agents without one is like building dashboards on raw CSV files.</blockquote>
+                <div class="quote-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team -->
+    <section class="section section-team" id="team">
+        <div class="container">
+            <div class="section-label">THE TEAM</div>
+            <h2 class="section-title">Built by Operators, Not Just Engineers</h2>
+            <p class="section-desc" style="max-width:680px;margin:0 auto;">
+                A team that has scaled enterprise AI, built $230M+ pipelines, and shipped products across supply chain, sales, and strategy functions.
+            </p>
+            <div class="team-grid" data-animate>
+                <!-- Row 1: Co-Founders -->
+                <div class="team-card team-card-featured">
+                    <div class="team-avatar" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">
+                        <img src="https://ui-avatars.com/api/?name=Akhil+Singh&size=200&background=4f46e5&color=fff&bold=true&font-size=0.4" alt="Akhil Singh">
+                    </div>
+                    <h4>Akhil Singh</h4>
+                    <div class="team-role">Co-Founder &amp; CEO</div>
+                    <div class="team-bio">Driving vision and GTM strategy. Building the category of Intelligence Infrastructure for enterprise AI agents.</div>
+                    <div class="team-links">
+                        <a href="https://www.linkedin.com/in/akhil-singh-26a20330/" class="team-link" aria-label="LinkedIn" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg></a>
+                    </div>
+                </div>
+                <div class="team-card team-card-featured">
+                    <div class="team-avatar" style="background:linear-gradient(135deg,#d97706,#f59e0b);">
+                        <img src="https://ui-avatars.com/api/?name=Nidhi+Prabhu&size=200&background=d97706&color=fff&bold=true&font-size=0.4" alt="Nidhi Prabhu">
+                    </div>
+                    <h4>Nidhi Prabhu</h4>
+                    <div class="team-role">Co-Founder &amp; CPO</div>
+                    <div class="team-bio">Shaping the product experience. Deep understanding of enterprise workflows, UX for complex systems, and design-led product strategy.</div>
+                    <div class="team-links">
+                        <a href="https://www.linkedin.com/in/nidhi-prabhu/" class="team-link" aria-label="LinkedIn" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg></a>
+                    </div>
+                </div>
+                <!-- Row 2: Leadership -->
+                <div class="team-card">
+                    <div class="team-avatar" style="background:linear-gradient(135deg,#059669,#0d9488);">
+                        <img src="https://ui-avatars.com/api/?name=Aniruddh+T&size=200&background=059669&color=fff&bold=true&font-size=0.4" alt="Aniruddh Tammewar">
+                    </div>
+                    <h4>Aniruddh Tammewar</h4>
+                    <div class="team-role">AI &amp; Technology</div>
+                    <div class="team-bio">Leading core AI and graph infrastructure. Deep expertise in knowledge graphs, NLP, and enterprise AI systems at scale.</div>
+                    <div class="team-links">
+                        <a href="https://www.linkedin.com/in/aniruddha-tammewar-2bb74245/" class="team-link" aria-label="LinkedIn" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg></a>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">
+                        <img src="https://ui-avatars.com/api/?name=Siddhartha+G&size=200&background=7c3aed&color=fff&bold=true&font-size=0.4" alt="Siddhartha Gupta">
+                    </div>
+                    <h4>Siddhartha Gupta</h4>
+                    <div class="team-role">Chief of AI</div>
+                    <div class="team-bio">Architecting the intelligence layer. Former AI lead with expertise in autonomous decision systems and enterprise ML pipelines.</div>
+                    <div class="team-links">
+                        <a href="#" class="team-link" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg></a>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar" style="background:linear-gradient(135deg,#2563eb,#3b82f6);">
+                        <img src="https://ui-avatars.com/api/?name=Ankur+Jain&size=200&background=2563eb&color=fff&bold=true&font-size=0.4" alt="Ankur Jain">
+                    </div>
+                    <h4>Ankur Jain</h4>
+                    <div class="team-role">Strategy &amp; Operations</div>
+                    <div class="team-bio">15+ years scaling portfolios from $2M to $38M. ISB MBA. Lean Six Sigma certified. Driving operational excellence and go-to-market execution.</div>
+                    <div class="team-links">
+                        <a href="https://www.linkedin.com/in/ankurjain0108/" class="team-link" aria-label="LinkedIn" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investors -->
+    <section class="section section-investors" id="investors">
+        <div class="container">
+            <div class="section-label">BACKED BY</div>
+            <h2 class="section-title">Investors Who Understand<br>Enterprise Infrastructure</h2>
+            <p class="section-desc" style="max-width:680px;margin:0 auto;">
+                Backed by firms that built and scaled the last generation of enterprise software. They see what we see&thinsp;&mdash;&thinsp;the intelligence layer is the next platform shift.
+            </p>
+            <div class="investors-grid" data-animate>
+                <div class="investor-logo">
+                    <span>Premji Invest<span class="investor-sub">Wipro Family Office</span></span>
+                </div>
+                <div class="investor-logo">
+                    <span>Chiratae Ventures<span class="investor-sub">Enterprise &amp; Deep Tech</span></span>
+                </div>
+                <div class="investor-logo">
+                    <span>Celesta Capital<span class="investor-sub">Deep Tech &amp; AI</span></span>
+                </div>
+                <div class="investor-logo">
+                    <span>Titan Capital<span class="investor-sub">Early Stage</span></span>
+                </div>
+                <div class="investor-logo">
+                    <span>AET Fund<span class="investor-sub">Strategic Growth</span></span>
+                </div>
+            </div>
+            <div class="investors-note" data-animate>
+                <p>Intelligence Warehouse is a new category&thinsp;&mdash;&thinsp;the foundational infrastructure that makes enterprise AI agents actually work. Our investors understand that <strong>every enterprise will need one</strong>, just as every enterprise needed a data warehouse.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section section-cta" id="contact">
+        <div class="container">
+            <div class="cta-content" data-animate>
+                <div class="section-label">GET STARTED</div>
+                <h2 class="section-title">Build the Foundation<br>Your AI Agents Need</h2>
+                <p class="section-desc" style="max-width:550px;margin:0 auto 2.5rem;">Stop building agents on fragmented context. Start with the infrastructure layer that makes AI actually work.</p>
+                <div class="cta-actions">
+                    <a href="mailto:hello@intelligencewarehouse.com" class="btn btn-primary btn-lg">Request a Demo <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+                    <a href="#partners" class="btn btn-outline btn-lg">Partner With Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="nav-logo" style="margin-bottom:1rem;">
+                        <div class="logo-mark"><svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="8" width="28" height="4" rx="1" fill="white" opacity="0.9"/><rect x="5" y="15" width="22" height="4" rx="1" fill="white" opacity="0.6"/><rect x="8" y="22" width="16" height="4" rx="1" fill="white" opacity="0.3"/></svg></div>
+                        <span class="logo-text">Intelligence Warehouse</span>
+                    </div>
+                    <p class="footer-tagline">The foundation AI agents need.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col"><h5>Platform</h5><a href="#architecture">Architecture</a><a href="#platform">Products</a><a href="#process">How It Works</a><a href="#domains">Domains</a></div>
+                    <div class="footer-col"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Blog</a><a href="#contact">Contact</a></div>
+                    <div class="footer-col"><h5>Resources</h5><a href="#">Technical Paper</a><a href="#">API Docs</a><a href="#partners">Partners</a><a href="#">Security</a></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Intelligence Warehouse. All rights reserved.</span>
+                <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
