@@ -3350,6 +3350,52 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
         flex-direction: column;
         align-items: center;
     }
+
+    .conv-combined {
+        overflow: hidden;
+    }
+
+    .conv-combined-path {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        justify-content: flex-start;
+        padding-bottom: 0.75rem;
+    }
+
+    .conv-insight-text {
+        font-size: 0.78rem;
+        word-break: break-word;
+    }
+
+    .conv-traversal,
+    .conv-architecture {
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .conv-combined,
+    .conv-traversal-footer {
+        max-width: calc(100vw - 2.5rem);
+        overflow: hidden;
+        word-break: break-word;
+    }
+
+    .conv-traversal-footer {
+        font-size: 0.82rem;
+    }
+
+    .convergence-section {
+        padding: 4rem 0;
+    }
+
+    .conv-section-label {
+        font-size: 0.6rem;
+    }
+
+    .conv-silo-card {
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+    }
 }
 
 /* === MORRIE SECTION === */
@@ -3713,9 +3759,10 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
 }
 
 @media (max-width: 768px) {
+    html, body { overflow-x: hidden; }
     .nav-links, .nav-actions { display: none; }
     .nav-toggle { display: flex; }
-    .section { padding: 4rem 0; }
+    .section { padding: 4rem 0; overflow-x: hidden; }
     .container { padding: 0 1.25rem; }
     .container-wide { padding: 0 1.25rem; }
     .problem-grid { grid-template-columns: 1fr; }
@@ -3784,28 +3831,59 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
 
     .hero-trust-items { flex-wrap: wrap; gap: 0.5rem; }
 
-    .scroll-indicator { left: 50%; right: auto; transform: translateX(-50%); }
+    .scroll-indicator { display: none; }
 
     .graph-legend {
         top: 10px;
         padding: 0.4rem 0.75rem;
         gap: 0.5rem;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
     }
 
     .legend-chip {
         font-size: 0.65rem;
         padding: 0.2rem 0.5rem;
+        white-space: nowrap;
     }
 
     .node-detail-panel,
     .traversal-panel {
-        width: 100%;
+        width: calc(100% - 1rem);
         max-width: 100%;
+        left: 0.5rem !important;
+        right: 0.5rem !important;
+        border-radius: 12px;
     }
 
     .graph-container {
-        height: 70vh;
-        min-height: 500px;
+        height: 60vh;
+        min-height: 400px;
+        overflow: hidden;
+    }
+
+    /* Traversal section mobile fix */
+    .section { overflow-x: hidden; }
+
+    .hero-bottom {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .section-title {
+        font-size: clamp(1.6rem, 6vw, 2.2rem);
+    }
+
+    .section-desc {
+        font-size: 0.95rem;
+        max-width: 100%;
+    }
+
+    /* CTA section mobile */
+    .cta-section .section-title {
+        font-size: clamp(1.5rem, 5.5vw, 2rem);
     }
 }
 
@@ -3847,5 +3925,19 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
         border-radius: 12px;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        max-width: calc(100vw - 2rem);
+    }
+
+    .graph-container {
+        height: 55vh;
+        min-height: 350px;
+    }
+
+    .section-title {
+        font-size: clamp(1.4rem, 5.5vw, 1.8rem);
+    }
+
+    .morrie-title {
+        font-size: clamp(1.5rem, 6vw, 2rem);
     }
 }
