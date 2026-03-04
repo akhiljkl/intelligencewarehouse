@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Intelligence Warehouse | Problem, Thesis & Architecture</title>
+    <meta name="description" content="AI agent projects fail due to fragmented context. Intelligence Warehouse provides the missing architecture layer for enterprise AI.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.intelligencewarehouse.com/learn.html">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X17PMES96Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-X17PMES96Q');
+    </script>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.intelligencewarehouse.com/learn.html">
+    <meta property="og:title" content="Why Intelligence Warehouse | Problem, Thesis & Architecture">
+    <meta property="og:description" content="AI agent projects fail due to fragmented context. Intelligence Warehouse provides the missing architecture layer for enterprise AI.">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Why Intelligence Warehouse | Problem, Thesis & Architecture">
+    <meta name="twitter:description" content="AI agent projects fail due to fragmented context. Intelligence Warehouse provides the missing architecture layer for enterprise AI.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-mark">IW</div>
+                <span class="logo-text">Intelligence Warehouse</span>
+            </a>
+            <div class="nav-links">
+                <a href="learn.html" class="active">Why IW</a>
+                <a href="partners.html">Partners</a>
+                <a href="team.html">Team</a>
+            </div>
+            <div class="nav-actions">
+                <a href="#contact" class="btn btn-ghost">Contact</a>
+                <a href="#contact" class="btn btn-primary">Request Demo</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="learn.html" class="active">Why IW</a>
+        <a href="partners.html">Partners</a>
+        <a href="team.html">Team</a>
+        <a href="#contact" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Request Demo</a>
+    </div>
+
+    <!-- Problem -->
+    <section class="section" id="problem" style="padding-top: 10rem;">
+        <div class="container">
+            <div class="section-label">THE PROBLEM</div>
+            <h1 class="section-title">Why AI Agent Projects Fail</h1>
+            <p class="section-desc" style="max-width:680px;margin:0 auto 4rem;">
+                You're building agents directly on fragmented context. That's like building dashboards on raw CSV files.
+            </p>
+            <div class="problem-grid">
+                <div class="problem-card" data-animate>
+                    <div class="problem-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                    <h3>No Shared Ontology</h3>
+                    <p>Every team defines "revenue," "margin," and "demand" differently. Agents inherit these inconsistencies and amplify them.</p>
+                </div>
+                <div class="problem-card" data-animate>
+                    <div class="problem-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+                    <h3>Tribal Knowledge</h3>
+                    <p>Critical decision rules live in people's heads. When they leave, institutional knowledge walks out the door.</p>
+                </div>
+                <div class="problem-card" data-animate>
+                    <div class="problem-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+                    <h3>No Decision Layer</h3>
+                    <p>Data warehouses store facts. But nobody structured the <em>logic</em> that drives actual operations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Thesis -->
+    <section class="section section-bg-img section-bg-thesis" id="thesis">
+        <div class="container">
+            <div class="section-label">THE THESIS</div>
+            <div class="thesis-block" data-animate>
+                <div class="thesis-comparison">
+                    <div class="thesis-era">
+                        <div class="era-label">PRE-AI ERA</div>
+                        <div class="era-flow">
+                            <div class="era-node">Fragmented Data</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node era-highlight">Data Warehouse</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node">Dashboards &amp; Reports</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node era-dim">Human Interprets &rarr; Decides &rarr; Acts</div>
+                        </div>
+                    </div>
+                    <div class="thesis-divider">
+                        <div class="divider-line"></div>
+                        <div class="divider-label">PARADIGM SHIFT</div>
+                        <div class="divider-line"></div>
+                    </div>
+                    <div class="thesis-era">
+                        <div class="era-label">AI ERA</div>
+                        <div class="era-flow">
+                            <div class="era-node">Data Warehouses Still Exist</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node era-highlight era-glow">Intelligence Warehouse</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node">Outcome Agents</div>
+                            <div class="era-arrow">&darr;</div>
+                            <div class="era-node era-bright">Autonomous Action + Human Oversight</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="thesis-statement" data-animate>
+                <h2>Data warehouses let you ask <span class="text-dim">"what happened?"</span> reliably.<br>
+                Intelligence Warehouse lets agents ask <span class="text-gradient">"what should I do?"</span> reliably.</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="section" id="architecture">
+        <div class="container">
+            <div class="section-label">THE ARCHITECTURE</div>
+            <h2 class="section-title">What's Being Warehoused</h2>
+            <p class="section-desc" style="max-width:680px;margin:0 auto 1rem;">
+                Not data. <strong>Understanding of the business</strong>&thinsp;&mdash;&thinsp;structured, queryable, executable.
+            </p>
+            <div class="architecture-compare" data-animate>
+                <div class="arch-col">
+                    <div class="arch-header arch-header-dim">DATA WAREHOUSE</div>
+                    <div class="arch-items">
+                        <div class="arch-item">Facts</div>
+                        <div class="arch-item">Transactions</div>
+                        <div class="arch-item">Dimensions</div>
+                        <div class="arch-item">The <strong>"what"</strong></div>
+                    </div>
+                    <div class="arch-footer">ETL loads it. SQL queries it.</div>
+                </div>
+                <div class="arch-vs">
+                    <div class="arch-vs-line"></div>
+                    <span>vs</span>
+                    <div class="arch-vs-line"></div>
+                </div>
+                <div class="arch-col arch-col-highlight">
+                    <div class="arch-header">INTELLIGENCE WAREHOUSE</div>
+                    <div class="arch-items">
+                        <div class="arch-item">Ontology <span class="arch-detail">what things mean, how they relate</span></div>
+                        <div class="arch-item">Metrics <span class="arch-detail">how we measure, with calculation logic</span></div>
+                        <div class="arch-item">Decisions <span class="arch-detail">how we decide, with rules &amp; thresholds</span></div>
+                        <div class="arch-item">The <strong>"why"</strong> and the <strong>"how"</strong></div>
+                    </div>
+                    <div class="arch-footer">Blueprint Capture loads it. Agents traverse it.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works — Story-driven flow -->
+    <section class="section section-hiw" id="process">
+        <div class="container">
+            <div class="section-label">HOW IT WORKS</div>
+            <h2 class="section-title">From Tribal Knowledge<br>to Autonomous Decisions</h2>
+            <p class="section-desc" style="max-width:680px;margin:0 auto 4rem;">
+                Three steps to go from "it's all in people's heads" to AI agents that make decisions like your best operators.
+            </p>
+
+            <div class="hiw-timeline" data-animate>
+                <!-- Step 1 -->
+                <div class="hiw-step">
+                    <div class="hiw-step-marker">
+                        <div class="hiw-step-num">1</div>
+                        <div class="hiw-step-line"></div>
+                    </div>
+                    <div class="hiw-step-content">
+                        <div class="hiw-step-header">
+                            <div class="hiw-icon-wrap hiw-icon-extract">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10a7 7 0 0 0-14 0"/><path d="M12 14v8"/><path d="M8 18h8"/></svg>
+                            </div>
+                            <h3>Extract the Decision Logic</h3>
+                        </div>
+                        <p class="hiw-step-desc">MORRIE talks to your domain experts&thinsp;&mdash;&thinsp;supply chain managers, pricing analysts, sales leaders&thinsp;&mdash;&thinsp;and extracts the rules, thresholds, and edge cases they use to make decisions every day.</p>
+                        <div class="hiw-step-example">
+                            <div class="hiw-example-label">Example</div>
+                            <div class="hiw-example-text">&ldquo;When lead time exceeds 14 days <strong>and</strong> demand variance is above 20%, we bump safety stock by 1.65&times; the forecast error.&rdquo;</div>
+                            <div class="hiw-example-arrow">&darr;</div>
+                            <div class="hiw-example-output">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                Captured as a structured decision blueprint
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="hiw-step">
+                    <div class="hiw-step-marker">
+                        <div class="hiw-step-num">2</div>
+                        <div class="hiw-step-line"></div>
+                    </div>
+                    <div class="hiw-step-content">
+                        <div class="hiw-step-header">
+                            <div class="hiw-icon-wrap hiw-icon-build">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><line x1="6.5" y1="7.5" x2="10" y2="10"/><line x1="17.5" y1="7.5" x2="14" y2="10"/><line x1="6.5" y1="16.5" x2="10" y2="14"/><line x1="17.5" y1="16.5" x2="14" y2="14"/></svg>
+                            </div>
+                            <h3>Build the Intelligence Graph</h3>
+                        </div>
+                        <p class="hiw-step-desc">Blueprints are structured into a unified knowledge graph that connects ontology (what things mean), metrics (how you measure), and decisions (how you act)&thinsp;&mdash;&thinsp;across every function.</p>
+                        <div class="hiw-step-visual">
+                            <div class="hiw-graph-nodes">
+                                <div class="hiw-gnode hiw-gnode-ont">Ontology</div>
+                                <div class="hiw-gnode-connector"></div>
+                                <div class="hiw-gnode hiw-gnode-met">Metrics</div>
+                                <div class="hiw-gnode-connector"></div>
+                                <div class="hiw-gnode hiw-gnode-dec">Decisions</div>
+                            </div>
+                            <div class="hiw-graph-caption">Every concept, metric, and rule&thinsp;&mdash;&thinsp;connected and traversable</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="hiw-step hiw-step-last">
+                    <div class="hiw-step-marker">
+                        <div class="hiw-step-num">3</div>
+                    </div>
+                    <div class="hiw-step-content">
+                        <div class="hiw-step-header">
+                            <div class="hiw-icon-wrap hiw-icon-deploy">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            </div>
+                            <h3>Agents Traverse &amp; Execute</h3>
+                        </div>
+                        <p class="hiw-step-desc">AI agents don't guess&thinsp;&mdash;&thinsp;they follow the same decision paths your best people do. They traverse the graph, pull the right rules, and execute autonomously&thinsp;&mdash;&thinsp;with full traceability.</p>
+                        <div class="hiw-step-stats">
+                            <div class="hiw-stat">
+                                <div class="hiw-stat-value">90%</div>
+                                <div class="hiw-stat-label">Autonomous execution</div>
+                            </div>
+                            <div class="hiw-stat-divider"></div>
+                            <div class="hiw-stat">
+                                <div class="hiw-stat-value">10%</div>
+                                <div class="hiw-stat-label">Human-in-the-loop with full decision traces</div>
+                            </div>
+                            <div class="hiw-stat-divider"></div>
+                            <div class="hiw-stat">
+                                <div class="hiw-stat-value">100%</div>
+                                <div class="hiw-stat-label">Explainable &amp; auditable</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Positioning -->
+    <section class="section" id="positioning">
+        <div class="container">
+            <div class="section-label">WHY US</div>
+            <h2 class="section-title">They're Adding AI to Data.<br>We Built Intelligence from Scratch.</h2>
+            <div class="positioning-grid" data-animate>
+                <div class="pos-card pos-them">
+                    <div class="pos-label">OTHERS</div>
+                    <p>Data warehouses with conversation layers bolted on. Adding AI to data. No ontology. No decision nodes.</p>
+                    <div class="pos-approach">Data &rarr; trying to make it intelligent</div>
+                </div>
+                <div class="pos-card pos-us">
+                    <div class="pos-label">INTELLIGENCE WAREHOUSE</div>
+                    <p>Purpose-built intelligence infrastructure. Ontology, metrics, and decisions as first-class traversable nodes.</p>
+                    <div class="pos-approach">Intelligence &rarr; built as the foundation</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote -->
+    <section class="section section-quote">
+        <div class="container">
+            <div class="quote-block" data-animate>
+                <div class="quote-mark">&ldquo;</div>
+                <blockquote>You need an intelligence warehouse before AI agents work. Building agents without one is like building dashboards on raw CSV files.</blockquote>
+                <div class="quote-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section section-cta" id="contact">
+        <div class="container">
+            <div class="cta-content" data-animate>
+                <div class="section-label">GET STARTED</div>
+                <h2 class="section-title">Build the Foundation<br>Your AI Agents Need</h2>
+                <p class="section-desc" style="max-width:550px;margin:0 auto 2.5rem;">Stop building agents on fragmented context. Start with the infrastructure layer that makes AI actually work.</p>
+                <div class="cta-actions">
+                    <a href="mailto:hello@intelligencewarehouse.com" class="btn btn-primary btn-lg">Request a Demo <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+                    <a href="partners.html" class="btn btn-outline btn-lg">Partner With Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="nav-logo" style="margin-bottom:1rem;">
+                        <div class="logo-mark">IW</div>
+                        <span class="logo-text">Intelligence Warehouse</span>
+                    </div>
+                    <p class="footer-tagline">The foundation AI agents need.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col"><h5>Platform</h5><a href="learn.html#architecture">Architecture</a><a href="learn.html#process">How It Works</a><a href="index.html#impact">Impact</a><a href="team.html">Team</a></div>
+                    <div class="footer-col"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Blog</a><a href="#contact">Contact</a></div>
+                    <div class="footer-col"><h5>Resources</h5><a href="IW-Whitepaper.pdf" target="_blank">Technical Paper</a><a href="#">API Docs</a><a href="partners.html">Partners</a><a href="#">Security</a></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Intelligence Warehouse. All rights reserved.</span>
+                <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

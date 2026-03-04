@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jio Financial Services — Enterprise Knowledge Graph | Intelligence Warehouse</title>
+<meta name="description" content="Interactive enterprise knowledge graph for Jio Financial Services — ontology, metrics, and decision nodes across lending, insurance, payments, broking, and regulatory functions.">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X17PMES96Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-X17PMES96Q');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0c1220;--bg-card:rgba(14,22,38,0.94);
+  --accent:#6366f1;--accent-light:#818cf8;--accent-glow:rgba(99,102,241,0.1);
+  --gradient-1:#4f46e5;--gradient-2:#7c3aed;--gradient-3:#a855f7;
+  --blue:#3b82f6;--green:#10b981;--purple:#8b5cf6;--amber:#f59e0b;
+  --red:#ef4444;--teal:#14b8a6;--pink:#ec4899;--cyan:#06b6d4;--orange:#f97316;
+  --text:#f1f3f8;--text-secondary:#94a3b8;--text-dim:#64748b;
+  --border:rgba(255,255,255,0.08);--border-light:rgba(255,255,255,0.12);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+  --ease:cubic-bezier(0.25,0.46,0.45,0.94);
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+}
+html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;margin:0}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:none;background:none}
+
+/* === HEADER === */
+.page-header{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  padding:0.75rem 2rem;
+  background:rgba(12,18,32,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.header-logo{display:flex;align-items:center;gap:0.75rem}
+.logo-mark{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--gradient-1),var(--gradient-2));border-radius:8px}
+.header-logo span{font-weight:600;font-size:0.9rem;letter-spacing:-0.02em;white-space:nowrap}
+.header-badge{font-family:var(--mono);font-size:0.65rem;padding:0.25rem 0.7rem;border-radius:100px;background:rgba(99,102,241,0.15);color:var(--accent-light);border:1px solid rgba(99,102,241,0.2);letter-spacing:0.05em;font-weight:500}
+.header-right{display:flex;align-items:center;gap:1rem}
+.header-link{font-size:0.8rem;color:var(--text-secondary);transition:color 0.2s;font-weight:500}
+.header-link:hover{color:var(--text)}
+
+/* === GRAPH SECTION === */
+.graph-section{
+  position:relative;width:100%;min-height:100vh;
+  background:linear-gradient(180deg,#0f172a 0%,#0c1220 100%);
+  padding-top:60px;
+  overflow:hidden;color:var(--text);
+}
+.graph-section-header{
+  text-align:center;padding:2rem 2rem 1.5rem;
+}
+.section-label{
+  font-family:var(--mono);font-size:0.75rem;letter-spacing:0.15em;
+  color:var(--accent-light);margin-bottom:1rem;font-weight:500;text-align:center;
+}
+.section-title{
+  font-size:clamp(1.75rem,3.5vw,2.75rem);font-weight:800;letter-spacing:-0.03em;
+  line-height:1.15;text-align:center;margin-bottom:0.75rem;
+}
+.text-gradient{background:linear-gradient(135deg,var(--gradient-1),var(--gradient-2),var(--gradient-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-desc{font-size:0.95rem;color:var(--text-secondary);line-height:1.7;text-align:center;max-width:700px;margin:0 auto}
+
+/* === GRAPH CONTAINER === */
+.graph-container{
+  position:relative;width:100%;height:calc(100vh - 180px);min-height:600px;overflow:hidden;
+}
+.graph-container>canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+
+/* === LEGEND === */
+.graph-legend{
+  position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:10;
+  display:flex;align-items:center;gap:0.5rem;
+  padding:0.5rem 1rem;
+  background:rgba(12,18,32,0.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,0.1);border-radius:100px;
+  max-width:96vw;overflow-x:auto;
+}
+.legend-items{display:flex;gap:0.2rem;align-items:center;flex-wrap:nowrap}
+.legend-chip{
+  display:inline-flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;
+  border-radius:100px;font-size:0.68rem;font-weight:500;
+  color:rgba(255,255,255,0.45);background:transparent;
+  border:1px solid transparent;cursor:pointer;
+  transition:all 0.2s var(--ease);white-space:nowrap;font-family:var(--font);
+}
+.legend-chip:hover{color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.04)}
+.legend-chip.active{color:var(--text);background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.16)}
+.legend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.legend-dot-ring{background:transparent !important;border:2px solid var(--teal);width:7px;height:7px}
+.legend-dot-triangle{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:8px solid #64748b;border-radius:0;background:transparent}
+
+/* === TOOLTIP === */
+.ontology-tooltip{
+  position:absolute;display:none;padding:0.6rem 1rem;
+  background:rgba(14,22,38,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.12);border-radius:10px;
+  font-size:0.8rem;color:var(--text);pointer-events:none;z-index:15;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  font-family:var(--mono);min-width:170px;max-width:240px;
+}
+.ontology-tooltip.visible{display:block}
+
+/* === NODE DETAIL PANEL === */
+.node-detail-panel{
+  position:absolute;top:0;right:0;width:380px;height:100%;z-index:20;
+  background:rgba(14,22,38,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-left:1px solid rgba(255,255,255,0.1);padding:1.5rem;overflow-y:auto;
+  transform:translateX(100%);transition:transform 0.35s var(--ease-out);color:var(--text);
+}
+.node-detail-panel.open{transform:translateX(0)}
+.ndp-close{position:absolute;top:1rem;right:1rem;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--text-dim);cursor:pointer;border-radius:6px;transition:all 0.2s;background:none;border:none;font-family:var(--font)}
+.ndp-close:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+.ndp-header{display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;padding-right:2rem}
+.ndp-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:rgba(255,255,255,0.06);border:1px solid var(--border)}
+.ndp-title{font-size:1.2rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:0.25rem}
+.ndp-badges{display:flex;gap:0.4rem;flex-wrap:wrap}
+.ndp-badge{font-family:var(--mono);font-size:0.62rem;padding:0.15rem 0.5rem;border-radius:4px;font-weight:600;letter-spacing:0.04em}
+.ndp-badge-id{background:rgba(255,255,255,0.08);color:var(--text-secondary)}
+.ndp-badge-type{color:white}
+.ndp-section{margin-bottom:1.25rem}
+.ndp-label{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;color:var(--text-dim);font-weight:600;margin-bottom:0.5rem}
+.ndp-text{font-size:0.85rem;color:var(--text-secondary);line-height:1.6}
+.ndp-formula{font-family:var(--mono);font-size:0.75rem;line-height:1.6;color:var(--text);background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:0.75rem 1rem;white-space:pre-wrap;overflow-x:auto}
+.ndp-formula-section,.ndp-rule-section{display:none}
+.ndp-formula-section.visible,.ndp-rule-section.visible{display:block}
+.ndp-meta-row{display:flex;gap:2rem;margin-bottom:1.25rem}
+.ndp-meta{display:flex;flex-direction:column;gap:0.2rem}
+.ndp-meta-label{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.12em;color:var(--text-dim);font-weight:600}
+.ndp-meta-value{font-size:0.9rem;font-weight:600;color:var(--text)}
+.ndp-meta-pill{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:var(--accent);color:white;font-size:0.8rem;font-weight:700}
+.ndp-grain{font-family:var(--mono);font-size:0.8rem;color:var(--text-secondary);line-height:1.5}
+.ndp-components{display:flex;flex-direction:column;gap:0.5rem}
+.ndp-comp-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.7rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px}
+.ndp-comp-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ndp-comp-info{display:flex;flex-direction:column}
+.ndp-comp-name{font-size:0.82rem;font-weight:600;color:var(--text)}
+.ndp-comp-group{font-size:0.68rem;color:var(--text-dim)}
+.ndp-dimensions{display:flex;gap:0.35rem;flex-wrap:wrap}
+.ndp-dim-chip{display:inline-flex;align-items:center;gap:0.25rem;padding:0.25rem 0.6rem;border-radius:100px;font-size:0.72rem;font-weight:500;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text-secondary)}
+.ndp-dim-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+
+/* === TRAVERSAL PANEL === */
+.traversal-panel{
+  position:absolute;top:0;right:0;width:420px;height:100%;z-index:25;
+  background:rgba(14,22,38,0.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-left:1px solid rgba(255,255,255,0.1);padding:1.5rem;overflow-y:auto;
+  transform:translateX(100%);transition:transform 0.35s var(--ease-out);color:var(--text);
+}
+.traversal-panel.open{transform:translateX(0)}
+.tp-close{position:absolute;top:1rem;right:1rem;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--text-dim);cursor:pointer;border-radius:6px;transition:all 0.2s;background:none;border:none;font-family:var(--font)}
+.tp-close:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+.tp-header{display:flex;gap:0.75rem;align-items:flex-start;padding:1rem;background:var(--accent);border-radius:12px;margin-bottom:1rem;margin-right:2rem}
+.tp-question-badge{font-family:var(--mono);font-size:0.75rem;font-weight:700;background:rgba(255,255,255,0.2);color:white;padding:0.2rem 0.5rem;border-radius:4px;flex-shrink:0;margin-top:0.1rem}
+.tp-question-title{font-size:0.95rem;font-weight:700;color:white;margin-bottom:0.35rem}
+.tp-question-text{font-size:0.78rem;color:rgba(255,255,255,0.8);line-height:1.5}
+.tp-progress{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem}
+.tp-iteration{font-family:var(--mono);font-size:0.68rem;font-weight:600;padding:0.25rem 0.6rem;border-radius:4px;background:rgba(99,102,241,0.15);color:var(--accent-light)}
+.tp-status{display:flex;align-items:center;gap:0.4rem;font-size:0.72rem;color:var(--green);font-weight:500}
+.tp-status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,0.4)}50%{opacity:0.7;box-shadow:0 0 0 8px rgba(16,185,129,0)}}
+.tp-steps{display:flex;flex-direction:column;gap:1rem}
+.tp-step{border:1px solid var(--border);border-radius:10px;overflow:hidden;animation:stepFadeIn 0.4s ease forwards;opacity:0;transform:translateY(8px)}
+@keyframes stepFadeIn{to{opacity:1;transform:translateY(0)}}
+.tp-step-header{display:flex;align-items:center;gap:0.5rem;padding:0.7rem 1rem;border-bottom:1px solid var(--border)}
+.tp-step-num{font-family:var(--mono);font-size:0.68rem;font-weight:700;color:var(--accent-light)}
+.tp-step-title{font-size:0.82rem;font-weight:600;color:var(--text)}
+.tp-step-reasoning{padding:0.7rem 1rem;background:rgba(245,158,11,0.06);border-bottom:1px solid var(--border);font-size:0.78rem;color:var(--text-secondary);line-height:1.55;font-style:italic;border-left:3px solid rgba(245,158,11,0.3)}
+.tp-step-nodes{padding:0.7rem 1rem}
+.tp-step-nodes-label{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.08em;color:var(--text-dim);font-weight:600;margin-bottom:0.4rem}
+.tp-step-node-chips{display:flex;gap:0.3rem;flex-wrap:wrap}
+.tp-node-chip{display:inline-flex;align-items:center;gap:0.25rem;padding:0.18rem 0.5rem;border-radius:4px;font-size:0.68rem;font-weight:500;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-secondary);font-family:var(--mono)}
+.tp-node-chip-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.tp-step-fetch{padding:0.7rem 1rem;border-top:1px solid var(--border);background:rgba(255,255,255,0.02)}
+.tp-fetch-header{display:flex;align-items:center;gap:0.4rem;font-size:0.72rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.35rem}
+.tp-fetch-icon{font-size:0.85rem}
+.tp-fetch-nodes{font-family:var(--mono);font-size:0.68rem;color:var(--text-dim);margin-bottom:0.5rem}
+.tp-fetch-result{font-family:var(--mono);font-size:0.68rem;line-height:1.5;color:var(--text-secondary);background:rgba(0,0,0,0.3);border-radius:6px;padding:0.5rem 0.7rem;white-space:pre-wrap;max-height:140px;overflow-y:auto}
+
+/* === SOURCE BADGES === */
+.ont-source-badges{position:absolute;inset:0;pointer-events:none;z-index:4}
+.ont-badge{position:absolute;padding:0.25rem 0.6rem;background:rgba(12,18,32,0.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.16);border-radius:100px;font-family:var(--mono);font-size:0.6rem;font-weight:600;letter-spacing:0.06em;color:rgba(255,255,255,0.6);pointer-events:none}
+
+/* === RESPONSIVE === */
+@media(max-width:1200px){
+  .node-detail-panel{width:340px}
+  .traversal-panel{width:380px}
+}
+@media(max-width:1024px){
+  .node-detail-panel,.traversal-panel{width:100%;max-width:400px}
+}
+@media(max-width:768px){
+  .page-header{padding:0.5rem 1rem}
+  .header-badge{display:none}
+  .graph-section-header{padding:1.5rem 1rem 1rem}
+  .graph-container{height:calc(100vh - 160px);min-height:500px}
+  .graph-legend{top:8px;padding:0.35rem 0.6rem;gap:0.3rem;border-radius:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .legend-chip{font-size:0.62rem;padding:0.2rem 0.45rem}
+  .node-detail-panel,.traversal-panel{width:100%;max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="page-header">
+  <div class="header-logo">
+    <div class="logo-mark">
+      <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+        <rect x="2" y="8" width="28" height="4" rx="1" fill="white" opacity="0.9"/>
+        <rect x="5" y="15" width="22" height="4" rx="1" fill="white" opacity="0.6"/>
+        <rect x="8" y="22" width="16" height="4" rx="1" fill="white" opacity="0.3"/>
+      </svg>
+    </div>
+    <span>Intelligence Warehouse</span>
+  </div>
+  <div class="header-right">
+    <span class="header-badge">JIO FINANCIAL SERVICES — LIVE DEMO</span>
+    <a href="index.html" class="header-link">← Back to Platform</a>
+  </div>
+</header>
+
+<!-- Graph Section -->
+<section class="graph-section">
+  <div class="graph-section-header">
+    <div class="section-label">INTELLIGENCE WAREHOUSE — JIO FINANCIAL SERVICES</div>
+    <h2 class="section-title">Enterprise Knowledge Graph: <span class="text-gradient">Jio Finance</span></h2>
+    <p class="section-desc">Every entity, metric, and decision rule across lending, insurance, payments, broking, and regulatory — structured as traversable nodes. Click any node to inspect.</p>
+  </div>
+
+  <div class="graph-container" id="graphContainer">
+    <canvas id="ontologyCanvas"></canvas>
+
+    <!-- Legend -->
+    <div class="graph-legend">
+      <div class="legend-items">
+        <button class="legend-chip active" data-layer="all"><span class="legend-dot" style="background:#6366f1;"></span> All</button>
+        <button class="legend-chip" data-layer="lending"><span class="legend-dot" style="background:#3b82f6;"></span> Lending</button>
+        <button class="legend-chip" data-layer="insurance"><span class="legend-dot" style="background:#10b981;"></span> Insurance</button>
+        <button class="legend-chip" data-layer="payments"><span class="legend-dot" style="background:#f59e0b;"></span> Payments</button>
+        <button class="legend-chip" data-layer="broking"><span class="legend-dot" style="background:#8b5cf6;"></span> Broking & AMC</button>
+        <button class="legend-chip" data-layer="regulatory"><span class="legend-dot" style="background:#ef4444;"></span> Regulatory</button>
+        <button class="legend-chip" data-layer="distribution"><span class="legend-dot" style="background:#f97316;"></span> Distribution</button>
+        <button class="legend-chip" data-layer="metrics"><span class="legend-dot legend-dot-ring" style="border-color:#14b8a6;"></span> Metrics</button>
+        <button class="legend-chip" data-layer="decisions"><span class="legend-dot legend-dot-triangle"></span> Decisions</button>
+      </div>
+    </div>
+
+    <!-- Node Detail Panel -->
+    <div class="node-detail-panel" id="nodeDetailPanel">
+      <button class="ndp-close" id="ndpClose">&times;</button>
+      <div class="ndp-header">
+        <div class="ndp-icon" id="ndpIcon"></div>
+        <div>
+          <h3 class="ndp-title" id="ndpTitle"></h3>
+          <div class="ndp-badges" id="ndpBadges"></div>
+        </div>
+      </div>
+      <div class="ndp-section"><div class="ndp-label">BUSINESS INTENT</div><p class="ndp-text" id="ndpIntent"></p></div>
+      <div class="ndp-section ndp-formula-section" id="ndpFormulaSection"><div class="ndp-label">FORMULA</div><pre class="ndp-formula" id="ndpFormula"></pre></div>
+      <div class="ndp-section ndp-rule-section" id="ndpRuleSection"><div class="ndp-label">DECISION RULE</div><pre class="ndp-formula" id="ndpRule"></pre></div>
+      <div class="ndp-meta-row"><div class="ndp-meta" id="ndpMetaLeft"></div><div class="ndp-meta" id="ndpMetaRight"></div></div>
+      <div class="ndp-section"><div class="ndp-label">DEFAULT GRAIN</div><p class="ndp-grain" id="ndpGrain"></p></div>
+      <div class="ndp-section"><div class="ndp-label">COMPONENT NODES (INPUT)</div><div class="ndp-components" id="ndpComponents"></div></div>
+      <div class="ndp-section"><div class="ndp-label">DIMENSIONS (GROUPED BY)</div><div class="ndp-dimensions" id="ndpDimensions"></div></div>
+    </div>
+
+    <!-- Traversal Panel -->
+    <div class="traversal-panel" id="traversalPanel">
+      <button class="tp-close" id="tpClose">&times;</button>
+      <div class="tp-header">
+        <div class="tp-question-badge">Q1</div>
+        <div>
+          <h3 class="tp-question-title" id="tpTitle"></h3>
+          <p class="tp-question-text" id="tpQuestion"></p>
+        </div>
+      </div>
+      <div class="tp-progress"><span class="tp-iteration" id="tpIteration">Iteration 1 / 4</span><span class="tp-status"><span class="tp-status-dot"></span> Auto-playing</span></div>
+      <div class="tp-steps" id="tpSteps"></div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="ontology-tooltip" id="ontologyTooltip"></div>
+
+    <!-- Source badges -->
+    <div class="ont-source-badges">
+      <div class="ont-badge" style="top:6%;left:2%;">CBS</div>
+      <div class="ont-badge" style="bottom:8%;right:2%;">CRM</div>
+      <div class="ont-badge" style="top:50%;left:1.5%;">LOS</div>
+      <div class="ont-badge" style="bottom:4%;left:35%;">CIBIL</div>
+      <div class="ont-badge" style="top:8%;right:2%;">Jio Ecosystem</div>
+      <div class="ont-badge" style="bottom:12%;left:2%;">RBI Compliance</div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+'use strict';
+
+const canvas = document.getElementById('ontologyCanvas');
+if(!canvas)return;
+const c = canvas.getContext('2d');
+const tooltip = document.getElementById('ontologyTooltip');
+const heroSection = document.getElementById('graphContainer');
+
+let W=0,H=0,dpr=1,animId=null,time=0;
+let activeLayer='all',hoveredNode=null,selectedNode=null;
+let mouseX=-9999,mouseY=-9999;
+
+const COLORS = {
+  'core':'#6366f1',
+  'lending':'#3b82f6',
+  'insurance':'#10b981',
+  'payments':'#f59e0b',
+  'broking':'#8b5cf6',
+  'regulatory':'#ef4444',
+  'distribution':'#f97316',
+  'metrics':'#14b8a6',
+  'decisions':'#64748b'
+};
+
+// ===========================
+// NODE DATA — Jio Financial Services
+// ===========================
+const NODE_DATA = [
+  // === CORE ONTOLOGY ===
+  {id:'Customer',label:'Customer',group:'core',type:'ontology',fx:0.46,fy:0.42,radius:18},
+  {id:'LoanAccount',label:'Loan Account',group:'core',type:'ontology',fx:0.38,fy:0.35,radius:15},
+  {id:'Product',label:'Product',group:'core',type:'ontology',fx:0.54,fy:0.34,radius:16},
+  {id:'CalendarDate',label:'Calendar Date',group:'core',type:'ontology',fx:0.50,fy:0.24,radius:11},
+  {id:'Branch',label:'Branch / Channel',group:'core',type:'ontology',fx:0.42,fy:0.52,radius:12},
+  {id:'Region',label:'Region',group:'core',type:'ontology',fx:0.56,fy:0.50,radius:12},
+  {id:'Segment',label:'Customer Segment',group:'core',type:'ontology',fx:0.48,fy:0.48,radius:11},
+  {id:'Currency',label:'Currency',group:'core',type:'ontology',fx:0.52,fy:0.27,radius:9},
+
+  // === LENDING ===
+  {id:'LoanApplication',label:'Loan Application',group:'lending',type:'ontology',fx:0.12,fy:0.20,radius:14},
+  {id:'CreditScore',label:'Credit Score',group:'lending',type:'ontology',fx:0.08,fy:0.32,radius:13},
+  {id:'Collateral',label:'Collateral',group:'lending',type:'ontology',fx:0.18,fy:0.34,radius:11},
+  {id:'Disbursement',label:'Disbursement',group:'lending',type:'ontology',fx:0.15,fy:0.14,radius:12},
+  {id:'EMI',label:'EMI Schedule',group:'lending',type:'ontology',fx:0.06,fy:0.22,radius:11},
+  {id:'InterestRate',label:'Interest Rate',group:'lending',type:'ontology',fx:0.22,fy:0.24,radius:12},
+  {id:'CollectionBucket',label:'Collection Bucket',group:'lending',type:'ontology',fx:0.10,fy:0.44,radius:12},
+  {id:'RecoveryAgent',label:'Recovery Agent',group:'lending',type:'ontology',fx:0.04,fy:0.40,radius:10},
+  {id:'AltData',label:'Alt. Data (Jio)',group:'lending',type:'ontology',fx:0.20,fy:0.10,radius:13},
+
+  // === INSURANCE ===
+  {id:'Policy',label:'Insurance Policy',group:'insurance',type:'ontology',fx:0.82,fy:0.14,radius:14},
+  {id:'Premium',label:'Premium',group:'insurance',type:'ontology',fx:0.88,fy:0.08,radius:11},
+  {id:'Claim',label:'Claim',group:'insurance',type:'ontology',fx:0.76,fy:0.22,radius:12},
+  {id:'Underwriter',label:'Underwriter',group:'insurance',type:'ontology',fx:0.92,fy:0.20,radius:11},
+  {id:'InsurerPartner',label:'Insurer Partner',group:'insurance',type:'ontology',fx:0.85,fy:0.28,radius:12},
+  {id:'RiskPool',label:'Risk Pool',group:'insurance',type:'ontology',fx:0.78,fy:0.08,radius:10},
+
+  // === PAYMENTS ===
+  {id:'UPITransaction',label:'UPI Transaction',group:'payments',type:'ontology',fx:0.16,fy:0.68,radius:14},
+  {id:'MerchantAccount',label:'Merchant Account',group:'payments',type:'ontology',fx:0.08,fy:0.74,radius:12},
+  {id:'SavingsAccount',label:'Savings Account',group:'payments',type:'ontology',fx:0.22,fy:0.76,radius:12},
+  {id:'PaymentGateway',label:'Payment Gateway',group:'payments',type:'ontology',fx:0.12,fy:0.60,radius:11},
+  {id:'BillPayment',label:'Bill Payment',group:'payments',type:'ontology',fx:0.05,fy:0.62,radius:10},
+  {id:'DebitCard',label:'Debit Card',group:'payments',type:'ontology',fx:0.24,fy:0.62,radius:10},
+
+  // === BROKING & AMC ===
+  {id:'MutualFund',label:'Mutual Fund',group:'broking',type:'ontology',fx:0.78,fy:0.62,radius:14},
+  {id:'Portfolio',label:'Portfolio',group:'broking',type:'ontology',fx:0.85,fy:0.70,radius:13},
+  {id:'NAV',label:'NAV',group:'broking',type:'ontology',fx:0.72,fy:0.68,radius:11},
+  {id:'AladdinRisk',label:'Aladdin Risk Engine',group:'broking',type:'ontology',fx:0.90,fy:0.60,radius:12},
+  {id:'EquityTrade',label:'Equity Trade',group:'broking',type:'ontology',fx:0.82,fy:0.55,radius:11},
+  {id:'SIPMandate',label:'SIP Mandate',group:'broking',type:'ontology',fx:0.74,fy:0.76,radius:10},
+
+  // === REGULATORY ===
+  {id:'KYC',label:'KYC / eKYC',group:'regulatory',type:'ontology',fx:0.40,fy:0.88,radius:13},
+  {id:'AML',label:'AML Monitoring',group:'regulatory',type:'ontology',fx:0.50,fy:0.90,radius:12},
+  {id:'CRAR',label:'CRAR (Capital)',group:'regulatory',type:'ontology',fx:0.58,fy:0.86,radius:11},
+  {id:'NPAClassification',label:'NPA Classification',group:'regulatory',type:'ontology',fx:0.34,fy:0.82,radius:12},
+  {id:'PSLNorms',label:'PSL Norms',group:'regulatory',type:'ontology',fx:0.46,fy:0.82,radius:10},
+  {id:'RBIReporting',label:'RBI Reporting',group:'regulatory',type:'ontology',fx:0.54,fy:0.78,radius:10},
+
+  // === DISTRIBUTION ===
+  {id:'JioFinanceApp',label:'JioFinance App',group:'distribution',type:'ontology',fx:0.64,fy:0.40,radius:13},
+  {id:'RelianceRetail',label:'Reliance Retail',group:'distribution',type:'ontology',fx:0.68,fy:0.32,radius:12},
+  {id:'DSA',label:'DSA Network',group:'distribution',type:'ontology',fx:0.62,fy:0.52,radius:11},
+  {id:'BusinessCorrespondent',label:'Business Correspondent',group:'distribution',type:'ontology',fx:0.70,fy:0.45,radius:11},
+  {id:'JioTelecomData',label:'Jio Telecom Data',group:'distribution',type:'ontology',fx:0.66,fy:0.24,radius:12},
+
+  // === KPI / METRICS ===
+  {id:'NIM',label:'Net Interest Margin',group:'metrics',type:'kpi',fx:0.30,fy:0.50,radius:15,
+    meta:{code:'M101',badge:'Profitability',intent:'Net Interest Margin — primary measure of lending spread. Difference between interest income earned and interest paid, relative to average earning assets. Target: 10-15% (fintech-comparable).',
+      formula:'(Interest Income - Interest Expense)\n/ Avg Interest-Earning Assets × 100',unit:'%',inputNodes:3,
+      grain:'Product × Segment × Quarter',
+      components:[{id:'InterestRate',group:'lending',label:'Interest Rate'},{id:'LoanAccount',group:'core',label:'Loan Account'}],
+      dimensions:[{label:'Product',color:'#3b82f6'},{label:'Segment',color:'#6366f1'},{label:'Quarter',color:'#14b8a6'}]}},
+
+  {id:'NPARatio',label:'NPA Ratio',group:'metrics',type:'kpi',fx:0.26,fy:0.40,radius:14,
+    meta:{code:'M102',badge:'Asset Quality',intent:'Gross NPA Ratio — percentage of non-performing assets to total advances. RBI classifies assets as NPA when overdue for 90+ days. Critical for regulatory compliance and provisioning.',
+      formula:'Gross NPAs / Gross Advances × 100',unit:'%',inputNodes:2,
+      grain:'Product × Region × Month',
+      components:[{id:'NPAClassification',group:'regulatory',label:'NPA Classification'},{id:'LoanAccount',group:'core',label:'Loan Account'}],
+      dimensions:[{label:'Product',color:'#3b82f6'},{label:'Region',color:'#6366f1'}]}},
+
+  {id:'CostToIncome',label:'Cost-to-Income',group:'metrics',type:'kpi',fx:0.68,fy:0.58,radius:13,
+    meta:{code:'M201',badge:'Efficiency',intent:'Operating cost efficiency ratio. Measures operating expenses as a percentage of operating income. Lower is better — indicates operational efficiency.',
+      formula:'Operating Expenses\n/ Operating Income × 100',unit:'%',inputNodes:2,
+      grain:'Entity × Quarter',
+      components:[{id:'Branch',group:'core',label:'Branch / Channel'},{id:'Product',group:'core',label:'Product'}],
+      dimensions:[{label:'Entity',color:'#6366f1'},{label:'Quarter',color:'#14b8a6'}]}},
+
+  {id:'DisbursementVolume',label:'Disbursement Vol.',group:'metrics',type:'kpi',fx:0.28,fy:0.26,radius:13,
+    meta:{code:'M103',badge:'Growth Metric',intent:'Total loan disbursement volume in value terms. Tracks lending growth across products (PL, CD, LAP, LAS). AUM grew from ₹173Cr to ₹10,053Cr in FY25.',
+      formula:'SUM(disbursed_amount)\nGROUP BY product, channel, period',unit:'₹ Cr',inputNodes:2,
+      grain:'Product × Channel × Month',
+      components:[{id:'Disbursement',group:'lending',label:'Disbursement'},{id:'LoanApplication',group:'lending',label:'Loan Application'}],
+      dimensions:[{label:'Product',color:'#3b82f6'},{label:'Channel',color:'#f97316'},{label:'Month',color:'#14b8a6'}]}},
+
+  {id:'CollectionEfficiency',label:'Collection Efficiency',group:'metrics',type:'kpi',fx:0.18,fy:0.54,radius:13,
+    meta:{code:'M105',badge:'Recovery Metric',intent:'Measures effectiveness of collections across DPD buckets. Critical as RBI tightens unsecured lending norms. Higher efficiency = lower credit losses.',
+      formula:'Amount Collected in Period\n/ Amount Due in Period × 100',unit:'%',inputNodes:3,
+      grain:'DPD Bucket × Product × Month',
+      components:[{id:'CollectionBucket',group:'lending',label:'Collection Bucket'},{id:'EMI',group:'lending',label:'EMI Schedule'},{id:'RecoveryAgent',group:'lending',label:'Recovery Agent'}],
+      dimensions:[{label:'DPD Bucket',color:'#ef4444'},{label:'Product',color:'#3b82f6'}]}},
+
+  {id:'ClaimSettlement',label:'Claim Settlement %',group:'metrics',type:'kpi',fx:0.84,fy:0.40,radius:12,
+    meta:{code:'M301',badge:'Service Metric',intent:'Percentage of insurance claims settled versus filed. Key indicator of insurance service quality. Measured across life, health, and motor segments.',
+      formula:'Claims Settled / Claims Filed × 100',unit:'%',inputNodes:2,
+      grain:'Insurer × Product Type × Quarter',
+      components:[{id:'Claim',group:'insurance',label:'Claim'},{id:'InsurerPartner',group:'insurance',label:'Insurer Partner'}],
+      dimensions:[{label:'Insurer',color:'#10b981'},{label:'Product Type',color:'#10b981'}]}},
+
+  {id:'AUM',label:'AUM',group:'metrics',type:'kpi',fx:0.80,fy:0.48,radius:14,
+    meta:{code:'M401',badge:'Scale Metric',intent:'Assets Under Management across lending and AMC operations. NBFC AUM: ₹10,053Cr (FY25). Jio BlackRock NFO raised ₹17,800Cr from 90+ institutional investors.',
+      formula:'SUM(outstanding_principal)\n+ SUM(amc_fund_value)',unit:'₹ Cr',inputNodes:3,
+      grain:'Business Line × Product × Quarter',
+      components:[{id:'LoanAccount',group:'core',label:'Loan Account'},{id:'MutualFund',group:'broking',label:'Mutual Fund'},{id:'Portfolio',group:'broking',label:'Portfolio'}],
+      dimensions:[{label:'Business Line',color:'#8b5cf6'},{label:'Product',color:'#3b82f6'}]}},
+
+  // === DECISION NODES ===
+  {id:'LoanApprovalDecision',label:'Loan Approval',group:'decisions',type:'decision',fx:0.14,fy:0.28,radius:16,
+    meta:{code:'D001',badge:'Credit Decision',intent:'AI/ML-driven loan approval using traditional bureau data plus Jio ecosystem alternative data (telecom recharge patterns, retail purchase history, payment behavior). 10-minute digital approval for LAS.',
+      rule:'IF credit_score >= min_threshold\n  AND alt_data_score >= jio_threshold\n  AND debt_to_income <= max_dti\n  AND kyc_status = VERIFIED\nTHEN approve_loan(\n  amount = eligible_amount,\n  rate = risk_based_rate,\n  tenure = max_tenure\n)',unit:'Approval',inputNodes:5,
+      grain:'Customer × Product × Day',
+      components:[{id:'CreditScore',group:'lending',label:'Credit Score'},{id:'AltData',group:'lending',label:'Alt. Data (Jio)'},{id:'KYC',group:'regulatory',label:'KYC / eKYC'},{id:'LoanApplication',group:'lending',label:'Loan Application'}],
+      dimensions:[{label:'Customer',color:'#6366f1'},{label:'Product',color:'#3b82f6'}],
+      traversal:{
+        title:'Loan Approval Analysis',
+        question:'Should we approve a ₹5L personal loan for a Jio Platinum subscriber with 3-year recharge history and moderate CIBIL score?',
+        steps:[
+          {num:'#1',title:'Resolve Customer & KYC',reasoning:'First verify KYC status and pull customer profile from Jio ecosystem data.',
+            nodes:['Customer','KYC','AltData','JioTelecomData'],fetchNodes:'Customer, KYC, AltData',
+            fetchResult:'{\n  "customer_id": "JFS_CUS_90128",\n  "kyc_status": "VIDEO_KYC_VERIFIED",\n  "jio_tenure_months": 38,\n  "recharge_consistency": 97.2%,\n  "avg_monthly_spend": "₹2,450"\n}'},
+          {num:'#2',title:'Credit Scoring (Bureau + Alt Data)',reasoning:'CIBIL score is 680 (moderate). But Jio alt data shows 97% recharge consistency for 3 years — strong payment discipline signal.',
+            nodes:['CreditScore','AltData','InterestRate'],fetchNodes:'CreditScore, AltData',
+            fetchResult:'{\n  "cibil_score": 680,\n  "jio_alt_score": 82,\n  "composite_score": 74,\n  "risk_band": "NEAR_PRIME",\n  "eligible_amount": "₹5,00,000"\n}'},
+          {num:'#3',title:'Risk-Based Pricing',reasoning:'Near-prime band. Apply risk-based pricing — higher than prime but within acceptable NIM target of 10-15%.',
+            nodes:['InterestRate','NIM','Product'],fetchNodes:'InterestRate, NIM',
+            fetchResult:'{\n  "base_rate": "12.5%",\n  "risk_premium": "2.8%",\n  "offered_rate": "15.3%",\n  "tenure_months": 36,\n  "emi": "₹17,420"\n}'},
+          {num:'#4',title:'Generate Loan & Disburse',reasoning:'All checks passed. DTI within limits. Generating loan account and triggering instant disbursement via UPI.',
+            nodes:['LoanAccount','Disbursement','EMI'],fetchNodes:'LoanAccount, Disbursement',
+            fetchResult:'{\n  "loan_id": "JFL_PL_2026_44821",\n  "amount": "₹5,00,000",\n  "disbursement": "UPI_INSTANT",\n  "status": "APPROVED_DISBURSED",\n  "first_emi_date": "2026-03-10"\n}'}
+        ]
+      }}},
+
+  {id:'CollectionStrategyDecision',label:'Collection Strategy',group:'decisions',type:'decision',fx:0.10,fy:0.56,radius:15,
+    meta:{code:'D002',badge:'Recovery Decision',intent:'Determines collection approach based on DPD (Days Past Due) bucket, customer behavior signals, and early warning indicators from Jio ecosystem data. Escalates from digital nudges to field recovery.',
+      rule:'IF dpd_bucket = "0-30"\n  THEN soft_reminder(channel=app_push)\nELSE IF dpd_bucket = "31-60"\n  AND jio_recharge_active = TRUE\n  THEN intensify(channel=call_center)\nELSE IF dpd_bucket = "61-90"\n  THEN hard_collection(\n    assign = field_recovery_agent,\n    flag = pre_npa_watch\n  )',unit:'Strategy',inputNodes:4,
+      grain:'Customer × Loan × Week',
+      components:[{id:'CollectionBucket',group:'lending',label:'Collection Bucket'},{id:'RecoveryAgent',group:'lending',label:'Recovery Agent'},{id:'EMI',group:'lending',label:'EMI Schedule'}],
+      dimensions:[{label:'DPD Bucket',color:'#ef4444'},{label:'Customer',color:'#6366f1'}],
+      traversal:{
+        title:'Collection Escalation Analysis',
+        question:'A personal loan borrower has missed 2 EMIs (42 DPD). Jio telecom data shows active usage. What collection strategy should we deploy?',
+        steps:[
+          {num:'#1',title:'Check DPD Bucket & Loan Details',reasoning:'Pull loan details and current DPD classification. 42 days overdue = Bucket 2 (31-60 DPD).',
+            nodes:['CollectionBucket','LoanAccount','EMI'],fetchNodes:'CollectionBucket, LoanAccount',
+            fetchResult:'{\n  "loan_id": "JFL_PL_2025_38102",\n  "outstanding": "₹3,82,000",\n  "dpd": 42,\n  "bucket": "31-60",\n  "missed_emis": 2,\n  "emi_amount": "₹14,200"\n}'},
+          {num:'#2',title:'Check Jio Ecosystem Signals',reasoning:'Customer is still recharging Jio — signals financial activity, not total default. Likely a cash flow timing issue.',
+            nodes:['AltData','JioTelecomData','Customer'],fetchNodes:'AltData, JioTelecomData',
+            fetchResult:'{\n  "jio_recharge_active": true,\n  "last_recharge": "2026-02-08",\n  "jiomart_txn_last_30d": 3,\n  "payment_behavior_signal": "TEMPORARILY_STRESSED",\n  "contact_preference": "EVENING_CALL"\n}'},
+          {num:'#3',title:'Deploy Collection Strategy',reasoning:'Active Jio user with temporary stress. Escalate to call center with restructure offer rather than field recovery.',
+            nodes:['RecoveryAgent','NPAClassification','CollectionEfficiency'],fetchNodes:'RecoveryAgent',
+            fetchResult:'{\n  "strategy": "CALL_CENTER_INTENSIVE",\n  "offer": "EMI_RESTRUCTURE_3_MONTH",\n  "agent_assigned": "CC_TEAM_WEST_07",\n  "next_action_date": "2026-02-12",\n  "pre_npa_flag": false\n}'}
+        ]
+      }}},
+
+  {id:'RiskBasedPricing',label:'Risk-Based Pricing',group:'decisions',type:'decision',fx:0.30,fy:0.30,radius:14,
+    meta:{code:'D003',badge:'Pricing Decision',intent:'Dynamically sets interest rate based on customer risk profile, product type, competitive landscape, and NIM targets. Incorporates Jio alt-data scores for more granular risk differentiation.',
+      rule:'rate = base_rate\n  + risk_premium(credit_band)\n  + product_spread\n  - relationship_discount(\n    IF jio_tenure > 24m\n    AND ecosystem_active = TRUE\n  )\nSUBJECT TO min_nim >= 10%',unit:'Rate %',inputNodes:4,
+      grain:'Customer × Product × Day',
+      components:[{id:'InterestRate',group:'lending',label:'Interest Rate'},{id:'CreditScore',group:'lending',label:'Credit Score'},{id:'NIM',group:'metrics',label:'Net Interest Margin'}],
+      dimensions:[{label:'Risk Band',color:'#3b82f6'},{label:'Product',color:'#3b82f6'}]}},
+
+  {id:'PortfolioAllocationDecision',label:'Portfolio Allocation',group:'decisions',type:'decision',fx:0.86,fy:0.80,radius:14,
+    meta:{code:'D004',badge:'Investment Decision',intent:'Determines optimal asset allocation using BlackRock Aladdin platform — multi-asset class (equity, fixed income, alternatives). First Aladdin deployment in India through Jio BlackRock JV.',
+      rule:'OPTIMIZE allocation ACROSS asset_classes\n  WHERE sharpe_ratio > min_threshold\n  AND risk_score <= client_risk_tolerance\n  USING aladdin_risk_engine\n  SUBJECT TO regulatory_limits,\n    sector_caps, liquidity_floor',unit:'Allocation',inputNodes:4,
+      grain:'Portfolio × Asset Class × Month',
+      components:[{id:'AladdinRisk',group:'broking',label:'Aladdin Risk Engine'},{id:'Portfolio',group:'broking',label:'Portfolio'},{id:'MutualFund',group:'broking',label:'Mutual Fund'}],
+      dimensions:[{label:'Portfolio',color:'#8b5cf6'},{label:'Asset Class',color:'#8b5cf6'}]}},
+
+  {id:'KYCDecision',label:'KYC Verification',group:'decisions',type:'decision',fx:0.44,fy:0.74,radius:13,
+    meta:{code:'D005',badge:'Compliance Decision',intent:'Automated KYC verification using Video KYC, Aadhaar e-KYC, and CKYC registry. Determines onboarding approval and risk category for AML monitoring.',
+      rule:'IF aadhaar_ekyc = VALID\n  AND video_kyc = PASSED\n  AND pep_screening = CLEAR\n  AND sanctions_check = CLEAR\nTHEN kyc_status = VERIFIED\n  AND aml_risk = ASSIGN(risk_category)\nELSE REJECT(reason)',unit:'Status',inputNodes:3,
+      grain:'Customer × Day',
+      components:[{id:'KYC',group:'regulatory',label:'KYC / eKYC'},{id:'AML',group:'regulatory',label:'AML Monitoring'},{id:'Customer',group:'core',label:'Customer'}],
+      dimensions:[{label:'Customer',color:'#6366f1'},{label:'Risk Category',color:'#ef4444'}]}},
+
+  {id:'NPADecision',label:'NPA Classification',group:'decisions',type:'decision',fx:0.36,fy:0.68,radius:13,
+    meta:{code:'D006',badge:'Regulatory Decision',intent:'Classifies loan assets per RBI norms — Standard, Sub-standard, Doubtful, Loss. Triggers provisioning requirements. 90+ DPD auto-classifies as NPA.',
+      rule:'IF dpd >= 90\n  THEN classify = "SUB_STANDARD"\n  AND provision = 15%\nIF dpd >= 365\n  THEN classify = "DOUBTFUL"\n  AND provision = 40%\nIF recovery_unlikely\n  THEN classify = "LOSS"\n  AND provision = 100%',unit:'Classification',inputNodes:3,
+      grain:'Loan × Month',
+      components:[{id:'NPAClassification',group:'regulatory',label:'NPA Classification'},{id:'CollectionBucket',group:'lending',label:'Collection Bucket'},{id:'RBIReporting',group:'regulatory',label:'RBI Reporting'}],
+      dimensions:[{label:'Loan',color:'#3b82f6'},{label:'NPA Category',color:'#ef4444'}]}}
+];
+
+// ===========================
+// EDGE DATA
+// ===========================
+const EDGE_DATA = [
+  // Core connections
+  {from:'Customer',to:'LoanAccount',label:'holds'},{from:'Customer',to:'Segment',label:'classified_as'},
+  {from:'Customer',to:'Region',label:'located_in'},{from:'LoanAccount',to:'Product',label:'product_type'},
+  {from:'Product',to:'CalendarDate',label:'tracked_by'},{from:'LoanAccount',to:'Branch',label:'sourced_via'},
+  {from:'Currency',to:'LoanAccount',label:'denominated_in'},{from:'Customer',to:'Branch',label:'served_by'},
+  {from:'Region',to:'Branch',label:'contains'},
+
+  // Lending internal
+  {from:'LoanApplication',to:'Customer',label:'submitted_by'},{from:'LoanApplication',to:'CreditScore',label:'assessed_by'},
+  {from:'CreditScore',to:'AltData',label:'enhanced_by'},{from:'LoanApplication',to:'Collateral',label:'secured_by'},
+  {from:'LoanApplication',to:'Disbursement',label:'triggers'},{from:'Disbursement',to:'LoanAccount',label:'creates'},
+  {from:'LoanAccount',to:'EMI',label:'has_schedule'},{from:'EMI',to:'CollectionBucket',label:'tracked_in'},
+  {from:'CollectionBucket',to:'RecoveryAgent',label:'assigned_to'},{from:'InterestRate',to:'Product',label:'priced_for'},
+  {from:'AltData',to:'JioTelecomData',label:'sourced_from'},{from:'InterestRate',to:'LoanApplication',label:'applied_to'},
+
+  // Insurance
+  {from:'Policy',to:'Customer',label:'issued_to'},{from:'Policy',to:'Premium',label:'has_premium'},
+  {from:'Policy',to:'Claim',label:'may_have'},{from:'Claim',to:'InsurerPartner',label:'settled_by'},
+  {from:'Underwriter',to:'Policy',label:'underwrites'},{from:'Underwriter',to:'RiskPool',label:'assesses'},
+  {from:'InsurerPartner',to:'Product',label:'offers'},{from:'Premium',to:'RiskPool',label:'funds'},
+
+  // Payments
+  {from:'UPITransaction',to:'Customer',label:'initiated_by'},{from:'UPITransaction',to:'MerchantAccount',label:'paid_to'},
+  {from:'SavingsAccount',to:'Customer',label:'owned_by'},{from:'PaymentGateway',to:'UPITransaction',label:'processes'},
+  {from:'BillPayment',to:'Customer',label:'paid_by'},{from:'DebitCard',to:'SavingsAccount',label:'linked_to'},
+  {from:'SavingsAccount',to:'UPITransaction',label:'funds'},{from:'MerchantAccount',to:'Region',label:'located_in'},
+
+  // Broking & AMC
+  {from:'MutualFund',to:'NAV',label:'has_nav'},{from:'MutualFund',to:'Portfolio',label:'held_in'},
+  {from:'Portfolio',to:'Customer',label:'owned_by'},{from:'AladdinRisk',to:'Portfolio',label:'monitors'},
+  {from:'AladdinRisk',to:'MutualFund',label:'analyzes'},{from:'EquityTrade',to:'Customer',label:'placed_by'},
+  {from:'EquityTrade',to:'CalendarDate',label:'on_date'},{from:'SIPMandate',to:'MutualFund',label:'invests_in'},
+  {from:'SIPMandate',to:'Customer',label:'held_by'},
+
+  // Regulatory
+  {from:'KYC',to:'Customer',label:'verifies'},{from:'AML',to:'UPITransaction',label:'monitors'},
+  {from:'AML',to:'Customer',label:'screens'},{from:'CRAR',to:'LoanAccount',label:'risk_weights'},
+  {from:'NPAClassification',to:'LoanAccount',label:'classifies'},{from:'PSLNorms',to:'Product',label:'mandates'},
+  {from:'RBIReporting',to:'NPAClassification',label:'reports'},{from:'RBIReporting',to:'CRAR',label:'reports'},
+  {from:'KYC',to:'AML',label:'feeds'},
+
+  // Distribution
+  {from:'JioFinanceApp',to:'Customer',label:'serves'},{from:'JioFinanceApp',to:'LoanApplication',label:'originates'},
+  {from:'RelianceRetail',to:'LoanApplication',label:'sources'},{from:'DSA',to:'LoanApplication',label:'refers'},
+  {from:'BusinessCorrespondent',to:'SavingsAccount',label:'opens'},{from:'JioTelecomData',to:'AltData',label:'provides'},
+  {from:'JioTelecomData',to:'Customer',label:'profiles'},{from:'RelianceRetail',to:'Policy',label:'distributes'},
+  {from:'JioFinanceApp',to:'MutualFund',label:'distributes'},
+
+  // KPI connections
+  {from:'NIM',to:'InterestRate',label:'derived_from'},{from:'NIM',to:'LoanAccount',label:'measured_on'},
+  {from:'NPARatio',to:'NPAClassification',label:'aggregates'},{from:'NPARatio',to:'LoanAccount',label:'per_portfolio'},
+  {from:'CostToIncome',to:'Branch',label:'measured_at'},{from:'DisbursementVolume',to:'Disbursement',label:'counts'},
+  {from:'DisbursementVolume',to:'Product',label:'by_product'},{from:'CollectionEfficiency',to:'CollectionBucket',label:'tracks'},
+  {from:'CollectionEfficiency',to:'EMI',label:'measured_against'},{from:'ClaimSettlement',to:'Claim',label:'measures'},
+  {from:'ClaimSettlement',to:'InsurerPartner',label:'by_insurer'},{from:'AUM',to:'LoanAccount',label:'includes'},
+  {from:'AUM',to:'MutualFund',label:'includes'},
+
+  // Decision connections
+  {from:'LoanApprovalDecision',to:'CreditScore',label:'evaluates'},{from:'LoanApprovalDecision',to:'AltData',label:'considers'},
+  {from:'LoanApprovalDecision',to:'KYC',label:'requires'},{from:'LoanApprovalDecision',to:'LoanApplication',label:'decides_on'},
+  {from:'LoanApprovalDecision',to:'Disbursement',label:'triggers'},{from:'LoanApprovalDecision',to:'InterestRate',label:'sets'},
+  {from:'CollectionStrategyDecision',to:'CollectionBucket',label:'evaluates'},{from:'CollectionStrategyDecision',to:'RecoveryAgent',label:'assigns'},
+  {from:'CollectionStrategyDecision',to:'AltData',label:'checks_signals'},{from:'CollectionStrategyDecision',to:'NPAClassification',label:'prevents'},
+  {from:'RiskBasedPricing',to:'CreditScore',label:'uses'},{from:'RiskBasedPricing',to:'InterestRate',label:'determines'},
+  {from:'RiskBasedPricing',to:'NIM',label:'targets'},{from:'RiskBasedPricing',to:'AltData',label:'incorporates'},
+  {from:'PortfolioAllocationDecision',to:'AladdinRisk',label:'powered_by'},{from:'PortfolioAllocationDecision',to:'Portfolio',label:'rebalances'},
+  {from:'PortfolioAllocationDecision',to:'MutualFund',label:'selects'},{from:'KYCDecision',to:'KYC',label:'executes'},
+  {from:'KYCDecision',to:'AML',label:'triggers'},{from:'KYCDecision',to:'Customer',label:'onboards'},
+  {from:'NPADecision',to:'NPAClassification',label:'applies'},{from:'NPADecision',to:'CollectionBucket',label:'informed_by'},
+  {from:'NPADecision',to:'RBIReporting',label:'reports_to'}
+];
+
+// Build lookups
+const nodeMap={};
+NODE_DATA.forEach(n=>{nodeMap[n.id]=n});
+const adjacency={};
+NODE_DATA.forEach(n=>{adjacency[n.id]=[]});
+EDGE_DATA.forEach(e=>{
+  if(adjacency[e.from])adjacency[e.from].push({target:e.to,label:e.label});
+  if(adjacency[e.to])adjacency[e.to].push({target:e.from,label:e.label});
+});
+
+// Breathing seeds
+NODE_DATA.forEach(n=>{
+  n.seed=Math.random()*Math.PI*2;
+  n.speedX=0.3+Math.random()*0.4;
+  n.speedY=0.3+Math.random()*0.4;
+  n.ampX=2+Math.random()*3;
+  n.ampY=2+Math.random()*3;
+});
+
+function resize(){
+  dpr=window.devicePixelRatio||1;
+  W=heroSection.clientWidth;H=heroSection.clientHeight;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  c.setTransform(dpr,0,0,dpr,0,0);
+}
+
+function getPos(n){
+  const bx=n.fx*W,by=n.fy*H;
+  const ox=Math.sin(time*n.speedX+n.seed)*n.ampX;
+  const oy=Math.cos(time*n.speedY+n.seed+1.0)*n.ampY;
+  return{x:bx+ox,y:by+oy};
+}
+
+function nodeMatchesLayer(n){
+  if(activeLayer==='all')return true;
+  if(activeLayer==='metrics')return n.type==='kpi';
+  if(activeLayer==='decisions')return n.type==='decision';
+  return n.group===activeLayer||n.group==='core';
+}
+
+function drawEdges(){
+  c.setLineDash([4,4]);
+  EDGE_DATA.forEach(e=>{
+    const from=nodeMap[e.from],to=nodeMap[e.to];
+    if(!from||!to)return;
+    const p1=getPos(from),p2=getPos(to);
+    let alpha=0.10;
+    if(activeLayer!=='all'){
+      const fm=nodeMatchesLayer(from),tm=nodeMatchesLayer(to);
+      alpha=(fm&&tm)?0.20:0.02;
+    }
+    if(selectedNode&&(e.from===selectedNode.id||e.to===selectedNode.id))alpha=0.45;
+    else if(hoveredNode&&(e.from===hoveredNode.id||e.to===hoveredNode.id))alpha=0.4;
+    c.beginPath();c.moveTo(p1.x,p1.y);c.lineTo(p2.x,p2.y);
+    c.strokeStyle='rgba(255,255,255,'+alpha+')';c.lineWidth=1;c.stroke();
+    const mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2;
+    let la=activeLayer==='all'?0.12:alpha*0.5;
+    if((hoveredNode||selectedNode)&&(e.from===(hoveredNode||selectedNode).id||e.to===(hoveredNode||selectedNode).id))la=0.55;
+    if(la>0.04){
+      c.font='7px Inter, sans-serif';c.fillStyle='rgba(255,255,255,'+la+')';
+      c.textAlign='center';c.textBaseline='middle';c.fillText(e.label,mx,my-5);
+    }
+  });
+  c.setLineDash([]);
+}
+
+function drawTriangle(x,y,r,color,alpha,hl){
+  const h=r*1.8;c.save();c.globalAlpha=alpha;
+  const grad=c.createRadialGradient(x,y,r*0.3,x,y,r*2.5);
+  grad.addColorStop(0,color+'33');grad.addColorStop(1,color+'00');
+  c.beginPath();c.arc(x,y,r*2.5,0,Math.PI*2);c.fillStyle=grad;c.fill();
+  c.beginPath();c.moveTo(x,y-h/2);c.lineTo(x-r,y+h/2);c.lineTo(x+r,y+h/2);c.closePath();
+  c.fillStyle=color;c.shadowColor=color;c.shadowBlur=hl?20:8;c.fill();c.shadowBlur=0;
+  c.restore();
+}
+
+function drawKPINode(x,y,r,color,alpha,hl){
+  c.save();c.globalAlpha=alpha;
+  const grad=c.createRadialGradient(x,y,r*0.5,x,y,r*2.5);
+  grad.addColorStop(0,color+'33');grad.addColorStop(1,color+'00');
+  c.beginPath();c.arc(x,y,r*2.5,0,Math.PI*2);c.fillStyle=grad;c.fill();
+  c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.strokeStyle=color;c.lineWidth=2.5;
+  c.shadowColor=color;c.shadowBlur=hl?20:8;c.stroke();c.shadowBlur=0;
+  c.beginPath();c.arc(x,y,r*0.6,0,Math.PI*2);c.fillStyle=color;c.fill();
+  c.restore();
+}
+
+function drawNodes(){
+  NODE_DATA.forEach(n=>{
+    const pos=getPos(n);const color=COLORS[n.group];
+    let nodeAlpha=1.0;
+    if(activeLayer!=='all')nodeAlpha=nodeMatchesLayer(n)?1.0:0.08;
+    const isH=hoveredNode&&hoveredNode.id===n.id;
+    const isS=selectedNode&&selectedNode.id===n.id;
+    const ref=hoveredNode||selectedNode;
+    const isN=ref&&adjacency[ref.id]&&adjacency[ref.id].some(a=>a.target===n.id);
+    if(ref){
+      if(isH||isS)nodeAlpha=1.0;
+      else if(isN)nodeAlpha=Math.max(nodeAlpha,0.8);
+      else nodeAlpha=Math.min(nodeAlpha,0.1);
+    }
+    const r=n.radius;const hl=isH||isS;
+    if(n.type==='decision')drawTriangle(pos.x,pos.y,r,color,nodeAlpha,hl);
+    else if(n.type==='kpi')drawKPINode(pos.x,pos.y,r,color,nodeAlpha,hl);
+    else{
+      c.save();c.globalAlpha=nodeAlpha;
+      const g=c.createRadialGradient(pos.x,pos.y,r*0.5,pos.x,pos.y,r*2.5);
+      g.addColorStop(0,color+'33');g.addColorStop(1,color+'00');
+      c.beginPath();c.arc(pos.x,pos.y,r*2.5,0,Math.PI*2);c.fillStyle=g;c.fill();
+      c.beginPath();c.arc(pos.x,pos.y,r,0,Math.PI*2);c.fillStyle=color;
+      c.shadowColor=color;c.shadowBlur=hl?20:8;c.fill();c.shadowBlur=0;
+      c.beginPath();c.arc(pos.x,pos.y-r*0.25,r*0.5,0,Math.PI*2);
+      c.fillStyle='rgba(255,255,255,0.12)';c.fill();c.restore();
+    }
+    const fs=r>=14?10:r>=11?9:8;
+    c.save();c.globalAlpha=nodeAlpha*0.9;
+    c.font='500 '+fs+'px Inter, sans-serif';c.fillStyle='#fff';c.textAlign='center';c.textBaseline='top';
+    const ly=n.type==='decision'?pos.y+r*1.0:pos.y+r+4;
+    c.fillText(n.label,pos.x,ly);c.restore();
+  });
+}
+
+function updateTooltip(){
+  if(!tooltip)return;
+  if(hoveredNode&&!selectedNode){
+    const pos=getPos(hoveredNode);
+    const conns=adjacency[hoveredNode.id]||[];
+    const tl=hoveredNode.type==='kpi'?'KPI':hoveredNode.type==='decision'?'Decision':'Ontology';
+    const cl=conns.slice(0,6).map(cn=>{
+      const tn=nodeMap[cn.target];const ch=tn?COLORS[tn.group]:'#888';
+      return '<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:rgba(255,255,255,0.7);">'+
+        '<span style="width:5px;height:5px;border-radius:50%;background:'+ch+';flex-shrink:0;"></span>'+
+        '<span style="color:rgba(255,255,255,0.4);font-size:9px;">'+cn.label+'</span>'+
+        '<span>'+cn.target+'</span></div>';
+    }).join('');
+    const gc=COLORS[hoveredNode.group];
+    tooltip.innerHTML='<div style="font-weight:600;font-size:12px;margin-bottom:3px;color:'+gc+';">'+hoveredNode.label+'</div>'+
+      '<div style="display:flex;gap:5px;margin-bottom:6px;">'+
+      '<span style="font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.35);">'+hoveredNode.group+'</span>'+
+      '<span style="font-size:8px;padding:1px 4px;border-radius:3px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);">'+tl+'</span></div>'+
+      '<div style="display:flex;flex-direction:column;gap:3px;">'+cl+'</div>'+
+      (conns.length>6?'<div style="font-size:9px;color:rgba(255,255,255,0.3);margin-top:3px;">+'+(conns.length-6)+' more</div>':'')+
+      (hoveredNode.type!=='ontology'?'<div style="font-size:9px;color:rgba(99,102,241,0.7);margin-top:5px;">Click to inspect →</div>':'');
+    tooltip.classList.add('visible');
+    let tx=pos.x+20,ty=pos.y-20;
+    if(tx+220>W-10)tx=pos.x-240;
+    if(ty+160>H-10)ty=H-170;
+    if(ty<10)ty=10;
+    tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
+  }else{tooltip.classList.remove('visible')}
+}
+
+function hitTest(mx,my){
+  let cl=null,cd=Infinity;
+  NODE_DATA.forEach(n=>{
+    const pos=getPos(n);const dx=mx-pos.x,dy=my-pos.y;
+    const dist=Math.sqrt(dx*dx+dy*dy);const th=n.radius+12;
+    if(dist<th&&dist<cd){cl=n;cd=dist}
+  });
+  return cl;
+}
+
+// === PANELS ===
+const ndPanel=document.getElementById('nodeDetailPanel');
+const ndpClose=document.getElementById('ndpClose');
+const tPanel=document.getElementById('traversalPanel');
+const tpClose=document.getElementById('tpClose');
+
+function closeAllPanels(){
+  ndPanel.classList.remove('open');tPanel.classList.remove('open');
+  selectedNode=null;
+}
+if(ndpClose)ndpClose.addEventListener('click',closeAllPanels);
+if(tpClose)tpClose.addEventListener('click',closeAllPanels);
+
+function showNodeDetail(node){
+  selectedNode=node;tPanel.classList.remove('open');
+  const color=COLORS[node.group];
+  const tl=node.type==='kpi'?'KPI':node.type==='decision'?'Decision':'Ontology';
+  const iconEl=document.getElementById('ndpIcon');
+  if(node.type==='decision')iconEl.innerHTML='<svg width="20" height="20" viewBox="0 0 20 20"><polygon points="10,2 18,18 2,18" fill="'+color+'"/></svg>';
+  else if(node.type==='kpi')iconEl.innerHTML='<svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke="'+color+'" stroke-width="2.5" fill="none"/><circle cx="10" cy="10" r="4.5" fill="'+color+'"/></svg>';
+  else iconEl.innerHTML='<svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="'+color+'"/></svg>';
+  iconEl.style.borderColor=color+'44';
+  document.getElementById('ndpTitle').textContent=node.label;
+  const badgesEl=document.getElementById('ndpBadges');
+  if(node.meta)badgesEl.innerHTML='<span class="ndp-badge ndp-badge-id">'+node.meta.code+'</span><span class="ndp-badge ndp-badge-type" style="background:'+color+';">'+node.meta.badge+'</span>';
+  else badgesEl.innerHTML='<span class="ndp-badge ndp-badge-type" style="background:'+color+';">'+tl+' Node</span><span class="ndp-badge ndp-badge-id">'+node.group+'</span>';
+  document.getElementById('ndpIntent').textContent=node.meta?node.meta.intent:'Core entity node in the Jio Financial Services ontology. Connected to '+(adjacency[node.id]||[]).length+' other nodes.';
+  const fS=document.getElementById('ndpFormulaSection'),rS=document.getElementById('ndpRuleSection');
+  fS.classList.remove('visible');rS.classList.remove('visible');
+  if(node.meta&&node.meta.formula){document.getElementById('ndpFormula').textContent=node.meta.formula;fS.classList.add('visible')}
+  if(node.meta&&node.meta.rule){document.getElementById('ndpRule').textContent=node.meta.rule;rS.classList.add('visible')}
+  const mL=document.getElementById('ndpMetaLeft'),mR=document.getElementById('ndpMetaRight');
+  if(node.meta){
+    mL.innerHTML='<span class="ndp-meta-label">UNIT</span><span class="ndp-meta-value">'+node.meta.unit+'</span>';
+    mR.innerHTML='<span class="ndp-meta-label">INPUT NODES</span><span class="ndp-meta-pill">'+node.meta.inputNodes+'</span>';
+  }else{
+    mL.innerHTML='<span class="ndp-meta-label">TYPE</span><span class="ndp-meta-value">'+tl+'</span>';
+    mR.innerHTML='<span class="ndp-meta-label">CONNECTIONS</span><span class="ndp-meta-pill">'+(adjacency[node.id]||[]).length+'</span>';
+  }
+  document.getElementById('ndpGrain').textContent=node.meta?node.meta.grain:node.group+' × CalendarDate';
+  const compEl=document.getElementById('ndpComponents');
+  if(node.meta&&node.meta.components){
+    compEl.innerHTML=node.meta.components.map(cm=>{
+      const cc=COLORS[cm.group]||'#888';
+      return '<div class="ndp-comp-item"><span class="ndp-comp-dot" style="background:'+cc+';"></span><div class="ndp-comp-info"><span class="ndp-comp-name">'+cm.label+'</span><span class="ndp-comp-group">'+cm.group+'</span></div></div>';
+    }).join('');
+  }else{
+    const conns=(adjacency[node.id]||[]).slice(0,4);
+    compEl.innerHTML=conns.map(cn=>{const tn=nodeMap[cn.target];const cc=tn?COLORS[tn.group]:'#888';
+      return '<div class="ndp-comp-item"><span class="ndp-comp-dot" style="background:'+cc+';"></span><div class="ndp-comp-info"><span class="ndp-comp-name">'+cn.target+'</span><span class="ndp-comp-group">'+cn.label+'</span></div></div>';
+    }).join('');
+  }
+  const dimEl=document.getElementById('ndpDimensions');
+  if(node.meta&&node.meta.dimensions)dimEl.innerHTML=node.meta.dimensions.map(d=>'<span class="ndp-dim-chip"><span class="ndp-dim-dot" style="background:'+d.color+';"></span>'+d.label+'</span>').join('');
+  else dimEl.innerHTML='<span class="ndp-dim-chip"><span class="ndp-dim-dot" style="background:#6366f1;"></span>'+node.group+'</span>';
+  ndPanel.classList.add('open');
+  if(node.meta&&node.meta.traversal)setTimeout(()=>{if(selectedNode&&selectedNode.id===node.id)showTraversal(node)},1200);
+}
+
+function showTraversal(node){
+  if(!node.meta||!node.meta.traversal)return;
+  const t=node.meta.traversal;
+  ndPanel.classList.remove('open');tPanel.classList.add('open');
+  document.getElementById('tpTitle').textContent=t.title;
+  document.getElementById('tpQuestion').textContent=t.question;
+  const stepsEl=document.getElementById('tpSteps');stepsEl.innerHTML='';
+  t.steps.forEach((step,i)=>{
+    setTimeout(()=>{
+      document.getElementById('tpIteration').textContent='Iteration '+(i+1)+' / '+t.steps.length;
+      const el=document.createElement('div');el.className='tp-step';
+      let chips=step.nodes.map(nid=>{const nd=nodeMap[nid];const nc=nd?COLORS[nd.group]:'#888';
+        return '<span class="tp-node-chip"><span class="tp-node-chip-dot" style="background:'+nc+';"></span>'+nid+'</span>';}).join('');
+      el.innerHTML='<div class="tp-step-header"><span class="tp-step-num">'+step.num+'</span><span class="tp-step-title">'+step.title+'</span></div>'+
+        '<div class="tp-step-reasoning">"'+step.reasoning.replace(/"/g,'')+'"</div>'+
+        '<div class="tp-step-nodes"><div class="tp-step-nodes-label">Nodes Accessed:</div><div class="tp-step-node-chips">'+chips+'</div></div>'+
+        (step.fetchResult?'<div class="tp-step-fetch"><div class="tp-fetch-header"><span class="tp-fetch-icon">⊜</span> Fetch</div><div class="tp-fetch-nodes"><strong>Nodes:</strong> '+step.fetchNodes+'</div><div class="tp-fetch-result">'+step.fetchResult+'</div></div>':'');
+      stepsEl.appendChild(el);
+    },i*1800);
+  });
+}
+
+// === Events ===
+canvas.addEventListener('mousemove',e=>{
+  const rect=canvas.getBoundingClientRect();
+  mouseX=e.clientX-rect.left;mouseY=e.clientY-rect.top;
+  hoveredNode=hitTest(mouseX,mouseY);
+  canvas.style.cursor=hoveredNode?'pointer':'default';
+});
+canvas.addEventListener('mouseleave',()=>{hoveredNode=null;mouseX=-9999;mouseY=-9999;canvas.style.cursor='default'});
+canvas.addEventListener('click',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const hit=hitTest(e.clientX-rect.left,e.clientY-rect.top);
+  if(hit)showNodeDetail(hit);else closeAllPanels();
+});
+
+// Legend
+document.querySelectorAll('.legend-chip[data-layer]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.legend-chip[data-layer]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');activeLayer=btn.getAttribute('data-layer');closeAllPanels();
+  });
+});
+
+// === DEMO ANIMATION ===
+let demoPlayed=false,demoActive=false,demoPulseNode=null,demoPulseTime=0,demoPulseActive=false;
+const demoSequence=[
+  {nodeId:'Customer',type:'ontology',duration:2500,showPanel:false},
+  {nodeId:'NIM',type:'kpi',duration:3000,showPanel:true},
+  {nodeId:'LoanApprovalDecision',type:'decision',duration:5000,showPanel:true}
+];
+
+function drawDemoPulse(){
+  if(!demoPulseActive||!demoPulseNode)return;
+  demoPulseTime+=0.04;const pos=getPos(demoPulseNode);const color=COLORS[demoPulseNode.group];
+  const maxR=demoPulseNode.radius*4;
+  for(let i=0;i<3;i++){
+    const phase=(demoPulseTime+i*0.7)%2.1;const progress=phase/2.1;
+    const r=demoPulseNode.radius+progress*(maxR-demoPulseNode.radius);
+    const alpha=(1-progress)*0.35;if(alpha<=0)continue;
+    c.beginPath();c.arc(pos.x,pos.y,r,0,Math.PI*2);
+    c.strokeStyle=color+Math.round(alpha*255).toString(16).padStart(2,'0');
+    c.lineWidth=2*(1-progress);c.stroke();
+  }
+  const la=0.5+Math.sin(demoPulseTime*2)*0.3;c.save();c.globalAlpha=la;
+  c.font='600 10px Inter, sans-serif';c.fillStyle='#fff';c.textAlign='center';c.textBaseline='bottom';
+  const ly=demoPulseNode.type==='decision'?pos.y-demoPulseNode.radius*1.8-12:pos.y-demoPulseNode.radius-16;
+  const txt=demoPulseNode.type==='ontology'?'● Ontology Node':demoPulseNode.type==='kpi'?'◎ Metric — Click to inspect':'▲ Decision — Click to inspect';
+  const tw=c.measureText(txt).width;
+  c.fillStyle='rgba(0,0,0,0.6)';c.beginPath();c.roundRect(pos.x-tw/2-10,ly-18,tw+20,22,6);c.fill();
+  c.fillStyle='#fff';c.fillText(txt,pos.x,ly);c.restore();
+}
+
+// Main draw loop
+function draw(){
+  time+=0.008;c.clearRect(0,0,W,H);
+  drawEdges();drawNodes();drawDemoPulse();updateTooltip();
+  animId=requestAnimationFrame(draw);
+}
+
+function runDemo(){
+  if(demoPlayed||demoActive)return;demoPlayed=true;demoActive=true;
+  let si=0;
+  function playStep(){
+    if(si>=demoSequence.length||!demoActive){
+      demoPulseActive=false;demoPulseNode=null;selectedNode=null;hoveredNode=null;closeAllPanels();demoActive=false;return;
+    }
+    const step=demoSequence[si];const node=nodeMap[step.nodeId];
+    if(!node){si++;playStep();return}
+    demoPulseNode=node;demoPulseActive=true;demoPulseTime=0;hoveredNode=node;
+    if(step.showPanel)setTimeout(()=>{if(!demoActive)return;showNodeDetail(node)},1000);
+    setTimeout(()=>{
+      demoPulseActive=false;demoPulseNode=null;closeAllPanels();selectedNode=null;hoveredNode=null;
+      setTimeout(()=>{si++;playStep()},600);
+    },step.duration);
+  }
+  setTimeout(playStep,1200);
+}
+
+canvas.addEventListener('click',()=>{if(demoActive){demoActive=false;demoPulseActive=false;demoPulseNode=null}});
+canvas.addEventListener('mousemove',()=>{if(demoActive&&hoveredNode){demoActive=false;demoPulseActive=false;demoPulseNode=null}});
+
+// Touch
+let startX=0;
+canvas.addEventListener('touchstart',e=>{startX=e.touches[0].clientX},{passive:true});
+canvas.addEventListener('touchend',e=>{
+  const rect=canvas.getBoundingClientRect();
+  const tx=e.changedTouches[0].clientX-rect.left,ty=e.changedTouches[0].clientY-rect.top;
+  const hit=hitTest(tx,ty);if(hit)showNodeDetail(hit);else closeAllPanels();
+});
+
+// Init
+resize();draw();window.addEventListener('resize',resize);
+
+// Trigger demo
+const heroObs=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){if(!animId)draw();if(!demoPlayed)runDemo()}
+    else{if(animId){cancelAnimationFrame(animId);animId=null}}
+  });
+},{threshold:0.3});
+heroObs.observe(heroSection);
+})();
+</script>
+</body>
+</html>

@@ -221,8 +221,8 @@
         let W = 0, H = 0, dpr = 1;
         let animId = null;
 
-        // Theme-matched colors (indigo/purple/slate palette)
-        const COLORS = ['#6366f1','#4f46e5','#7c3aed','#818cf8','#a78bfa','#8b5cf6','#64748b'];
+        // Theme-matched colors (teal/copper/warm palette)
+        const COLORS = ['#1B6B5A','#24846F','#B8734A','#2D9B80','#D4956A','#3BAA8A','#A09D98'];
         const LABELS_SCATTERED = [
             'ERP','CRM','POS','Warehouse','API','Forecast','Inventory',
             'Pipeline','Campaign','Pricing','Orders','Supply','Revenue',
@@ -534,13 +534,13 @@
         // ---- Color map ----
         const COLORS = {
             'supply-chain': '#3b82f6',
-            'sales':        '#10b981',
-            'pricing':      '#8b5cf6',
-            'marketing':    '#f59e0b',
-            'assortment':   '#ef4444',
-            'core':         '#6366f1',
+            'sales':        '#1B854A',
+            'pricing':      '#B8734A',
+            'marketing':    '#D4956A',
+            'assortment':   '#C4453C',
+            'core':         '#1B6B5A',
             'metrics':      '#14b8a6',
-            'decisions':    '#e11d48'
+            'decisions':    '#C4453C'
         };
 
         // ---- NODE DATA ----
@@ -610,7 +610,7 @@
                       formula: '(Revenue_Current - Revenue_Prior) /\nRevenue_Prior × 100', unit: '%', inputNodes: 3,
                       grain: 'Category × Region × Quarter',
                       components: [{ id: 'Revenue', group: 'sales', label: 'Revenue' }, { id: 'CalendarDate', group: 'core', label: 'CalendarDate' }],
-                      dimensions: [{ label: 'Category', color: '#6366f1' }, { label: 'Region', color: '#6366f1' }, { label: 'Quarter', color: '#14b8a6' }] }},
+                      dimensions: [{ label: 'Category', color: '#1B6B5A' }, { label: 'Region', color: '#1B6B5A' }, { label: 'Quarter', color: '#14b8a6' }] }},
 
             { id: 'OTIF',           label: 'OTIF %',              group: 'metrics', type: 'kpi', fx: 0.65, fy: 0.64, radius: 13,
               meta: { code: 'M108', badge: 'Service Metric', intent: 'On-Time In-Full delivery performance. Combined measure of delivery timeliness and order completeness.',
@@ -624,21 +624,21 @@
                       formula: '(Revenue - COGS) / Revenue × 100', unit: '%', inputNodes: 2,
                       grain: 'SKU × Channel × Month',
                       components: [{ id: 'Revenue', group: 'sales', label: 'Revenue' }, { id: 'PriceList', group: 'pricing', label: 'PriceList' }],
-                      dimensions: [{ label: 'SKU', color: '#3b82f6' }, { label: 'Channel', color: '#6366f1' }, { label: 'Month', color: '#14b8a6' }] }},
+                      dimensions: [{ label: 'SKU', color: '#3b82f6' }, { label: 'Channel', color: '#1B6B5A' }, { label: 'Month', color: '#14b8a6' }] }},
 
             { id: 'ForecastAccuracy', label: 'Forecast Accuracy', group: 'metrics', type: 'kpi', fx: 0.28, fy: 0.46, radius: 12,
               meta: { code: 'M112', badge: 'Planning Metric', intent: 'Measures how closely demand forecasts match actual sales. Critical for inventory planning.',
                       formula: '1 - ABS(Forecast - Actual) /\nActual', unit: '%', inputNodes: 2,
                       grain: 'SKU × Region × Month',
                       components: [{ id: 'Forecast', group: 'supply-chain', label: 'Forecast' }, { id: 'Revenue', group: 'sales', label: 'Revenue (Actual)' }],
-                      dimensions: [{ label: 'SKU', color: '#3b82f6' }, { label: 'Region', color: '#6366f1' }] }},
+                      dimensions: [{ label: 'SKU', color: '#3b82f6' }, { label: 'Region', color: '#1B6B5A' }] }},
 
             { id: 'SalesVolume',    label: 'Sales Volume',        group: 'metrics', type: 'kpi', fx: 0.68, fy: 0.22, radius: 12,
               meta: { code: 'M055', badge: 'Volume Metric', intent: 'Total cases sold across channels. Primary volume indicator for demand planning.',
                       formula: 'SUM(cases_sold)', unit: 'Cases', inputNodes: 1,
                       grain: 'SKU × Customer × Channel × Week',
                       components: [{ id: 'Product', group: 'core', label: 'Product' }],
-                      dimensions: [{ label: 'SKU', color: '#3b82f6' }, { label: 'Customer', color: '#10b981' }, { label: 'Channel', color: '#6366f1' }] }},
+                      dimensions: [{ label: 'SKU', color: '#3b82f6' }, { label: 'Customer', color: '#10b981' }, { label: 'Channel', color: '#1B6B5A' }] }},
 
             // === DECISION NODES (Triangles) ===
             { id: 'ReorderDecision',    label: 'Reorder Decision',     group: 'decisions', type: 'decision', fx: 0.16, fy: 0.52, radius: 16,
@@ -671,7 +671,7 @@
                       rule: 'IF days_of_stock > 45\n  AND margin > min_margin_threshold\n  AND competitor_price < current_price\nTHEN apply_markdown(\n  depth = elasticity_model.optimal,\n  floor = min_margin\n)', unit: 'Action', inputNodes: 5,
                       grain: 'SKU × Store Cluster × Week',
                       components: [{ id: 'Markdown', group: 'pricing', label: 'Markdown' }, { id: 'Elasticity', group: 'pricing', label: 'Elasticity' }, { id: 'CompetitorPrice', group: 'pricing', label: 'Competitor Price' }],
-                      dimensions: [{ label: 'SKU', color: '#3b82f6' }, { label: 'Store Cluster', color: '#8b5cf6' }],
+                      dimensions: [{ label: 'SKU', color: '#3b82f6' }, { label: 'Store Cluster', color: '#B8734A' }],
                       traversal: {
                           title: 'Markdown Optimization',
                           question: 'Should we markdown slow-moving winter snacks in Mumbai stores based on current inventory aging?',
@@ -707,7 +707,7 @@
                       rule: 'ALLOCATE budget ACROSS channels\n  WHERE marginal_ROAS > min_ROAS\n  WEIGHTED BY attribution_score\n  SUBJECT TO channel_min, channel_max', unit: 'Budget $', inputNodes: 4,
                       grain: 'Campaign × Channel × Month',
                       components: [{ id: 'BudgetAllocation', group: 'marketing', label: 'Budget Allocation' }, { id: 'Attribution', group: 'marketing', label: 'Attribution' }, { id: 'Campaign', group: 'marketing', label: 'Campaign' }],
-                      dimensions: [{ label: 'Campaign', color: '#f59e0b' }, { label: 'Channel', color: '#6366f1' }] }}
+                      dimensions: [{ label: 'Campaign', color: '#f59e0b' }, { label: 'Channel', color: '#1B6B5A' }] }}
         ];
 
         // ---- EDGE DATA ----
@@ -1266,7 +1266,7 @@
             if (node.meta && node.meta.dimensions) {
                 dimEl.innerHTML = node.meta.dimensions.map(d => '<span class="ndp-dim-chip"><span class="ndp-dim-dot" style="background:' + d.color + ';"></span>' + d.label + '</span>').join('');
             } else {
-                dimEl.innerHTML = '<span class="ndp-dim-chip"><span class="ndp-dim-dot" style="background:#6366f1;"></span>' + node.group + '</span>';
+                dimEl.innerHTML = '<span class="ndp-dim-chip"><span class="ndp-dim-dot" style="background:#1B6B5A;"></span>' + node.group + '</span>';
             }
 
             ndPanel.classList.add('open');

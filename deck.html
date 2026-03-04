@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questt × Partner — Intelligence Warehouse Micro Deck</title>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X17PMES96Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-X17PMES96Q');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f172a;
+  --bg-card:rgba(30,45,74,0.6);
+  --accent:#6366f1;
+  --accent2:#a855f7;
+  --accent3:#818cf8;
+  --green:#34d399;
+  --amber:#fbbf24;
+  --red:#f87171;
+  --teal:#2dd4bf;
+  --blue:#60a5fa;
+  --text:#f1f5f9;
+  --text-dim:#94a3b8;
+  --border:rgba(255,255,255,0.08);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;height:100vh;width:100vw;-webkit-font-smoothing:antialiased}
+
+/* === SLIDE CONTAINER === */
+.deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:3rem 4rem;
+  opacity:0;transform:translateX(60px);
+  transition:opacity 0.5s ease,transform 0.5s ease;
+  pointer-events:none;
+  overflow-y:auto;
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all}
+.slide.exit-left{opacity:0;transform:translateX(-60px)}
+
+/* === PROGRESS BAR === */
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.4s ease;z-index:100}
+
+/* === NAV CONTROLS === */
+.deck-nav{position:fixed;bottom:2rem;right:2rem;display:flex;gap:0.75rem;z-index:90}
+.deck-nav button{
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--border);
+  background:rgba(15,23,42,0.8);backdrop-filter:blur(12px);
+  color:var(--text);font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.25s ease;
+}
+.deck-nav button:hover{background:var(--accent);border-color:var(--accent)}
+.deck-nav button:disabled{opacity:0.3;cursor:default}
+.deck-nav button:disabled:hover{background:rgba(15,23,42,0.8);border-color:var(--border)}
+
+.slide-counter{
+  position:fixed;bottom:2.35rem;left:2rem;
+  font-size:0.8rem;color:var(--text-dim);letter-spacing:0.05em;z-index:90;
+  font-variant-numeric:tabular-nums;
+}
+
+/* === LOGO === */
+.deck-logo{
+  position:fixed;top:1.5rem;left:2rem;
+  display:flex;align-items:center;gap:0.6rem;z-index:90;
+}
+.deck-logo svg{opacity:0.7}
+.deck-logo span{font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim)}
+
+/* === TYPOGRAPHY === */
+.slide-tag{
+  font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--accent3);margin-bottom:1rem;
+  display:inline-flex;align-items:center;gap:0.5rem;
+}
+.slide-tag::before{content:'';width:20px;height:1px;background:var(--accent3)}
+h1.slide-title{
+  font-size:clamp(2rem,4vw,3.2rem);font-weight:800;line-height:1.15;
+  margin-bottom:1.25rem;letter-spacing:-0.02em;
+  max-width:900px;text-align:center;
+}
+h2.slide-title{
+  font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;line-height:1.2;
+  margin-bottom:1rem;letter-spacing:-0.015em;
+  max-width:800px;text-align:center;
+}
+.slide-subtitle{
+  font-size:clamp(1rem,1.5vw,1.2rem);color:var(--text-dim);line-height:1.6;
+  max-width:650px;text-align:center;margin-bottom:2rem;
+}
+.text-gradient{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.text-green{color:var(--green)}
+.text-amber{color:var(--amber)}
+.text-red{color:var(--red)}
+.text-blue{color:var(--blue)}
+.text-accent{color:var(--accent3)}
+
+/* === LAYOUT HELPERS === */
+.row{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;width:100%;max-width:1000px}
+.col{flex:1;min-width:220px}
+
+/* === CARDS === */
+.card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:16px;
+  padding:1.75rem;backdrop-filter:blur(12px);
+  transition:transform 0.3s ease,border-color 0.3s ease;
+}
+.card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15)}
+.card h3{font-size:1.05rem;font-weight:700;margin-bottom:0.5rem}
+.card p{font-size:0.88rem;color:var(--text-dim);line-height:1.55}
+.card-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;margin-bottom:0.75rem;
+}
+
+/* === STACK DIAGRAM === */
+.stack{
+  display:flex;flex-direction:column;gap:0;width:100%;max-width:600px;
+  margin:0 auto;
+}
+.stack-layer{
+  padding:1rem 1.5rem;text-align:center;font-weight:600;font-size:0.95rem;
+  border:1px solid var(--border);position:relative;
+  transition:all 0.3s ease;
+}
+.stack-layer:first-child{border-radius:12px 12px 0 0}
+.stack-layer:last-child{border-radius:0 0 12px 12px}
+.stack-layer.highlight{
+  background:linear-gradient(135deg,rgba(99,102,241,0.25),rgba(168,85,247,0.25));
+  border-color:var(--accent);z-index:2;
+  padding:1.25rem 1.5rem;
+  box-shadow:0 0 30px rgba(99,102,241,0.15);
+}
+.stack-layer.dim{background:rgba(30,45,74,0.3);color:var(--text-dim)}
+.stack-label{font-size:0.7rem;color:var(--text-dim);font-weight:400;display:block;margin-top:0.2rem}
+
+/* === BIG NUMBERS === */
+.big-num{
+  font-size:clamp(2.5rem,5vw,4rem);font-weight:900;line-height:1;
+  letter-spacing:-0.03em;
+}
+.big-num-label{font-size:0.85rem;color:var(--text-dim);margin-top:0.4rem}
+
+/* === COMPARISON TABLE === */
+.compare{width:100%;max-width:750px;border-collapse:separate;border-spacing:0}
+.compare th{
+  padding:0.75rem 1.25rem;text-align:left;font-size:0.7rem;font-weight:600;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);
+  border-bottom:1px solid var(--border);
+}
+.compare td{
+  padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);font-size:0.92rem;
+}
+.compare tr:last-child td{border-bottom:none}
+.compare .label{color:var(--text-dim);font-weight:500}
+
+/* === TIMELINE === */
+.timeline{display:flex;align-items:center;gap:0;width:100%;max-width:700px;margin:1.5rem auto}
+.timeline-node{
+  width:140px;padding:1rem;border-radius:12px;text-align:center;
+  border:1px solid var(--border);background:var(--bg-card);
+  font-size:0.85rem;font-weight:600;position:relative;z-index:2;
+}
+.timeline-node.now{border-color:var(--green);box-shadow:0 0 20px rgba(52,211,153,0.15)}
+.timeline-node.later{border-color:var(--red);opacity:0.6}
+.timeline-line{flex:1;height:2px;background:linear-gradient(90deg,var(--green),var(--red))}
+
+/* === PARTNERSHIP DIAGRAM === */
+.partner-grid{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:2rem;
+  align-items:center;width:100%;max-width:800px;
+}
+.partner-box{
+  padding:2rem;border-radius:16px;border:1px solid var(--border);
+  background:var(--bg-card);text-align:center;
+}
+.partner-box h3{font-size:1.1rem;font-weight:700;margin-bottom:0.75rem}
+.partner-box ul{list-style:none;font-size:0.88rem;color:var(--text-dim);line-height:2}
+.partner-box ul li::before{content:'→ ';color:var(--accent3)}
+.partner-plus{font-size:2rem;color:var(--accent3);font-weight:300}
+
+/* === PILL BADGES === */
+.pill{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  padding:0.3rem 0.8rem;border-radius:100px;font-size:0.75rem;font-weight:600;
+  background:rgba(99,102,241,0.15);color:var(--accent3);
+  border:1px solid rgba(99,102,241,0.2);
+}
+
+/* === ARROW FLOW === */
+.arrow-flow{
+  display:flex;align-items:center;gap:0;width:100%;max-width:800px;
+  justify-content:center;flex-wrap:wrap;
+}
+.arrow-flow .af-step{
+  padding:0.8rem 1.2rem;border-radius:10px;font-size:0.85rem;font-weight:600;
+  background:var(--bg-card);border:1px solid var(--border);text-align:center;
+  min-width:120px;
+}
+.arrow-flow .af-step.active{
+  background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(168,85,247,0.2));
+  border-color:var(--accent);
+}
+.arrow-flow .af-arrow{color:var(--text-dim);font-size:1.2rem;padding:0 0.5rem}
+
+/* === BACKGROUND EFFECTS === */
+.bg-glow{
+  position:absolute;width:500px;height:500px;border-radius:50%;
+  filter:blur(120px);opacity:0.08;pointer-events:none;
+}
+.bg-glow.purple{background:var(--accent2)}
+.bg-glow.blue{background:var(--accent)}
+.bg-glow.green{background:#34d399}
+
+/* === FOOTER TAG === */
+.deck-footer{
+  position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);
+  font-size:0.65rem;color:rgba(148,163,184,0.4);letter-spacing:0.05em;z-index:90;
+}
+
+/* === STAT ROW === */
+.stat-row{
+  display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;
+  margin-top:1.5rem;
+}
+.stat{text-align:center}
+.stat-val{font-size:1.8rem;font-weight:800;line-height:1}
+.stat-label{font-size:0.75rem;color:var(--text-dim);margin-top:0.3rem}
+
+/* === DIVIDER === */
+.divider{
+  width:60px;height:2px;margin:1.5rem auto;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;
+}
+
+/* === MATH BOX === */
+.math-box{
+  background:rgba(30,45,74,0.5);border:1px solid var(--border);border-radius:16px;
+  padding:2rem 2.5rem;width:100%;max-width:550px;text-align:center;
+}
+.math-row{
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+  font-size:1.1rem;font-weight:600;padding:0.6rem 0;
+}
+.math-row .op{color:var(--text-dim);font-size:1.4rem}
+.math-row .val{font-variant-numeric:tabular-nums}
+.math-result{
+  border-top:2px solid var(--accent);margin-top:0.75rem;padding-top:0.75rem;
+  font-size:1.5rem;font-weight:800;
+}
+
+/* === RESPONSIVE === */
+@media(max-width:768px){
+  .slide{padding:2rem 1.5rem}
+  .row{flex-direction:column}
+  .partner-grid{grid-template-columns:1fr;text-align:center}
+  .partner-plus{transform:rotate(90deg)}
+  .timeline{flex-direction:column;gap:0.5rem}
+  .timeline-line{width:2px;height:30px;background:linear-gradient(180deg,var(--green),var(--red))}
+  .arrow-flow{flex-direction:column}
+  .arrow-flow .af-arrow{transform:rotate(90deg)}
+  .deck-nav{bottom:1rem;right:1rem}
+  .compare td,.compare th{padding:0.6rem 0.75rem;font-size:0.8rem}
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.slide.active .animate{animation:fadeUp 0.5s ease forwards}
+.slide.active .animate.d1{animation-delay:0.1s;opacity:0}
+.slide.active .animate.d2{animation-delay:0.2s;opacity:0}
+.slide.active .animate.d3{animation-delay:0.3s;opacity:0}
+.slide.active .animate.d4{animation-delay:0.4s;opacity:0}
+.slide.active .animate.d5{animation-delay:0.5s;opacity:0}
+.slide.active .animate.d6{animation-delay:0.6s;opacity:0}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress" id="progress"></div>
+
+<!-- Logo -->
+<div class="deck-logo">
+  <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+    <rect x="2" y="8" width="28" height="4" rx="1" fill="white" opacity="0.9"/>
+    <rect x="5" y="15" width="22" height="4" rx="1" fill="white" opacity="0.6"/>
+    <rect x="8" y="22" width="16" height="4" rx="1" fill="white" opacity="0.3"/>
+  </svg>
+  <span>Questt</span>
+</div>
+
+<!-- ========== SLIDE 1 — The Wave ========== -->
+<div class="deck">
+
+<div class="slide active" data-slide="0">
+  <div class="bg-glow purple" style="top:-150px;right:-100px"></div>
+  <div class="bg-glow blue" style="bottom:-200px;left:-100px"></div>
+  <span class="slide-tag animate">Slide 1 — The Pattern</span>
+  <h1 class="slide-title animate d1">Every Data Warehouse Empire<br>Was Built by <span class="text-gradient">Partners</span></h1>
+  <p class="slide-subtitle animate d2">
+    Snowflake, Databricks, Oracle — none scaled alone.<br>
+    Consulting &amp; SI partners built the practices, drove adoption, captured the services revenue.
+  </p>
+  <div class="divider animate d3"></div>
+  <p class="slide-subtitle animate d4" style="font-size:1.05rem;color:var(--accent3);max-width:500px">
+    A new wave is forming.<br>Same pattern. Bigger market. Earlier window.
+  </p>
+</div>
+
+<!-- ========== SLIDE 2 — The New Layer ========== -->
+<div class="slide" data-slide="1">
+  <div class="bg-glow blue" style="top:-100px;left:50%;transform:translateX(-50%)"></div>
+  <span class="slide-tag animate">Slide 2 — The Stack</span>
+  <h2 class="slide-title animate d1">There's a New Layer<br>in the Enterprise Stack</h2>
+  <p class="slide-subtitle animate d2">
+    Data Warehouses store facts. Intelligence Warehouses store <em>understanding</em> — the context AI agents need to act.
+  </p>
+  <div class="stack animate d3">
+    <div class="stack-layer dim">AI Agents &amp; Copilots <span class="stack-label">consume decisions</span></div>
+    <div class="stack-layer highlight">⬥ Intelligence Warehouse <span class="stack-label">ontology + KPIs + decision logic</span></div>
+    <div class="stack-layer dim">Data Warehouse / Lakehouse <span class="stack-label">structured + unstructured data</span></div>
+    <div class="stack-layer dim">Raw Systems (ERP · CRM · SCM) <span class="stack-label">transactional data</span></div>
+  </div>
+  <p class="slide-subtitle animate d4" style="margin-top:1.5rem;font-size:0.9rem">
+    This layer doesn't exist yet in most enterprises. <strong style="color:var(--text)">That's the opportunity.</strong>
+  </p>
+</div>
+
+<!-- ========== SLIDE 3 — Market Wide Open ========== -->
+<div class="slide" data-slide="2">
+  <div class="bg-glow green" style="top:-100px;right:-150px"></div>
+  <span class="slide-tag animate">Slide 3 — The Market</span>
+  <h2 class="slide-title animate d1">The Market Is <span class="text-gradient">Wide Open</span></h2>
+  <p class="slide-subtitle animate d2">
+    80% of enterprise AI pilots stall — not because models are weak, but because there's no structured business context to feed them.
+  </p>
+  <div class="stat-row animate d3">
+    <div class="stat">
+      <div class="stat-val text-red">80%</div>
+      <div class="stat-label">AI pilots stalling</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val text-amber">$0</div>
+      <div class="stat-label">Incumbent IW platforms</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val text-green">Now</div>
+      <div class="stat-label">First-mover window</div>
+    </div>
+  </div>
+  <div class="divider animate d4"></div>
+  <p class="slide-subtitle animate d5" style="font-size:0.95rem">
+    No incumbent owns this layer today. No Snowflake, no Databricks equivalent.<br>
+    <strong style="color:var(--text)">Whoever builds the practice first, owns the client relationship.</strong>
+  </p>
+</div>
+
+<!-- ========== SLIDE 4 — Questt Moats ========== -->
+<div class="slide" data-slide="3">
+  <div class="bg-glow purple" style="bottom:-150px;left:-100px"></div>
+  <span class="slide-tag animate">Slide 4 — Why Questt</span>
+  <h2 class="slide-title animate d1">Two Moats.<br><span class="text-gradient">Architecture &amp; Capture.</span></h2>
+  <p class="slide-subtitle animate d2">Not just another AI tool — a platform built for enterprise-grade intelligence.</p>
+  <div class="row animate d3">
+    <div class="card col">
+      <div class="card-icon" style="background:rgba(99,102,241,0.15);color:var(--accent3)">⬡</div>
+      <h3>Moat 1 — Architecture</h3>
+      <p>Ontology-first knowledge graph that maps real business logic — not just data schemas. Connects KPIs, decisions, and domain context into a queryable structure.</p>
+      <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+        <span class="pill">97% consistency</span>
+        <span class="pill">4-week deploy</span>
+      </div>
+    </div>
+    <div class="card col">
+      <div class="card-icon" style="background:rgba(168,85,247,0.15);color:var(--accent2)">◈</div>
+      <h3>Moat 2 — Capture</h3>
+      <p>Every deployment enriches the ontology library. Cross-industry patterns compound. The 50th client deploys faster than the 5th — and gets better results.</p>
+      <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+        <span class="pill">Network effects</span>
+        <span class="pill">Compounding IP</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 5 — Economics ========== -->
+<div class="slide" data-slide="4">
+  <div class="bg-glow blue" style="top:-200px;right:-100px"></div>
+  <span class="slide-tag animate">Slide 5 — Economics</span>
+  <h2 class="slide-title animate d1">Why This Is <span class="text-gradient">Better Economics</span><br>Than Data Warehousing</h2>
+  <p class="slide-subtitle animate d2">Higher ACV. Stickier contracts. Bigger services wrapper.</p>
+  <table class="compare animate d3">
+    <thead>
+      <tr><th></th><th>Data Warehouse</th><th>Intelligence Warehouse</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="label">Avg. deal size</td><td>$500K – $2M</td><td><strong class="text-green">$3M – $5M / yr</strong></td></tr>
+      <tr><td class="label">Services multiplier</td><td>2–3×</td><td><strong class="text-green">3–5×</strong></td></tr>
+      <tr><td class="label">Lock-in</td><td>Data gravity</td><td><strong class="text-green">Context gravity + ontology</strong></td></tr>
+      <tr><td class="label">Time to production</td><td>6–12 months</td><td><strong class="text-green">4 weeks (Questt)</strong></td></tr>
+      <tr><td class="label">Expansion</td><td>More data</td><td><strong class="text-green">More domains → more agents</strong></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ========== SLIDE 6 — The Math ========== -->
+<div class="slide" data-slide="5">
+  <div class="bg-glow purple" style="bottom:-100px;left:50%;transform:translateX(-50%)"></div>
+  <span class="slide-tag animate">Slide 6 — The Math</span>
+  <h2 class="slide-title animate d1">Simple Math,<br><span class="text-gradient">Massive Upside</span></h2>
+  <p class="slide-subtitle animate d2">10 mid-market clients. Same relationships you already have.</p>
+  <div class="row animate d3" style="gap:2rem;max-width:850px">
+    <div class="math-box col">
+      <div style="font-size:0.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;font-weight:600">Today — DW Practice</div>
+      <div class="math-row"><span class="val">10 clients</span><span class="op">×</span><span class="val">$500K</span></div>
+      <div class="math-result"><span class="text-blue">$5M</span></div>
+      <div style="font-size:0.75rem;color:var(--text-dim);margin-top:0.3rem">annual revenue</div>
+    </div>
+    <div class="math-box col" style="border-color:var(--accent)">
+      <div style="font-size:0.75rem;color:var(--accent3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem;font-weight:600">With IW Practice</div>
+      <div class="math-row"><span class="val">10 clients</span><span class="op">×</span><span class="val">$3.5M</span></div>
+      <div class="math-result"><span class="text-gradient" style="font-size:1.5rem;font-weight:800">$35M</span></div>
+      <div style="font-size:0.75rem;color:var(--text-dim);margin-top:0.3rem">annual revenue</div>
+    </div>
+  </div>
+  <div class="animate d4" style="margin-top:1.5rem;text-align:center">
+    <span class="big-num text-gradient">7×</span>
+    <div class="big-num-label">revenue from the same client base</div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 7 — The Window ========== -->
+<div class="slide" data-slide="6">
+  <div class="bg-glow green" style="top:-100px;left:-100px"></div>
+  <span class="slide-tag animate">Slide 7 — Timing</span>
+  <h2 class="slide-title animate d1">The Window Is<br><span class="text-gradient">Right Now</span></h2>
+  <p class="slide-subtitle animate d2">
+    In 24 months, this category will have a name, a leader, and locked-in partners.<br>
+    The question is whether you're building the practice — or competing against someone who did.
+  </p>
+  <div class="timeline animate d3">
+    <div class="timeline-node now">
+      <div style="font-size:1.5rem;margin-bottom:0.3rem">🟢</div>
+      Now<br><span style="font-size:0.75rem;color:var(--green);font-weight:400">Open window</span>
+    </div>
+    <div class="timeline-line"></div>
+    <div class="timeline-node later">
+      <div style="font-size:1.5rem;margin-bottom:0.3rem">🔴</div>
+      +24 mo<br><span style="font-size:0.75rem;color:var(--red);font-weight:400">Category locked</span>
+    </div>
+  </div>
+  <div class="divider animate d4"></div>
+  <div class="row animate d5" style="max-width:600px;gap:1rem">
+    <div class="card col" style="text-align:center;padding:1.25rem">
+      <div style="font-size:0.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem">First movers get</div>
+      <div style="font-size:0.95rem;font-weight:600">Category expertise<br>+ client lock-in</div>
+    </div>
+    <div class="card col" style="text-align:center;padding:1.25rem">
+      <div style="font-size:0.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem">Late entrants face</div>
+      <div style="font-size:0.95rem;font-weight:600;color:var(--text-dim)">Commodity positioning<br>+ price competition</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 8 — Partnership ========== -->
+<div class="slide" data-slide="7">
+  <div class="bg-glow purple" style="top:-100px;right:-100px"></div>
+  <div class="bg-glow blue" style="bottom:-150px;left:-100px"></div>
+  <span class="slide-tag animate">Slide 8 — Partnership</span>
+  <h2 class="slide-title animate d1">Let's Build This<br><span class="text-gradient">Together</span></h2>
+  <p class="slide-subtitle animate d2">Questt brings the platform. You bring the clients and scale.</p>
+  <div class="partner-grid animate d3">
+    <div class="partner-box">
+      <h3><span class="text-gradient">Questt</span></h3>
+      <ul>
+        <li>Platform &amp; IP</li>
+        <li>Ontology engine</li>
+        <li>Technical enablement</li>
+        <li>Product roadmap</li>
+      </ul>
+    </div>
+    <div class="partner-plus">+</div>
+    <div class="partner-box">
+      <h3>Partner</h3>
+      <ul>
+        <li>Client relationships</li>
+        <li>Domain consultants</li>
+        <li>Delivery at scale</li>
+        <li>Go-to-market reach</li>
+      </ul>
+    </div>
+  </div>
+  <div class="divider animate d4"></div>
+  <p class="slide-subtitle animate d5" style="font-size:1rem;color:var(--text);font-weight:500">
+    Interested in exploring a pilot together?
+  </p>
+  <p class="slide-subtitle animate d6" style="font-size:0.9rem;margin-top:-1rem">
+    akhil@questt.ai
+  </p>
+</div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">8</span></div>
+<div class="deck-nav">
+  <button id="prevBtn" disabled aria-label="Previous slide">‹</button>
+  <button id="nextBtn" aria-label="Next slide">›</button>
+</div>
+<div class="deck-footer">CONFIDENTIAL — Questt × Partner</div>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  const progress = document.getElementById('progress');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const currentEl = document.getElementById('currentSlide');
+  const totalEl = document.getElementById('totalSlides');
+
+  totalEl.textContent = total;
+
+  function goTo(n){
+    if(n<0||n>=total)return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(n > current ? 'exit-left' : '');
+    setTimeout(()=>slides[current].classList.remove('exit-left'),500);
+    const prev = current;
+    current = n;
+    slides[current].classList.add('active');
+    progress.style.width = ((current+1)/total*100)+'%';
+    currentEl.textContent = current+1;
+    prevBtn.disabled = current===0;
+    nextBtn.disabled = current===total-1;
+  }
+
+  prevBtn.addEventListener('click',()=>goTo(current-1));
+  nextBtn.addEventListener('click',()=>goTo(current+1));
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='Enter') goTo(current+1);
+    if(e.key==='ArrowLeft'||e.key==='Backspace') goTo(current-1);
+  });
+
+  // Touch / swipe support
+  let startX=0;
+  document.addEventListener('touchstart',e=>{startX=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const diff=e.changedTouches[0].clientX-startX;
+    if(Math.abs(diff)>50){
+      diff<0?goTo(current+1):goTo(current-1);
+    }
+  });
+
+  // Init
+  progress.style.width=(1/total*100)+'%';
+})();
+</script>
+</body>
+</html>

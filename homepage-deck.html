@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intelligence Warehouse &times; Partner &mdash; GTM Deck</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;
+  --bg-alt:#f7f8fc;
+  --bg-card:#ffffff;
+  --accent:#4f46e5;
+  --accent2:#7c3aed;
+  --accent3:#6366f1;
+  --green:#059669;
+  --green-light:#ecfdf5;
+  --amber:#d97706;
+  --amber-light:#fffbeb;
+  --red:#dc2626;
+  --red-light:#fef2f2;
+  --purple-light:#f5f3ff;
+  --blue:#2563eb;
+  --teal:#0d9488;
+  --text:#111827;
+  --text-secondary:#4b5563;
+  --text-dim:#6b7280;
+  --border:rgba(0,0,0,0.08);
+  --border-strong:rgba(0,0,0,0.12);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;height:100vh;width:100vw;-webkit-font-smoothing:antialiased}
+
+.deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:3rem 4rem;
+  opacity:0;transform:translateX(60px);
+  transition:opacity 0.5s ease,transform 0.5s ease;
+  pointer-events:none;overflow-y:auto;
+  background:var(--bg);
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all}
+.slide.exit-left{opacity:0;transform:translateX(-60px)}
+
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.4s ease;z-index:100}
+
+.deck-nav{position:fixed;bottom:2rem;right:2rem;display:flex;gap:0.75rem;z-index:90}
+.deck-nav button{
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--border-strong);
+  background:rgba(255,255,255,0.9);backdrop-filter:blur(12px);
+  color:var(--text);font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all 0.25s ease;
+  box-shadow:0 1px 4px rgba(0,0,0,0.06);
+}
+.deck-nav button:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.deck-nav button:disabled{opacity:0.3;cursor:default}
+.deck-nav button:disabled:hover{background:rgba(255,255,255,0.9);border-color:var(--border-strong);color:var(--text)}
+
+.slide-counter{position:fixed;bottom:2.35rem;left:2rem;font-size:0.8rem;color:var(--text-dim);letter-spacing:0.05em;z-index:90;font-variant-numeric:tabular-nums}
+
+.deck-logo{position:fixed;top:1.5rem;left:2rem;display:flex;align-items:center;gap:0.6rem;z-index:90}
+.deck-logo .logo-icon{width:28px;height:28px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.deck-logo .logo-icon svg{opacity:0.95}
+.deck-logo span{font-size:0.75rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim)}
+
+/* Typography */
+.slide-tag{
+  font-size:0.7rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1rem;display:inline-flex;align-items:center;gap:0.5rem;
+}
+.slide-tag::before{content:'';width:20px;height:1px;background:var(--accent)}
+h1.slide-title{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;line-height:1.1;margin-bottom:1.25rem;letter-spacing:-0.025em;max-width:900px;text-align:center;color:var(--text)}
+h2.slide-title{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:700;line-height:1.2;margin-bottom:1rem;letter-spacing:-0.015em;max-width:850px;text-align:center;color:var(--text)}
+.slide-subtitle{font-size:clamp(1rem,1.5vw,1.15rem);color:var(--text-secondary);line-height:1.65;max-width:660px;text-align:center;margin-bottom:2rem}
+.text-gradient{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.text-green{color:var(--green)}.text-amber{color:var(--amber)}.text-red{color:var(--red)}.text-blue{color:var(--blue)}.text-accent{color:var(--accent)}
+
+/* Layout */
+.row{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;width:100%;max-width:1000px}
+.col{flex:1;min-width:240px}
+
+/* Cards */
+.card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
+  padding:1.75rem;transition:transform 0.3s ease,box-shadow 0.3s ease;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.card h3{font-size:1.05rem;font-weight:700;margin-bottom:0.5rem;color:var(--text)}
+.card p{font-size:0.88rem;color:var(--text-secondary);line-height:1.55}
+.card-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:0.75rem}
+
+/* Compare table */
+.compare{width:100%;max-width:800px;border-collapse:separate;border-spacing:0;background:var(--bg-card);border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.compare th{padding:0.85rem 1.25rem;text-align:left;font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border);background:var(--bg-alt)}
+.compare td{padding:0.85rem 1.25rem;border-bottom:1px solid var(--border);font-size:0.92rem;color:var(--text-secondary)}
+.compare tr:last-child td{border-bottom:none}
+.compare .label{color:var(--text-dim);font-weight:500}
+
+/* Stack */
+.stack{display:flex;flex-direction:column;gap:0;width:100%;max-width:600px;margin:0 auto}
+.stack-layer{padding:1rem 1.5rem;text-align:center;font-weight:600;font-size:0.95rem;border:1px solid var(--border);position:relative;transition:all 0.3s ease;background:var(--bg-card)}
+.stack-layer:first-child{border-radius:12px 12px 0 0}
+.stack-layer:last-child{border-radius:0 0 12px 12px}
+.stack-layer.highlight{
+  background:linear-gradient(135deg,rgba(79,70,229,0.08),rgba(124,58,237,0.08));
+  border-color:var(--accent);z-index:2;padding:1.25rem 1.5rem;
+  box-shadow:0 0 0 3px rgba(79,70,229,0.08);color:var(--accent);
+}
+.stack-layer.dim{color:var(--text-dim);background:var(--bg-alt)}
+.stack-label{font-size:0.7rem;color:var(--text-dim);font-weight:400;display:block;margin-top:0.2rem}
+
+/* Stats */
+.stat-row{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+.stat{text-align:center}
+.stat-val{font-size:1.8rem;font-weight:800;line-height:1}
+.stat-label{font-size:0.75rem;color:var(--text-dim);margin-top:0.3rem}
+
+/* Pills */
+.pill{display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.8rem;border-radius:100px;font-size:0.75rem;font-weight:600;background:rgba(79,70,229,0.08);color:var(--accent);border:1px solid rgba(79,70,229,0.15)}
+
+/* Divider */
+.divider{width:60px;height:2px;margin:1.5rem auto;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px}
+
+/* Partnership */
+.partner-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:2rem;align-items:center;width:100%;max-width:800px}
+.partner-box{padding:2rem;border-radius:14px;border:1px solid var(--border);background:var(--bg-card);text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.partner-box h3{font-size:1.1rem;font-weight:700;margin-bottom:0.75rem}
+.partner-box ul{list-style:none;font-size:0.88rem;color:var(--text-secondary);line-height:2}
+.partner-box ul li::before{content:'\2192\0020';color:var(--accent)}
+.partner-plus{font-size:2rem;color:var(--accent);font-weight:300}
+
+/* Proof bar */
+.proof-bar{
+  display:flex;gap:1.5rem;align-items:center;justify-content:center;flex-wrap:wrap;
+  margin-top:1rem;padding:1rem 1.5rem;border-radius:12px;
+  background:var(--green-light);border:1px solid rgba(5,150,105,0.15);
+}
+.proof-bar .pb-stat{text-align:center}
+.proof-bar .pb-val{font-size:1.1rem;font-weight:800;color:var(--green)}
+.proof-bar .pb-label{font-size:0.7rem;color:var(--text-dim)}
+
+.deck-footer{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);font-size:0.65rem;color:rgba(107,114,128,0.5);letter-spacing:0.05em;z-index:90}
+
+/* Responsive */
+@media(max-width:768px){
+  .slide{padding:2rem 1.5rem}
+  .row{flex-direction:column}
+  .partner-grid{grid-template-columns:1fr;text-align:center}
+  .partner-plus{transform:rotate(90deg)}
+  .deck-nav{bottom:1rem;right:1rem}
+  .compare td,.compare th{padding:0.6rem 0.75rem;font-size:0.8rem}
+}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.slide.active .animate{animation:fadeUp 0.5s ease forwards}
+.slide.active .animate.d1{animation-delay:0.1s;opacity:0}
+.slide.active .animate.d2{animation-delay:0.2s;opacity:0}
+.slide.active .animate.d3{animation-delay:0.3s;opacity:0}
+.slide.active .animate.d4{animation-delay:0.4s;opacity:0}
+.slide.active .animate.d5{animation-delay:0.5s;opacity:0}
+.slide.active .animate.d6{animation-delay:0.6s;opacity:0}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="deck-logo">
+  <div class="logo-icon">
+    <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+      <rect x="2" y="8" width="28" height="4" rx="1" fill="white" opacity="0.95"/>
+      <rect x="5" y="15" width="22" height="4" rx="1" fill="white" opacity="0.7"/>
+      <rect x="8" y="22" width="16" height="4" rx="1" fill="white" opacity="0.4"/>
+    </svg>
+  </div>
+  <span>Intelligence Warehouse</span>
+</div>
+
+<div class="deck">
+
+<!-- ========== SLIDE 1 — The Gold Rush ========== -->
+<div class="slide active" data-slide="0">
+  <span class="slide-tag animate">The Consulting Problem</span>
+  <h1 class="slide-title animate d1">There's a Gold Rush.<br>But Where's Your <span class="text-gradient">Shovel</span>?</h1>
+  <p class="slide-subtitle animate d2" style="max-width:700px">
+    Every enterprise client wants AI. Every consulting firm is pitching it.<br>Here's what's actually happening:
+  </p>
+  <div class="row animate d3" style="max-width:960px;gap:1rem">
+    <div class="card col" style="border-left:3px solid var(--red);padding:1.25rem 1.5rem">
+      <h3 style="font-size:0.95rem"><span class="text-red">&#10005;</span>&ensp;No Differentiation</h3>
+      <p>Every SI is selling the same AI story. Same models, same pilots, same decks. Clients can't tell you apart.</p>
+    </div>
+    <div class="card col" style="border-left:3px solid var(--amber);padding:1.25rem 1.5rem">
+      <h3 style="font-size:0.95rem"><span class="text-amber">&#10005;</span>&ensp;Agents Stalling</h3>
+      <p>AI agents aren't going to production&thinsp;&mdash;&thinsp;or taking 12+ months&thinsp;&mdash;&thinsp;because of context mismatch. The logic lives in people's heads, not in systems.</p>
+    </div>
+    <div class="card col" style="border-left:3px solid var(--accent2);padding:1.25rem 1.5rem">
+      <h3 style="font-size:0.95rem"><span style="color:var(--accent2)">&#10005;</span>&ensp;No Right to Expand</h3>
+      <p>You win one vertical&thinsp;&mdash;&thinsp;trade promotions, supply chain&thinsp;&mdash;&thinsp;and then rebuild from scratch for the next. No compounding. No expansion leverage.</p>
+    </div>
+  </div>
+  <div class="divider animate d4"></div>
+  <p class="animate d5" style="font-size:1.05rem;color:var(--text);text-align:center;font-weight:600">
+    Intelligence Warehouse is that shovel.
+  </p>
+</div>
+
+<!-- ========== SLIDE 2 — Introducing IW ========== -->
+<div class="slide" data-slide="1">
+  <span class="slide-tag animate">Introducing</span>
+  <h1 class="slide-title animate d1"><span class="text-gradient">Intelligence</span><br>Warehouse</h1>
+  <p class="slide-subtitle animate d2">
+    The structured layer where AI agents query understanding, not just data.<br>
+    Ontology, KPIs, and decision logic&thinsp;&mdash;&thinsp;unified into a single traversable graph.
+  </p>
+  <div class="stack animate d3">
+    <div class="stack-layer dim">AI Agents &amp; Copilots <span class="stack-label">consume decisions</span></div>
+    <div class="stack-layer highlight">&#11045; Intelligence Warehouse <span class="stack-label">ontology + KPIs + decision logic</span></div>
+    <div class="stack-layer dim">Data Warehouse / Lakehouse <span class="stack-label">structured + unstructured data</span></div>
+    <div class="stack-layer dim">Raw Systems (ERP &middot; CRM &middot; POS) <span class="stack-label">transactional data</span></div>
+  </div>
+  <p class="slide-subtitle animate d4" style="margin-top:1.5rem;font-size:0.88rem">
+    This layer doesn't exist yet in most enterprises. <strong style="color:var(--text)">That's the opportunity.</strong>
+  </p>
+</div>
+
+<!-- ========== SLIDE 3 — Before / After ========== -->
+<div class="slide" data-slide="2">
+  <span class="slide-tag animate">The Transformation</span>
+  <h2 class="slide-title animate d1">The Old Reality vs.<br><span class="text-gradient">Intelligence Warehouse</span></h2>
+  <table class="compare animate d2">
+    <thead>
+      <tr><th></th><th style="color:var(--text-dim)">The Old Reality</th><th style="color:var(--accent)">With Intelligence Warehouse</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="label">Time to go live</td><td>6&ndash;12 months</td><td><strong class="text-green">4 weeks</strong></td></tr>
+      <tr><td class="label">What you're selling</td><td>Rule-based automation dressed as AI</td><td><strong class="text-green">98% accuracy, Day Zero</strong></td></tr>
+      <tr><td class="label">Differentiation</td><td>Every SI selling the same story</td><td><strong class="text-green">Instant competitive differentiation</strong></td></tr>
+      <tr><td class="label">Scope</td><td>Win trade promotions. Rebuild for supply chain.</td><td><strong class="text-green">Compounding expansion across every vertical</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="divider animate d3"></div>
+  <p class="slide-subtitle animate d4" style="margin-top:0.5rem;font-size:0.95rem">
+    <strong style="color:var(--text)">What makes it SOTA?</strong> Architecture-driven 98% accuracy. 4-week go-live via our Agentic Decision Blueprint framework. One bedrock for every vertical.
+  </p>
+</div>
+
+<!-- ========== SLIDE 4 — Two Moats ========== -->
+<div class="slide" data-slide="3">
+  <span class="slide-tag animate">Under the Hood</span>
+  <h2 class="slide-title animate d1">Two Moats.<br><span class="text-gradient">Architecture &amp; Capture.</span></h2>
+  <div class="row animate d2" style="max-width:900px">
+    <div class="card col">
+      <div class="card-icon" style="background:rgba(79,70,229,0.08);color:var(--accent)">&#11045;</div>
+      <h3>Moat 1 &mdash; The Intelligence Graph</h3>
+      <p>Ontology-first knowledge graph that maps real business logic&thinsp;&mdash;&thinsp;not just data schemas. Connects KPIs, decisions, and domain context into a queryable, traversable structure. The graph doesn't just replicate existing decisions&thinsp;&mdash;&thinsp;it <strong>discovers new ones</strong> by walking across functions.</p>
+      <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+        <span class="pill">98% accuracy</span>
+        <span class="pill">4-week deploy</span>
+      </div>
+    </div>
+    <div class="card col">
+      <div class="card-icon" style="background:rgba(124,58,237,0.08);color:var(--accent2)">&#9670;</div>
+      <h3>Moat 2 &mdash; MORRIE (Capture Engine)</h3>
+      <p>The hardest part isn't the graph&thinsp;&mdash;&thinsp;it's getting the logic out of people's heads. MORRIE is our agentic interface that has conversations with domain experts, validates hypotheses, finds edge cases, and builds the decision blueprint. No spreadsheets. No questionnaires.</p>
+      <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+        <span class="pill">Agentic extraction</span>
+        <span class="pill">Compounding IP</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 5 — What This Means for Partner ========== -->
+<div class="slide" data-slide="4">
+  <span class="slide-tag animate">Why This Matters for You</span>
+  <h2 class="slide-title animate d1">What This Means for<br><span class="text-gradient">Your Practice</span></h2>
+  <p class="slide-subtitle animate d2">
+    You own consulting, data engineering, and dashboards across every vertical.<br>
+    Questt powers only the central Intelligence Warehouse layer.<br>
+    <strong style="color:var(--text)">One landing account's value increases fivefold.</strong>
+  </p>
+  <div class="row animate d3" style="max-width:950px">
+    <div class="card col" style="text-align:center;border-top:3px solid var(--accent)">
+      <div style="font-size:1.6rem;margin-bottom:0.5rem">&#9889;</div>
+      <h3>Faster Wins</h3>
+      <p>4-week go-live means faster billing cycles and faster proof of value to your clients. No more 12-month implementation death marches.</p>
+    </div>
+    <div class="card col" style="text-align:center;border-top:3px solid var(--green)">
+      <div style="font-size:1.6rem;margin-bottom:0.5rem">&#8599;</div>
+      <h3>Compounding Revenue</h3>
+      <p>One IW deployment expands into every vertical&thinsp;&mdash;&thinsp;supply chain, pricing, trade promo, assortment. Each domain adds services revenue.</p>
+    </div>
+    <div class="card col" style="text-align:center;border-top:3px solid var(--accent2)">
+      <div style="font-size:1.6rem;margin-bottom:0.5rem">&#9733;</div>
+      <h3>Competitive Edge</h3>
+      <p>Every SI is selling the same AI story. Intelligence Warehouse gives you a differentiated capability nobody else can offer yet.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 6 — The Economics ========== -->
+<div class="slide" data-slide="5">
+  <span class="slide-tag animate">The Economics</span>
+  <h2 class="slide-title animate d1">Simple Math,<br><span class="text-gradient">Massive Upside</span></h2>
+  <p class="slide-subtitle animate d2">Same client relationships you already have. Dramatically higher revenue per account.</p>
+  <table class="compare animate d3" style="max-width:780px">
+    <thead>
+      <tr><th></th><th>DW Practice Today</th><th style="color:var(--accent)">With IW Practice</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="label">Avg. deal size</td><td>$500K &ndash; $2M</td><td><strong class="text-green">$3M &ndash; $5M / yr</strong></td></tr>
+      <tr><td class="label">Services multiplier</td><td>2&ndash;3&times;</td><td><strong class="text-green">3&ndash;5&times;</strong></td></tr>
+      <tr><td class="label">Lock-in</td><td>Data gravity</td><td><strong class="text-green">Context gravity + ontology</strong></td></tr>
+      <tr><td class="label">Time to production</td><td>6&ndash;12 months</td><td><strong class="text-green">4 weeks</strong></td></tr>
+      <tr><td class="label">Expansion model</td><td>More data</td><td><strong class="text-green">More domains &rarr; more agents</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="proof-bar animate d4">
+    <div class="pb-stat">
+      <div class="pb-val">3 global clients</div>
+      <div class="pb-label">closed in &lt; 1 month</div>
+    </div>
+    <div style="width:1px;height:30px;background:rgba(5,150,105,0.15)"></div>
+    <div class="pb-stat">
+      <div class="pb-val">1 global SI partner</div>
+      <div class="pb-label">already in market</div>
+    </div>
+    <div style="width:1px;height:30px;background:rgba(5,150,105,0.15)"></div>
+    <div class="pb-stat">
+      <div class="pb-val">4 weeks</div>
+      <div class="pb-label">to production</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SLIDE 7 — Partnership ========== -->
+<div class="slide" data-slide="6">
+  <span class="slide-tag animate">Joint GTM</span>
+  <h2 class="slide-title animate d1">Let's Build This<br><span class="text-gradient">Together</span></h2>
+  <p class="slide-subtitle animate d2">Questt brings the platform. You bring the clients, domain depth, and delivery muscle.</p>
+  <div class="partner-grid animate d3">
+    <div class="partner-box">
+      <h3><span class="text-gradient">Questt</span></h3>
+      <ul>
+        <li>Intelligence Warehouse platform</li>
+        <li>MORRIE capture engine</li>
+        <li>Ontology library &amp; IP</li>
+        <li>Technical enablement</li>
+        <li>Product roadmap</li>
+      </ul>
+    </div>
+    <div class="partner-plus">+</div>
+    <div class="partner-box">
+      <h3>Partner</h3>
+      <ul>
+        <li>Client relationships</li>
+        <li>Domain consultants</li>
+        <li>Data engineering &amp; delivery</li>
+        <li>Go-to-market reach</li>
+        <li>Vertical expansion</li>
+      </ul>
+    </div>
+  </div>
+  <div class="divider animate d4"></div>
+  <p class="slide-subtitle animate d5" style="font-size:1.05rem;color:var(--text);font-weight:600;margin-bottom:0.5rem">
+    30 minutes to explore a joint GTM?
+  </p>
+  <p class="animate d6" style="font-size:0.9rem;color:var(--text-dim);text-align:center">
+    akhil@questt.ai &nbsp;&middot;&nbsp; intelligencewarehouse.com &nbsp;&middot;&nbsp; <a href="IW-Whitepaper.pdf" target="_blank" style="color:var(--accent);text-decoration:underline">Read the Whitepaper</a>
+  </p>
+</div>
+
+</div><!-- /deck -->
+
+<div class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">7</span></div>
+<div class="deck-nav">
+  <button id="prevBtn" disabled aria-label="Previous slide">&#8249;</button>
+  <button id="nextBtn" aria-label="Next slide">&#8250;</button>
+</div>
+<div class="deck-footer">CONFIDENTIAL &mdash; Intelligence Warehouse &times; Partner</div>
+
+<script>
+(function(){
+  const slides=document.querySelectorAll('.slide');
+  const total=slides.length;
+  let current=0;
+  const progress=document.getElementById('progress');
+  const prevBtn=document.getElementById('prevBtn');
+  const nextBtn=document.getElementById('nextBtn');
+  const currentEl=document.getElementById('currentSlide');
+  const totalEl=document.getElementById('totalSlides');
+  totalEl.textContent=total;
+
+  function goTo(n){
+    if(n<0||n>=total)return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(n>current?'exit-left':'');
+    setTimeout(()=>slides[current].classList.remove('exit-left'),500);
+    current=n;
+    slides[current].classList.add('active');
+    progress.style.width=((current+1)/total*100)+'%';
+    currentEl.textContent=current+1;
+    prevBtn.disabled=current===0;
+    nextBtn.disabled=current===total-1;
+  }
+
+  prevBtn.addEventListener('click',()=>goTo(current-1));
+  nextBtn.addEventListener('click',()=>goTo(current+1));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='Enter')goTo(current+1);
+    if(e.key==='ArrowLeft'||e.key==='Backspace')goTo(current-1);
+  });
+  let startX=0;
+  document.addEventListener('touchstart',e=>{startX=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',e=>{const diff=e.changedTouches[0].clientX-startX;if(Math.abs(diff)>50){diff<0?goTo(current+1):goTo(current-1)}});
+  progress.style.width=(1/total*100)+'%';
+})();
+</script>
+</body>
+</html>
