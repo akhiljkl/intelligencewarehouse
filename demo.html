@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo | Graph Traversal vs Prompt Engineering</title>
+    <meta name="description" content="See why structured graph traversal beats prompt engineering for enterprise AI decisions. Interactive demo comparing approaches side-by-side.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.intelligencewarehouse.com/demo.html">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X17PMES96Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-X17PMES96Q');
+    </script>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.intelligencewarehouse.com/demo.html">
+    <meta property="og:title" content="Demo | Graph Traversal vs Prompt Engineering">
+    <meta property="og:description" content="See why structured graph traversal beats prompt engineering for enterprise AI decisions.">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Demo | Graph Traversal vs Prompt Engineering">
+    <meta name="twitter:description" content="See why structured graph traversal beats prompt engineering for enterprise AI decisions.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-mark">iw<span class="logo-dot">.</span></div>
+            </a>
+            <div class="nav-links">
+                <a href="learn.html">Why IW</a>
+                <a href="demo.html" class="active">Demo</a>
+                <a href="partners.html">Partners</a>
+                <a href="team.html">Team</a>
+            </div>
+            <div class="nav-actions">
+                <a href="#contact" class="btn btn-ghost">Contact</a>
+                <a href="#contact" class="btn btn-primary">Request Demo</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="learn.html">Why IW</a>
+        <a href="demo.html" class="active">Demo</a>
+        <a href="partners.html">Partners</a>
+        <a href="team.html">Team</a>
+        <a href="#contact" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Request Demo</a>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SECTION 1: THE DECISION RACE                 -->
+    <!-- ============================================ -->
+    <section class="section demo-race-section" id="race" style="padding-top: 10rem;">
+        <div class="container-wide">
+            <div class="section-label">THE DECISION RACE</div>
+            <h1 class="section-title">Same Question. Two Approaches.</h1>
+            <p class="section-desc" style="max-width:720px;margin:0 auto 3rem;">
+                &ldquo;Should we markdown GlowMax Men 50ml in North zone?&rdquo;<br>
+                <span style="color:var(--text-dim);font-size:0.9rem;">DOI = 140 days &middot; Sell-Through = 22% &middot; Margin = 30%</span>
+            </p>
+
+            <div class="race-container" id="raceContainer" data-animate>
+                <!-- Left: Prompt Engineering -->
+                <div class="race-panel race-panel-prompt" id="racePrompt">
+                    <div class="race-panel-header">
+                        <span class="race-panel-icon race-icon-prompt">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </span>
+                        <h3>AI Agent (No Graph)</h3>
+                    </div>
+                    <div class="race-prompt-doc" id="racePromptDoc"></div>
+                    <div class="race-token-counter" id="raceTokens">
+                        <span class="race-token-label">Tokens:</span>
+                        <span class="race-token-value" id="raceTokenValue">0</span>
+                    </div>
+                    <div class="race-rule-scan" id="raceRuleScan"></div>
+                    <div class="race-result" id="raceResultPrompt"></div>
+                    <div class="race-failure-explain" id="raceFailureExplain"></div>
+                    <div class="race-accuracy" id="raceAccuracyPrompt">
+                        <div class="race-accuracy-bar"><div class="race-accuracy-fill" id="raceAccFillPrompt"></div></div>
+                        <span class="race-accuracy-label">Accuracy: <strong id="raceAccValuePrompt">—</strong></span>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="race-divider">
+                    <div class="race-divider-line"></div>
+                    <span class="race-divider-vs">VS</span>
+                    <div class="race-divider-line"></div>
+                </div>
+
+                <!-- Right: Intelligence Warehouse -->
+                <div class="race-panel race-panel-iw" id="raceIW">
+                    <div class="race-panel-header">
+                        <span class="race-panel-icon race-icon-iw">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><line x1="6.5" y1="7.5" x2="10" y2="10"/><line x1="17.5" y1="7.5" x2="14" y2="10"/><line x1="6.5" y1="16.5" x2="10" y2="14"/><line x1="17.5" y1="16.5" x2="14" y2="14"/></svg>
+                        </span>
+                        <h3>Intelligence Warehouse</h3>
+                    </div>
+                    <div class="race-flow" id="raceFlow"></div>
+                    <div class="race-steps" id="raceSteps"></div>
+                    <div class="race-result" id="raceResultIW"></div>
+                    <div class="race-success-explain" id="raceSuccessExplain"></div>
+                    <div class="race-accuracy" id="raceAccuracyIW">
+                        <div class="race-accuracy-bar"><div class="race-accuracy-fill race-accuracy-fill-high" id="raceAccFillIW"></div></div>
+                        <span class="race-accuracy-label">Accuracy: <strong id="raceAccValueIW">—</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="race-controls">
+                <button class="btn btn-ghost race-replay-btn" id="raceReplay">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    Replay
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 1B: THE CONTEXT PROBLEM              -->
+    <!-- ============================================ -->
+    <section class="section demo-context-section" id="context">
+        <div class="container">
+            <div class="section-label">THE DEEPER PROBLEM</div>
+            <h2 class="section-title">Even Before You Prompt</h2>
+            <p class="section-desc" style="max-width:720px;margin:0 auto 3rem;">
+                The demo above assumes you already have the rules. In reality, extracting business logic from domain experts is the real bottleneck.
+            </p>
+
+            <div class="context-compare" data-animate>
+                <!-- Traditional -->
+                <div class="context-col context-col-old">
+                    <div class="context-col-header context-col-header-old">
+                        <span class="context-col-icon">&#9201;</span>
+                        Traditional Approach
+                    </div>
+                    <div class="context-timeline">
+                        <div class="context-step">
+                            <div class="context-step-num">1</div>
+                            <div class="context-step-body">
+                                <strong>Domain expert interviews</strong>
+                                <span>Weeks of meetings to extract how decisions actually work</span>
+                            </div>
+                        </div>
+                        <div class="context-step">
+                            <div class="context-step-num">2</div>
+                            <div class="context-step-body">
+                                <strong>Document business rules</strong>
+                                <span>Translate conversations into structured logic manually</span>
+                            </div>
+                        </div>
+                        <div class="context-step">
+                            <div class="context-step-num">3</div>
+                            <div class="context-step-body">
+                                <strong>Engineering builds rule logic</strong>
+                                <span>Developers encode rules into prompts or code</span>
+                            </div>
+                        </div>
+                        <div class="context-step">
+                            <div class="context-step-num">4</div>
+                            <div class="context-step-body">
+                                <strong>Test against real data</strong>
+                                <span>Edge cases surface that break the rules</span>
+                            </div>
+                        </div>
+                        <div class="context-step">
+                            <div class="context-step-num">5</div>
+                            <div class="context-step-body">
+                                <strong>Back to domain experts</strong>
+                                <span>Clarify exceptions, thresholds, and overrides they forgot to mention</span>
+                            </div>
+                        </div>
+                        <div class="context-step">
+                            <div class="context-step-num">6</div>
+                            <div class="context-step-body">
+                                <strong>Rebuild, retest, repeat</strong>
+                                <span>3&ndash;5 cycles before rules stabilize</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="context-duration context-duration-old">8&ndash;12 months</div>
+                </div>
+
+                <!-- Morrie -->
+                <div class="context-col context-col-new">
+                    <div class="context-col-header context-col-header-new">
+                        <span class="context-col-icon">&#9889;</span>
+                        With Morrie
+                    </div>
+                    <div class="context-timeline">
+                        <div class="context-step">
+                            <div class="context-step-num context-step-num-new">1</div>
+                            <div class="context-step-body">
+                                <strong>Morrie converses with the expert</strong>
+                                <span>Extracts rules through natural dialogue, asks clarifying questions about thresholds, exceptions, and edge cases</span>
+                                <span class="context-step-replaces">Replaces weeks of interviews &mdash; Morrie guides the conversation, asks targeted follow-ups, and doesn&rsquo;t forget what was said last week</span>
+                            </div>
+                        </div>
+                        <div class="context-step">
+                            <div class="context-step-num context-step-num-new">2</div>
+                            <div class="context-step-body">
+                                <strong>Drafts a decision blueprint</strong>
+                                <span>Structured logic articulated back in real-time &mdash; expert sees their rules as a formal decision tree, not notes</span>
+                                <span class="context-step-replaces">Replaces manual documentation &mdash; no analyst translating meeting notes into logic. The blueprint is generated live during the conversation</span>
+                            </div>
+                        </div>
+                        <div class="context-step">
+                            <div class="context-step-num context-step-num-new">3</div>
+                            <div class="context-step-body">
+                                <strong>Validates against actual data</strong>
+                                <span>Simulates blueprint on 6 months of transactions (2.4M rows). Surfaces anomalies: &ldquo;3 cases didn&rsquo;t match any rule&rdquo;</span>
+                                <span class="context-step-replaces">Replaces engineering build + test cycle &mdash; no code needed. Morrie runs the blueprint against real data instantly</span>
+                            </div>
+                        </div>
+                        <div class="context-step">
+                            <div class="context-step-num context-step-num-new">4</div>
+                            <div class="context-step-body">
+                                <strong>Expert reviews anomalies</strong>
+                                <span>&ldquo;These 3 edge cases weren&rsquo;t in the original rules &mdash; should they be?&rdquo; Expert adds missing seasonal exception</span>
+                                <span class="context-step-replaces">Replaces months of back-and-forth &mdash; anomalies surface in the same session, not after deployment fails</span>
+                            </div>
+                        </div>
+                        <div class="context-step">
+                            <div class="context-step-num context-step-num-new">5</div>
+                            <div class="context-step-body">
+                                <strong>Morrie re-validates updated blueprint</strong>
+                                <span>Re-runs on the same 2.4M rows &mdash; anomalies drop to 0. All historical decisions now match</span>
+                                <span class="context-step-replaces">Replaces rebuild &amp; retest cycles &mdash; re-validation is instant, no engineering queue or sprint planning</span>
+                            </div>
+                        </div>
+                        <div class="context-step">
+                            <div class="context-step-num context-step-num-new">6</div>
+                            <div class="context-step-body">
+                                <strong>Blueprint locked with confidence</strong>
+                                <span>100% rule coverage on historical data. Decision blueprint ready for production</span>
+                                <span class="context-step-replaces">No &ldquo;let&rsquo;s try and see&rdquo; &mdash; the blueprint is proven against real data before it goes live</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="context-duration context-duration-new">Hours</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 2: WALK THE GRAPH                    -->
+    <!-- ============================================ -->
+    <section class="section demo-walk-section" id="walk">
+        <div class="container-wide">
+            <div class="section-label">WALK THE GRAPH</div>
+            <h2 class="section-title">How Agents Traverse the Intelligence Graph</h2>
+            <p class="section-desc" style="max-width:720px;margin:0 auto 2rem;">
+                Pick a scenario and watch an agent walk through all three layers. Toggle layers off to see what breaks.
+            </p>
+
+            <div class="walk-controls" data-animate>
+                <div class="walk-scenario-select">
+                    <label for="walkScenario">Scenario</label>
+                    <select id="walkScenario">
+                        <option value="markdown">Markdown Decision</option>
+                        <option value="reorder">Reorder Decision</option>
+                        <option value="territory">Territory Assignment</option>
+                    </select>
+                </div>
+                <div class="walk-layer-toggles">
+                    <label class="walk-toggle walk-toggle-l1"><input type="checkbox" id="walkL1" checked><span class="walk-toggle-dot" style="background:#1B6B5A;"></span> L1: Business Ontology</label>
+                    <label class="walk-toggle walk-toggle-l2"><input type="checkbox" id="walkL2" checked><span class="walk-toggle-dot" style="background:#14b8a6;"></span> L2: Codified Metrics</label>
+                    <label class="walk-toggle walk-toggle-l3"><input type="checkbox" id="walkL3" checked><span class="walk-toggle-dot" style="background:#C4453C;"></span> L3: Decision Rules</label>
+                </div>
+            </div>
+
+            <div class="walk-layout" data-animate>
+                <div class="walk-graph-container">
+                    <canvas id="walkCanvas"></canvas>
+                </div>
+                <div class="walk-right">
+                    <div class="walk-question" id="walkQuestion"></div>
+                    <div class="walk-steps" id="walkSteps"></div>
+                    <div class="walk-final-answer" id="walkFinalAnswer"></div>
+                </div>
+            </div>
+
+            <div class="walk-error-banner" id="walkErrorBanner"></div>
+        </div>
+    </section>
+
+    <!-- ============================================ -->
+    <!-- SECTION 3: THE COMPLEXITY CLIFF              -->
+    <!-- ============================================ -->
+    <section class="section demo-cliff-section" id="cliff">
+        <div class="container">
+            <div class="section-label">THE COMPLEXITY CLIFF</div>
+            <h2 class="section-title">What Happens as Rules Scale</h2>
+            <p class="section-desc" style="max-width:680px;margin:0 auto 3rem;">
+                An AI agent without a graph works fine at 3 rules. Watch what happens at 50.
+            </p>
+
+            <div class="cliff-container" data-animate>
+                <div class="cliff-slider-row">
+                    <label class="cliff-slider-label">Business Rules</label>
+                    <input type="range" id="cliffSlider" min="3" max="50" value="3" class="cliff-slider">
+                    <span class="cliff-slider-value" id="cliffSliderValue">3</span>
+                </div>
+
+                <div class="cliff-chart-container">
+                    <canvas id="cliffCanvas"></canvas>
+                </div>
+
+                <div class="cliff-legend">
+                    <span class="cliff-legend-item"><span class="cliff-legend-dot" style="background:var(--red);"></span> AI Agent (No Graph)</span>
+                    <span class="cliff-legend-item"><span class="cliff-legend-dot" style="background:var(--accent);"></span> Intelligence Warehouse</span>
+                </div>
+
+                <div class="cliff-failure" id="cliffFailure"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section section-cta" id="contact">
+        <div class="container">
+            <div class="cta-content" data-animate>
+                <div class="section-label">GET STARTED</div>
+                <h2 class="section-title">Build the Foundation<br>Your AI Agents Need</h2>
+                <p class="section-desc" style="max-width:550px;margin:0 auto 2.5rem;">Stop building agents on fragmented context. Start with the infrastructure layer that makes AI actually work.</p>
+                <div class="cta-actions">
+                    <a href="mailto:hello@intelligencewarehouse.com" class="btn btn-primary btn-lg">Request a Demo <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+                    <a href="partners.html" class="btn btn-outline btn-lg">Partner With Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="nav-logo" style="margin-bottom:1rem;">
+                        <div class="logo-mark">iw<span class="logo-dot">.</span></div>
+                            </div>
+                    <p class="footer-tagline">The foundation AI agents need.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col"><h5>Platform</h5><a href="learn.html#architecture">Architecture</a><a href="learn.html#process">How It Works</a><a href="index.html#impact">Impact</a><a href="team.html">Team</a></div>
+                    <div class="footer-col"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Blog</a><a href="#contact">Contact</a></div>
+                    <div class="footer-col"><h5>Resources</h5><a href="IW-Whitepaper.pdf" target="_blank">Technical Paper</a><a href="#">API Docs</a><a href="partners.html">Partners</a><a href="#">Security</a></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Intelligence Warehouse. All rights reserved.</span>
+                <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="demo.js"></script>
+</body>
+</html>
