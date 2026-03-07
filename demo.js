@@ -1166,4 +1166,190 @@
         updateFailure();
     })();
 
+    /* ================================================
+       SECTION: CONVERSATIONAL INTELLIGENCE (Cortex)
+       ================================================ */
+    (function cortex() {
+        var ROLES = [
+            {
+                name: 'Sales Manager',
+                question: 'Which SKUs in North zone are underperforming vs margin target?',
+                trace: [
+                    { layer: 'L1', label: 'Entity Resolution', desc: 'Product hierarchy \u2192 GlowMax \u2192 Men\u2019s Grooming \u2192 3 active SKUs in North zone' },
+                    { layer: 'L2', label: 'Metric Computation', desc: 'Margin per SKU: GXM-50 at 18%, GXM-30 at 31%, GXM-100 at 27%. Target: 30%' },
+                    { layer: 'L3', label: 'Rule Evaluation', desc: 'D4: Margin < 25% \u2192 flag underperforming. 2 SKUs triggered' },
+                    { layer: 'L1', label: 'Authority Routing', desc: 'North zone ZSM: Priya M. \u2192 Markdown review required' }
+                ],
+                answer: 'GXM-50 (18% margin) and GXM-100 (27% margin) are underperforming vs 30% target in North zone. D4 rule triggered for both. Routed to ZSM Priya M. for markdown review.',
+                failures: [
+                    { alt: 'LLM + Data Warehouse', fail: 'Pulls margin numbers but can\u2019t apply threshold rules or identify who should act' },
+                    { alt: 'LLM + BI Tool', fail: 'Shows a margin dashboard but can\u2019t recommend specific actions or route approval' },
+                    { alt: 'LLM + Prompt Eng.', fail: 'Hallucinates SKU-to-zone mapping and invents a threshold that doesn\u2019t match policy' }
+                ]
+            },
+            {
+                name: 'Supply Chain Head',
+                question: 'Should we increase reorder quantity for GlowMax before monsoon season?',
+                trace: [
+                    { layer: 'L1', label: 'Entity Resolution', desc: 'GlowMax \u2192 Skin Care \u2192 4 SKUs. Monsoon = Jun\u2013Sep seasonal window' },
+                    { layer: 'L2', label: 'Metric Computation', desc: 'Inventory velocity: +35% in monsoon. Current DOI: 45 days (target: 60 for seasonal)' },
+                    { layer: 'L3', label: 'Rule Evaluation', desc: 'D6: Seasonal exception \u2192 increase reorder by 1.4x when DOI < seasonal target' },
+                    { layer: 'L3', label: 'Exception Check', desc: 'Not a new launch \u2713. Distributor credit clear \u2713. Warehouse capacity available \u2713' }
+                ],
+                answer: 'Yes \u2014 increase reorder by 1.4x for all 4 GlowMax SKUs. D6 seasonal rule triggered. DOI is 45d vs 60d seasonal target. No exceptions blocking.',
+                failures: [
+                    { alt: 'LLM + Prompt Eng.', fail: 'Misses seasonal exception entirely \u2014 recommends standard reorder quantity' },
+                    { alt: 'LLM + Ontology Only', fail: 'Correctly identifies GlowMax SKUs but can\u2019t compute inventory velocity or apply seasonal rules' },
+                    { alt: 'LLM + BI Tool', fail: 'Shows historical seasonal trends but can\u2019t translate them into a specific reorder action' }
+                ]
+            },
+            {
+                name: 'Finance Analyst',
+                question: 'What\u2019s our markdown exposure in West zone this quarter?',
+                trace: [
+                    { layer: 'L1', label: 'Scope Resolution', desc: 'West zone \u2192 3 territories \u2192 12 distributors \u2192 847 active SKUs' },
+                    { layer: 'L2', label: 'Metric Computation', desc: 'Scan all 847 SKUs against D1 triggers. 23 SKUs meet DOI > 120 AND ST < 30%' },
+                    { layer: 'L3', label: 'Rule Simulation', desc: 'Apply tiered markdown logic: 8 SKUs at 10%, 11 at 15%, 4 at 20%. Total exposure: \u20B92.3Cr' },
+                    { layer: 'L3', label: 'Authority Check', desc: '4 SKUs above \u20B95L threshold \u2192 require Regional Head approval, not just ZSM' }
+                ],
+                answer: '23 SKUs in West zone qualify for markdown. Total exposure: \u20B92.3Cr this quarter. 4 high-value markdowns need Regional Head sign-off. 2 SKUs near exception threshold.',
+                failures: [
+                    { alt: 'LLM + Data Warehouse', fail: 'Can sum inventory values but has no markdown trigger rules \u2014 can\u2019t identify which SKUs actually qualify' },
+                    { alt: 'LLM + BI Tool', fail: 'Shows historical markdowns but can\u2019t simulate forward exposure using current trigger conditions' },
+                    { alt: 'LLM + Prompt Eng.', fail: 'Approximates markdown %, ignores tiered logic and authority thresholds entirely' }
+                ]
+            },
+            {
+                name: 'Trade Marketing',
+                question: 'Which promotions should we run for slow-movers in South zone?',
+                trace: [
+                    { layer: 'L1', label: 'Entity Resolution', desc: 'South zone \u2192 identify slow-movers: DOI > 90 AND ST < 25%. 18 SKUs qualify' },
+                    { layer: 'L2', label: 'Metric Analysis', desc: 'Segment by margin: 7 high-margin (>35%), 11 low-margin (<25%). Different promo strategies' },
+                    { layer: 'L3', label: 'Promotion Rules', desc: 'D8: High-margin slow \u2192 BOGO eligible. Low-margin slow \u2192 display discount only. Cap: \u20B912L/qtr' },
+                    { layer: 'L3', label: 'Cross-Rule Check', desc: 'Cross-check D1: 3 SKUs already flagged for markdown \u2014 exclude from promo to avoid double-discount' }
+                ],
+                answer: '15 SKUs eligible for promotion (3 excluded \u2014 already in markdown pipeline). 7 qualify for BOGO, 8 for display discount. Total budget: \u20B99.8L within \u20B912L cap.',
+                failures: [
+                    { alt: 'LLM + Prompt Eng.', fail: 'Suggests generic promotions with no awareness of markdown overlap \u2014 risks double-discounting' },
+                    { alt: 'LLM + Ontology Only', fail: 'Identifies the right products but invents promotion rules that don\u2019t match company policy' },
+                    { alt: 'LLM + Data Warehouse', fail: 'Pulls sell-through data but has no promotion rule logic or budget constraints' }
+                ]
+            },
+            {
+                name: 'Store Manager',
+                question: 'Why is aisle 7 conversion dropping and what should I change?',
+                trace: [
+                    { layer: 'L1', label: 'Location Resolution', desc: 'Aisle 7 \u2192 Premium Skin Care \u2192 24 SKUs across 4 planogram sections' },
+                    { layer: 'L2', label: 'Metric Analysis', desc: 'Conversion dropped 18% MoM. Foot traffic stable. Basket analysis: category mix shifted' },
+                    { layer: 'L3', label: 'Assortment Rules', desc: 'D12: Planogram compliance check \u2014 Section 3 has 6 delisted SKUs still on shelf' },
+                    { layer: 'L3', label: 'Action Chain', desc: 'Remove 6 delisted \u2192 restock 4 new launches \u2192 shift premium facings to eye-level' }
+                ],
+                answer: 'Conversion dropped because Section 3 has 6 delisted SKUs blocking 4 new launches. Action: remove delisted, restock new launches on eye-level shelf. Recovery: 2\u20133 weeks.',
+                failures: [
+                    { alt: 'LLM + Data Warehouse', fail: 'Has POS data showing the drop but no planogram or assortment rules to diagnose cause' },
+                    { alt: 'LLM + BI Tool', fail: 'Visualizes the conversion trend but can\u2019t link it to planogram compliance failures' },
+                    { alt: 'LLM + Prompt Eng.', fail: 'Guesses at reasons \u2014 suggests \u201Ctry better signage\u201D with no structural diagnosis' }
+                ]
+            },
+            {
+                name: 'Ops Head',
+                question: 'Which warehouses are at risk of SLA breach this week?',
+                trace: [
+                    { layer: 'L1', label: 'Facility Resolution', desc: '8 active warehouses \u2192 current capacity, staffing levels, pending orders' },
+                    { layer: 'L2', label: 'Metric Computation', desc: 'Fill rate forecast: WH-3 at 71% (SLA: 85%), WH-7 at 79% (SLA: 85%). 2 at risk' },
+                    { layer: 'L3', label: 'Escalation Rules', desc: 'D15: Fill rate < 80% projected \u2192 escalate to Regional Ops Manager within 24hrs' },
+                    { layer: 'L1', label: 'Authority Routing', desc: 'WH-3 \u2192 West \u2192 Ops Mgr: Deepak S. WH-7 \u2192 North \u2192 Ops Mgr: Rahul K.' }
+                ],
+                answer: 'WH-3 (West) and WH-7 (North) projected below 85% SLA this week. Escalation D15 triggered. Routed to Deepak S. and Rahul K. Root cause: 3 delayed inbound shipments.',
+                failures: [
+                    { alt: 'LLM + BI Tool', fail: 'Shows current fill rate but can\u2019t project forward or trigger escalation rules' },
+                    { alt: 'LLM + Data Warehouse', fail: 'Has order and shipment data but no SLA rules or escalation authority chains' },
+                    { alt: 'LLM + Prompt Eng.', fail: 'Warns about \u201Cpotential issues\u201D with no specific thresholds, timelines, or routing' }
+                ]
+            }
+        ];
+
+        var rolesEl = document.getElementById('cortexRoles');
+        var questionEl = document.getElementById('cortexQuestion');
+        var traceEl = document.getElementById('cortexTrace');
+        var answerEl = document.getElementById('cortexAnswer');
+        var failEl = document.getElementById('cortexFailures');
+        if (!rolesEl) return;
+
+        var activeIndex = 0;
+        var animTimers = [];
+
+        function clearTimers() {
+            animTimers.forEach(function (t) { clearTimeout(t); });
+            animTimers = [];
+        }
+
+        function renderRole(idx) {
+            clearTimers();
+            var role = ROLES[idx];
+
+            // Update active button
+            rolesEl.querySelectorAll('.cortex-role').forEach(function (btn, i) {
+                btn.classList.toggle('active', i === idx);
+            });
+
+            // Question
+            questionEl.textContent = role.question;
+
+            // Clear
+            traceEl.innerHTML = '';
+            answerEl.innerHTML = '';
+            answerEl.classList.remove('visible');
+            failEl.innerHTML = '';
+
+            // Build trace steps (animate with stagger)
+            role.trace.forEach(function (step, i) {
+                var div = document.createElement('div');
+                div.className = 'cortex-trace-step';
+                var badgeClass = 'cortex-trace-badge cortex-trace-badge-' + step.layer.toLowerCase();
+                div.innerHTML = '<span class="' + badgeClass + '">' + step.layer + '</span>' +
+                    '<div class="cortex-trace-content"><div class="cortex-trace-label">' + step.label + '</div>' +
+                    '<div class="cortex-trace-desc">' + step.desc + '</div></div>';
+                traceEl.appendChild(div);
+
+                animTimers.push(setTimeout(function () {
+                    div.classList.add('visible');
+                }, 150 * (i + 1)));
+            });
+
+            // Show answer after trace completes
+            var answerDelay = 150 * (role.trace.length + 1) + 300;
+            animTimers.push(setTimeout(function () {
+                answerEl.innerHTML = '<span class="cortex-answer-box-label">Answer</span>' + role.answer;
+                answerEl.classList.add('visible');
+            }, answerDelay));
+
+            // Build failure items (stagger from the other side)
+            role.failures.forEach(function (f, i) {
+                var div = document.createElement('div');
+                div.className = 'cortex-fail-item';
+                div.innerHTML = '<div class="cortex-fail-alt">' + f.alt + '</div>' +
+                    '<div class="cortex-fail-text">' + f.fail + '</div>';
+                failEl.appendChild(div);
+
+                animTimers.push(setTimeout(function () {
+                    div.classList.add('visible');
+                }, 300 * (i + 1)));
+            });
+        }
+
+        // Click handlers
+        rolesEl.addEventListener('click', function (e) {
+            var btn = e.target.closest('.cortex-role');
+            if (!btn) return;
+            var idx = parseInt(btn.getAttribute('data-role'), 10);
+            if (idx === activeIndex) return;
+            activeIndex = idx;
+            renderRole(idx);
+        });
+
+        // Initial render
+        renderRole(0);
+    })();
+
 })();

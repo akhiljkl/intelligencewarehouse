@@ -449,6 +449,95 @@
     </section>
 
     <!-- ============================== -->
+    <!-- QUADRANT: Accuracy vs Speed -->
+    <!-- ============================== -->
+    <section class="section quadrant-section" id="quadrant">
+        <div class="container">
+            <div class="section-label">THE LANDSCAPE</div>
+            <h2 class="section-title">Nothing Else Comes Close</h2>
+            <p class="section-desc" style="max-width:720px;margin:0 auto 3rem;">
+                Every enterprise AI approach trades off accuracy against deployment speed. Intelligence Warehouse is the only architecture that delivers both.
+            </p>
+
+            <div class="quadrant-container" data-animate>
+                <div class="quadrant-chart" id="quadrantChart">
+                    <!-- Y axis -->
+                    <div class="quadrant-axis-y">
+                        <span class="quadrant-axis-hi">98%</span>
+                        <span class="quadrant-axis-label">Decision Accuracy</span>
+                        <span class="quadrant-axis-lo">50%</span>
+                    </div>
+                    <!-- X axis -->
+                    <div class="quadrant-axis-x">
+                        <span class="quadrant-axis-lo">Months</span>
+                        <span class="quadrant-axis-label">Time to Production</span>
+                        <span class="quadrant-axis-hi">Weeks</span>
+                    </div>
+                    <!-- Grid -->
+                    <div class="quadrant-grid">
+                        <div class="quadrant-gridline-h" style="bottom:25%"></div>
+                        <div class="quadrant-gridline-h" style="bottom:50%"></div>
+                        <div class="quadrant-gridline-h" style="bottom:75%"></div>
+                        <div class="quadrant-gridline-v" style="left:25%"></div>
+                        <div class="quadrant-gridline-v" style="left:50%"></div>
+                        <div class="quadrant-gridline-v" style="left:75%"></div>
+                    </div>
+                    <!-- Data points -->
+                    <div class="quadrant-point quadrant-point-dw" style="left:78%;bottom:22%;" data-label="LLM + Data Warehouse" data-acc="~62%" data-speed="Fast (connect)">
+                        <span class="quadrant-dot"></span>
+                        <span class="quadrant-point-label">LLM + DW</span>
+                    </div>
+                    <div class="quadrant-point quadrant-point-bi" style="left:52%;bottom:32%;" data-label="LLM + BI Tool" data-acc="~68%" data-speed="3–6 weeks">
+                        <span class="quadrant-dot"></span>
+                        <span class="quadrant-point-label">LLM + BI</span>
+                    </div>
+                    <div class="quadrant-point quadrant-point-prompt" style="left:72%;bottom:28%;" data-label="LLM + Prompt Engineering" data-acc="~65%" data-speed="Fast (degrades)">
+                        <span class="quadrant-dot"></span>
+                        <span class="quadrant-point-label">LLM + Prompt</span>
+                    </div>
+                    <div class="quadrant-point quadrant-point-onto" style="left:40%;bottom:42%;" data-label="LLM + Ontology Only" data-acc="~73%" data-speed="6–8 weeks">
+                        <span class="quadrant-dot"></span>
+                        <span class="quadrant-point-label">LLM + Ontology</span>
+                    </div>
+                    <div class="quadrant-point quadrant-point-iw" style="left:72%;bottom:90%;" data-label="Intelligence Warehouse" data-acc="98%" data-speed="4 weeks">
+                        <span class="quadrant-dot quadrant-dot-iw"></span>
+                        <span class="quadrant-point-label quadrant-label-iw">Intelligence Warehouse</span>
+                    </div>
+                    <!-- Quadrant label -->
+                    <div class="quadrant-zone-label">Top Right = Best</div>
+                </div>
+
+                <!-- Capability scorecard -->
+                <div class="quadrant-scorecard">
+                    <div class="quadrant-sc-title">Capability Scorecard</div>
+                    <table class="quadrant-sc-table">
+                        <thead>
+                            <tr>
+                                <th>Capability</th>
+                                <th>+DW</th>
+                                <th>+BI</th>
+                                <th>+Prompt</th>
+                                <th>+Onto</th>
+                                <th class="quadrant-sc-iw">IW</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Entity Resolution</td><td class="sc-x">&times;</td><td class="sc-x">&times;</td><td class="sc-dash">&ndash;</td><td class="sc-check">&check;</td><td class="sc-check sc-iw">&check;</td></tr>
+                            <tr><td>Metric Formulas</td><td class="sc-x">&times;</td><td class="sc-check">&check;</td><td class="sc-dash">&ndash;</td><td class="sc-x">&times;</td><td class="sc-check sc-iw">&check;</td></tr>
+                            <tr><td>Decision Rules</td><td class="sc-x">&times;</td><td class="sc-x">&times;</td><td class="sc-dash">&ndash;</td><td class="sc-x">&times;</td><td class="sc-check sc-iw">&check;</td></tr>
+                            <tr><td>Exception Handling</td><td class="sc-x">&times;</td><td class="sc-x">&times;</td><td class="sc-dash">&ndash;</td><td class="sc-x">&times;</td><td class="sc-check sc-iw">&check;</td></tr>
+                            <tr><td>Persona / Authority</td><td class="sc-x">&times;</td><td class="sc-x">&times;</td><td class="sc-dash">&ndash;</td><td class="sc-dash">&ndash;</td><td class="sc-check sc-iw">&check;</td></tr>
+                            <tr><td>Auditable</td><td class="sc-check">&check;</td><td class="sc-check">&check;</td><td class="sc-x">&times;</td><td class="sc-check">&check;</td><td class="sc-check sc-iw">&check;</td></tr>
+                            <tr><td>Model-Agnostic</td><td class="sc-check">&check;</td><td class="sc-check">&check;</td><td class="sc-x">&times;</td><td class="sc-check">&check;</td><td class="sc-check sc-iw">&check;</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="quadrant-sc-footer">IW is the only architecture with &check; across all dimensions.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================== -->
     <!-- MORRIE: The Blueprint Extraction Engine -->
     <!-- ============================== -->
     <section class="section section-dark section-morrie" id="morrie">
