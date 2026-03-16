@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study: Global Consumer Healthcare Company</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --bg:#FAFAF8;--card:#FFFFFF;--text:#1C1C1C;--sub:#555555;--muted:#999999;--border:#E5E2DB;--accent:#2D5A3D;--accent-light:#EDF3EF;--accent-mid:#4A7A5D;--accent-soft:#D4E4DA;--red:#B5453A;--red-light:#FDF0EE;--red-muted:#D4918A;--amber:#C47A20;--amber-light:#FDF6EC;--font:'IBM Plex Sans',-apple-system,sans-serif;--mono:'JetBrains Mono','IBM Plex Mono',monospace;--serif:Georgia,'Times New Roman',serif; }
+html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;font-size:16px;-webkit-font-smoothing:antialiased}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}.reveal.visible{opacity:1;transform:translateY(0)}
+.container{max-width:780px;margin:0 auto;padding:0 32px}.container-wide{max-width:1000px;margin:0 auto;padding:0 32px}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,248,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 40px;height:48px;display:flex;align-items:center;justify-content:space-between}.topbar-logo{font-family:var(--font);font-weight:700;font-size:15px;letter-spacing:-.03em;color:var(--text)}.topbar-logo span{color:var(--accent)}.topbar-tag{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:500}
+.hero{padding:128px 0 0}.hero-eyebrow{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:500;display:flex;align-items:center;gap:12px}.hero-eyebrow::before{content:'';width:20px;height:1px;background:var(--accent)}.hero h1{font-family:var(--serif);font-size:clamp(30px,4.5vw,46px);font-weight:normal;line-height:1.18;letter-spacing:-.02em;color:var(--text);margin:20px 0 24px;max-width:680px}.hero-body{font-size:17px;color:var(--sub);line-height:1.7;max-width:540px;font-weight:300}
+.metrics-strip{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-top:52px}.ms-cell{padding:28px 0;text-align:center;position:relative}.ms-cell:not(:last-child)::after{content:'';position:absolute;right:0;top:20px;bottom:20px;width:1px;background:var(--border)}.ms-val{font-family:var(--serif);font-size:36px;font-weight:normal;color:var(--accent);letter-spacing:-.02em;line-height:1}.ms-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px;font-weight:500;line-height:1.5}
+.chapter{padding:80px 0 0}.ch-head{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}.ch-num{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.08em;font-weight:500;flex-shrink:0}.ch-line{flex:1;height:1px;background:var(--border)}.ch-title{font-family:var(--serif);font-size:clamp(26px,3.5vw,38px);font-weight:normal;line-height:1.22;letter-spacing:-.015em;margin-bottom:14px}.ch-lead{font-size:17px;color:var(--sub);line-height:1.7;max-width:560px;margin-bottom:44px;font-weight:300}
+.prose{font-size:16px;color:var(--sub);line-height:1.75}.prose p+p{margin-top:16px}.prose strong{color:var(--text);font-weight:600}
+.stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:5px;overflow:hidden;margin:36px 0}.ss-cell{background:var(--card);padding:22px 14px;text-align:center}.ss-val{font-family:var(--serif);font-size:26px;font-weight:normal;color:var(--text);letter-spacing:-.01em}.ss-label{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
+.poc-section{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 0}.poc-bar{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden;margin:36px 0 28px}.poc-bar-left{background:var(--red-light);padding:24px 28px;flex:0 0 180px;display:flex;flex-direction:column;justify-content:center;align-items:center;border-right:1px solid #F0D0CC}.poc-bar-pct{font-family:var(--serif);font-size:44px;font-weight:normal;color:var(--red);letter-spacing:-.02em;line-height:1}.poc-bar-tag{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--red-muted);margin-top:6px;font-weight:500}.poc-bar-right{padding:24px 28px;flex:1;display:flex;flex-direction:column;justify-content:center}.poc-bar-right p{font-size:15px;color:var(--sub);line-height:1.65}.poc-bar-right strong{color:var(--text)}
+.poc-items{margin:0}.poc-item{display:grid;grid-template-columns:16px 1fr;gap:12px;padding:16px 0;border-bottom:1px solid var(--border);align-items:start}.poc-item:last-child{border-bottom:none}.poc-x{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--red);padding-top:2px}.poc-item p{font-size:15px;color:var(--sub);line-height:1.65}.poc-item p strong{color:var(--text);font-weight:600}
+.iw-section{padding:80px 0}.bkg-container{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:36px 0;position:relative}.bkg-container::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-mid),var(--accent-soft));z-index:2}.bkg-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}.bkg-header-title{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:500}.bkg-legend{display:flex;align-items:center;gap:16px}.bkg-legend-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--muted)}.bkg-legend-circle{width:10px;height:10px;border-radius:50%;border:1.5px solid white;opacity:.9}.bkg-legend-diamond{width:8px;height:8px;transform:rotate(45deg);border-radius:1px;border:1.5px solid white;opacity:.9}.bkg-legend-triangle{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:9px solid var(--red);opacity:.9}#bkg-graph{width:100%;height:480px;display:block;cursor:grab}#bkg-graph:active{cursor:grabbing}.bkg-stats{padding:12px 24px;border-top:1px solid var(--border);display:flex;gap:24px;font-family:var(--mono);font-size:11px;color:var(--muted)}.bkg-stats strong{color:var(--text);font-weight:600}
+.morrie-section{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 0}.morrie-badge{display:flex;align-items:center;gap:10px;margin-bottom:20px}.morrie-badge-icon{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:15px;color:white}.morrie-badge-text{font-weight:600;font-size:15px}.morrie-badge-sub{font-size:12px;color:var(--muted)}.morrie-chat{max-width:580px;margin:32px auto;display:flex;flex-direction:column;gap:10px}.m-msg{max-width:84%;padding:12px 16px;border-radius:10px;font-size:13.5px;line-height:1.6}.m-bot{align-self:flex-start;background:var(--accent-light);color:var(--accent);border-bottom-left-radius:3px}.m-bot-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent-mid);margin-bottom:4px;font-weight:500}.m-user{align-self:flex-end;background:var(--text);color:rgba(255,255,255,.88);border-bottom-right-radius:3px}.m-sys{align-self:center;max-width:90%;background:transparent;border:1px dashed var(--border);color:var(--muted);font-family:var(--mono);font-size:11px;text-align:center;padding:8px 14px;border-radius:5px}
+.results-section{padding:80px 0}.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:36px 0}.r-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:28px;position:relative;overflow:hidden}.r-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}.r-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:500;margin-bottom:10px}.r-val{font-family:var(--serif);font-size:48px;font-weight:normal;color:var(--accent);letter-spacing:-.03em;line-height:1}.r-ctx{font-size:13px;color:var(--sub);margin-top:10px;line-height:1.55}.r-vs{display:inline-block;font-family:var(--mono);font-size:10px;padding:3px 7px;border-radius:3px;background:var(--red-light);color:var(--red);margin-top:6px;font-weight:500}
+.fw-section{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 0}.fw-table{width:100%;margin:36px 0;border-collapse:collapse}.fw-table thead th{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:500;padding:10px 14px;text-align:left;border-bottom:2px solid var(--text)}.fw-table tbody td{padding:18px 14px;font-size:14px;border-bottom:1px solid var(--border);vertical-align:top}.fw-table tbody tr:last-child td{border-bottom:none}.fw-name{font-weight:600;color:var(--text)}.fw-desc{font-size:12px;color:var(--muted);margin-top:2px}.fw-v{font-family:var(--mono);font-size:13px;font-weight:500}.fw-g{color:var(--accent)}.fw-b{color:var(--text)}.fw-row-base td{background:var(--accent-light)}
+.cost-vis{margin:44px 0}.cost-vis-title{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:20px;font-weight:500}.cost-row{display:grid;grid-template-columns:150px 1fr 50px;gap:14px;align-items:center;margin-bottom:12px}.cost-label{font-size:13px;color:var(--sub);text-align:right}.cost-track{height:28px;background:var(--bg);border-radius:3px;overflow:hidden;border:1px solid var(--border)}.cost-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(.22,1,.36,1);width:0}.cf-1{background:var(--accent)}.cf-2{background:var(--accent-mid)}.cf-3{background:#7FB38E}.cf-4{background:#A8D4B4}.cost-pct{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--text)}
+.compound{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:28px;margin:40px auto;max-width:780px}.compound h4{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:12px;font-weight:500}.compound p{font-size:14px;color:var(--sub);line-height:1.7}.compound strong{color:var(--text)}.compound-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.cn-cell{text-align:center;padding:14px;border:1px solid var(--border);border-radius:5px;background:var(--card)}.cn-val{font-family:var(--serif);font-size:22px;color:var(--accent)}.cn-label{font-size:11px;color:var(--muted);margin-top:3px}
+.final-section{padding:72px 0 56px;text-align:center}.final-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin:40px 0 0}.f-cell{background:var(--card);padding:32px 14px}.f-val{font-family:var(--serif);font-size:36px;font-weight:normal;color:var(--accent);letter-spacing:-.02em}.f-label{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
+.footer{padding:40px 0;text-align:center;border-top:1px solid var(--border)}.footer-logo{font-family:var(--font);font-weight:700;font-size:16px;letter-spacing:-.03em;color:var(--text)}.footer-logo span{color:var(--accent)}.footer-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px}
+@media(max-width:768px){.metrics-strip,.stat-strip{grid-template-columns:repeat(2,1fr)}.ms-cell:nth-child(2)::after{display:none}.result-grid{grid-template-columns:1fr}.final-grid{grid-template-columns:repeat(2,1fr)}.cost-row{grid-template-columns:1fr;gap:4px}.cost-label{text-align:left}.compound-nums{grid-template-columns:1fr}.poc-bar{flex-direction:column}.poc-bar-left{flex:0 0 auto;border-right:none;border-bottom:1px solid #F0D0CC}.container,.container-wide{padding:0 20px}.hero{padding:108px 0 0}.chapter{padding:56px 0 0}#bkg-graph{height:360px}.bkg-legend{flex-wrap:wrap;gap:8px}}
+</style>
+</head>
+<body>
+<div class="topbar"><a href="case-studies.html" class="topbar-logo" style="text-decoration:none;color:var(--text);">iw<span>.</span></a><div class="topbar-tag">Case Study</div></div>
+
+<section class="hero"><div class="container">
+  <div class="hero-eyebrow">Consumer Healthcare / OTC & Wellness</div>
+  <h1>How a Global Consumer Healthcare Company Unified 6 Competitive Arenas into a Single Intelligence Layer</h1>
+  <p class="hero-body">Nielsen said share was down 1.2 points. Internal sales said billing was up 8%. Both were right. Nobody could explain why.</p>
+</div><div class="container-wide" style="margin-top:52px"><div class="metrics-strip">
+  <div class="ms-cell"><div class="ms-val" data-count="96" data-suffix="%">--</div><div class="ms-label">Diagnostic accuracy<br>first use case</div></div>
+  <div class="ms-cell"><div class="ms-val" data-count="6" data-suffix=" wks">--</div><div class="ms-label">Kickoff to<br>production</div></div>
+  <div class="ms-cell"><div class="ms-val">Same day</div><div class="ms-label">Signal-to-insight<br>down from 3-4 weeks</div></div>
+  <div class="ms-cell"><div class="ms-val">&lt;10%</div><div class="ms-label">Relative cost per<br>subsequent use case</div></div>
+</div></div></section>
+
+<div class="chapter"><div class="container">
+  <div class="reveal"><div class="ch-head"><div class="ch-num">01</div><div class="ch-line"></div></div>
+    <h2 class="ch-title">Six businesses under one roof.<br>Each fighting a different war<br>with the same blind spots.</h2>
+    <p class="ch-lead">The company operates across oral health, pain relief, digestive health, respiratory, and vitamins. Each category has different competitors, channels, seasonality, and data sources. A single portfolio, but six separate intelligence requirements.</p>
+  </div>
+  <div class="stat-strip reveal">
+    <div class="ss-cell"><div class="ss-val">6</div><div class="ss-label">Distinct competitive<br>arenas</div></div>
+    <div class="ss-cell"><div class="ss-val">5+</div><div class="ss-label">External data sources<br>(Nielsen, Kantar, IQVIA)</div></div>
+    <div class="ss-cell"><div class="ss-val">3-4 wks</div><div class="ss-label">Lag from signal<br>to assembled insight</div></div>
+    <div class="ss-cell"><div class="ss-val">12</div><div class="ss-label">Personas needing<br>different views</div></div>
+  </div>
+  <div class="prose reveal" style="margin-top:36px">
+    <p>Nielsen IQ measures market share monthly across GT and MT, but undercounts the pharmacy channel where pain relief and respiratory products move. Kantar tracks household penetration on a different cadence with a different geography taxonomy. Internal primary sales shows distributor billing. Secondary sales from the field is patchy in newly expanded rural territories.</p>
+    <p>A category head sees oral health share dip 1.2 points in Nielsen. She asks sales. They say <strong>primary billing is up 8%</strong>. Both are correct: the company shipped more, but a competitor launched a Rs 10 sachet that captured trial in rural outlets where Nielsen coverage is thin. By the time someone manually assembles the picture, the competitor has been in-market for 6 weeks.</p>
+  </div>
+</div></div>
+
+<section class="poc-section" style="margin-top:80px"><div class="container">
+  <div class="reveal"><div class="ch-head"><div class="ch-num">02</div><div class="ch-line"></div></div>
+    <h2 class="ch-title">Five dashboards. Five data sources.<br>Zero cross-referencing.</h2>
+    <p class="ch-lead">Nielsen in one portal. Kantar in another. Internal sales in SAP. Pharmacy data in a quarterly spreadsheet. Brand health in a research vendor's platform. Each technically accessible. None connected.</p>
+  </div>
+  <div class="poc-bar reveal">
+    <div class="poc-bar-left"><div class="poc-bar-pct">~2 days</div><div class="poc-bar-tag">Per Monthly Review</div></div>
+    <div class="poc-bar-right"><p>Brand managers spent <strong>2 days assembling the monthly category picture</strong> by pulling data from each source, reconciling geography taxonomies, and building slides. The output was backward-looking, arrived too late to act on, and the cross-domain questions were often not asked at all.</p></div>
+  </div>
+  <div class="poc-items reveal">
+    <div class="poc-item"><div class="poc-x">&times;</div><p><strong>Different taxonomies, no entity resolution.</strong> Nielsen uses "Urban North." Internal sales uses state-level RSM territories. Kantar uses SEC classifications by city tier. A question like "is our share loss concentrated where we recently expanded distribution?" required manual joins across 3 naming systems.</p></div>
+    <div class="poc-item"><div class="poc-x">&times;</div><p><strong>No cross-domain diagnosis.</strong> Nielsen shows share is down. Internal data shows billing is up. Neither can tell you that a competitor launched a low-unit-price SKU in pharmacy outlets that Nielsen undercounts. That connection requires crossing system boundaries. No dashboard did this.</p></div>
+    <div class="poc-item"><div class="poc-x">&times;</div><p><strong>Pharmacy channel blind spot.</strong> Chemist outlets drive 30-40% of sales in pain relief and respiratory. Nielsen's pharmacy coverage is thin. HCP recommendation patterns were tracked in a separate IQVIA system. An entire channel operated without integrated intelligence.</p></div>
+  </div>
+</div></section>
+
+<section class="iw-section"><div class="container">
+  <div class="reveal"><div class="ch-head"><div class="ch-num">03</div><div class="ch-line"></div></div>
+    <h2 class="ch-title">One graph across all six arenas.<br>Market data, sales data, and<br>channel data connected.</h2>
+    <p class="ch-lead">The Intelligence Warehouse models the business as a single graph: brands, categories, geographies, channels, competitors, and the external measurement systems that track them. When share moves, the graph traces why across system boundaries.</p>
+  </div>
+</div><div class="container-wide">
+  <div class="bkg-container reveal">
+    <div class="bkg-header"><div class="bkg-header-title">Business Knowledge Graph</div><div class="bkg-legend">
+      <div class="bkg-legend-item"><div class="bkg-legend-circle" style="background:var(--accent)"></div>Entity</div>
+      <div class="bkg-legend-item"><div class="bkg-legend-diamond" style="background:var(--amber)"></div>Metric</div>
+      <div class="bkg-legend-item"><div class="bkg-legend-triangle"></div>Decision</div>
+    </div></div>
+    <svg id="bkg-graph"></svg>
+    <div class="bkg-stats"><span><strong>46</strong> entities</span><span><strong>28</strong> metrics</span><span><strong>15</strong> decision rules</span><span><strong>10</strong> domain clusters</span></div>
+  </div>
+</div></section>
+
+<section class="morrie-section"><div class="container">
+  <div class="reveal">
+    <div class="morrie-badge"><div class="morrie-badge-icon">M</div><div><div class="morrie-badge-text">Knowledge Elicitation via Morrie</div><div class="morrie-badge-sub">Adaptive sessions with brand managers, category heads, and sales leaders</div></div></div>
+    <div class="prose" style="margin-bottom:32px"><p>The graph was populated through <strong>structured sessions with stakeholders across brand, sales, and analytics</strong> using Morrie. Not "what reports do you use?" but "when Nielsen says share is down and sales says billing is up, how do you figure out who's right?" 18 sessions across 12 personas.</p></div>
+  </div>
+  <div class="morrie-chat reveal">
+    <div class="m-msg m-bot"><div class="m-bot-label">Morrie</div>Oral health share dropped 1.2 points in last month's Nielsen read. Internal billing is up 8% in the same period. Walk me through how you reconcile this.</div>
+    <div class="m-msg m-user">First: which geography and which channel? Nielsen is strong in GT and MT but weak in pharmacy. If the loss is in "Urban South" and I know we just expanded rural South distribution, the billing uplift is pipeline fill that hasn't converted to offtake. Two different signals, not a contradiction.</div>
+    <div class="m-msg m-sys">Diagnostic rule: Share_vs_Billing_Divergence &rarr; Geography_Channel_Mix + Pipeline_vs_Offtake split. Nielsen_Coverage_Gap flagged for pharmacy channel.</div>
+    <div class="m-msg m-bot"><div class="m-bot-label">Morrie</div>And if the geography matches? Urban GT, where both Nielsen coverage and your billing are strong.</div>
+    <div class="m-msg m-user">Then a competitor did something. I'd check if someone dropped a low-price sachet in the same outlets. In oral care, a Rs 10 trial pack can shift numeric distribution 3-4 points in a month. Nielsen catches it, but I won't see it in my data because my volumes didn't change. The category just got bigger beneath me.</div>
+    <div class="m-msg m-sys">RCA: Same_Geo_Divergence &rarr; Competitor_Activity (New_SKU OR Trade_Scheme). Category_Expansion: Haleon_Volume_Stable + Category_Volume_Up = Share_Dilution, not Sales_Loss.</div>
+    <div class="m-msg m-bot"><div class="m-bot-label">Morrie</div>So share dilution versus actual sales loss requires knowing if the category grew. How quickly do you get that signal today?</div>
+    <div class="m-msg m-user">Monthly, with a 3-week lag. By the time I see it, the competitor has had 6 weeks of uncontested distribution. If I had the signal in week 2, I could have run a counter-scheme before the trial converts to repeat purchase.</div>
+    <div class="m-msg m-sys">Critical gap: Nielsen_Lag (3 wks) + Analysis_Assembly (1 wk) = 4-week detection delay. Counter-scheme decision window: 2 weeks max. Net: 2-4 weeks lost response time.</div>
+  </div>
+  <p class="reveal" style="text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:28px">18 sessions &middot; 46 entities, 28 metrics, 15 decision rules &middot; Every node traceable to a specific conversation</p>
+</div></section>
+
+<section class="results-section"><div class="container">
+  <div class="reveal"><div class="ch-head"><div class="ch-num">04</div><div class="ch-line"></div></div>
+    <h2 class="ch-title">First use case: Sales Intelligence</h2>
+    <p class="ch-lead">Cross-domain diagnosis across Nielsen, Kantar, and internal data. When share moves, trace whether it's distribution, pricing, competition, or channel mix. Automated anomaly detection and root-cause decomposition across all six arenas.</p>
+  </div>
+  <div class="result-grid reveal">
+    <div class="r-card"><div class="r-label">Diagnostic Accuracy</div><div class="r-val" data-count="96" data-suffix="%">--</div><div class="r-ctx">Validated against root-cause analyses produced by senior category managers across 3 arenas over 2 months.</div><div class="r-vs">Previously: manual, 2 days per review</div></div>
+    <div class="r-card"><div class="r-label">Time to Production</div><div class="r-val" data-count="6" data-suffix=" wks">--</div><div class="r-ctx">Kickoff to live. Includes knowledge elicitation, graph build, Nielsen/Kantar/SAP/IQVIA data mapping, entity resolution, and agent deployment.</div></div>
+  </div>
+  <div class="result-grid reveal">
+    <div class="r-card"><div class="r-label">Signal-to-Insight</div><div class="r-val">Same day</div><div class="r-ctx">When Nielsen data refreshes, the graph cross-references with internal data automatically. Anomalies surfaced in hours, not weeks.</div><div class="r-vs">Previously: 3-4 week lag</div></div>
+    <div class="r-card"><div class="r-label">Cross-Domain Queries</div><div class="r-val" data-count="95" data-suffix="%">--</div><div class="r-ctx">Of questions requiring 2+ systems answered correctly. Previously, these required manual assembly and were often not asked.</div></div>
+  </div>
+</div></section>
+
+<section class="fw-section"><div class="container-wide">
+  <div class="reveal"><div class="ch-head"><div class="ch-num">05</div><div class="ch-line"></div></div>
+    <h2 class="ch-title">Build the graph once.<br>Deploy use cases at a fraction.</h2>
+    <p class="ch-lead">The first use case encoded the business model across all six arenas. Market Pulse rode on that same foundation, adding demand signal and competitive intelligence layers at a fraction of the original cost.</p>
+  </div>
+  <table class="fw-table reveal"><thead><tr><th style="width:34%">Use Case</th><th>BKG Reuse</th><th>Accuracy</th><th>Time to Live</th><th>Cost</th></tr></thead><tbody>
+    <tr class="fw-row-base"><td><div class="fw-name">Sales Intelligence</div><div class="fw-desc">Cross-domain diagnosis, share decomposition, competitive response detection</div></td><td><span class="fw-v fw-b">Baseline</span></td><td><span class="fw-v fw-g">96.1%</span></td><td><span class="fw-v fw-b">6 weeks</span></td><td><span class="fw-v fw-b">100%</span></td></tr>
+    <tr><td><div class="fw-name">Market Pulse</div><div class="fw-desc">Symptom-led social signals, Google Trends demand sensing, competitive creative detection, share-of-search</div></td><td><span class="fw-v fw-g">72%</span></td><td><span class="fw-v fw-g">95.2%</span></td><td><span class="fw-v fw-g">13 days</span></td><td><span class="fw-v fw-g">10%</span></td></tr>
+
+  </tbody></table>
+  <div class="cost-vis reveal"><div class="cost-vis-title">Relative Implementation Cost</div>
+    <div class="cost-row"><div class="cost-label">Sales Intelligence</div><div class="cost-track"><div class="cost-fill cf-1" data-width="100"></div></div><div class="cost-pct">100%</div></div>
+    <div class="cost-row"><div class="cost-label">Market Pulse</div><div class="cost-track"><div class="cost-fill cf-2" data-width="10"></div></div><div class="cost-pct">10%</div></div>
+  </div>
+  <div class="compound reveal"><h4>Why It Compounds</h4>
+    <p>Market Pulse adds social listening, symptom-led search signals, and competitive creative detection entities to the existing brand-category-geography-channel graph. The ontology from Sales Intelligence carries directly because the brand, competitor, channel, and geography model is shared. Only the new signal sources and their associated decision rules need to be built.</p>
+    <div class="compound-nums"><div class="cn-cell"><div class="cn-val">5</div><div class="cn-label">New entities<br>for Market Pulse</div></div><div class="cn-cell"><div class="cn-val">7</div><div class="cn-label">New metrics<br>for Market Pulse</div></div><div class="cn-cell"><div class="cn-val">6</div><div class="cn-label">New decision rules<br>for Market Pulse</div></div></div>
+    <p style="margin-top:16px;font-size:13px;color:var(--muted)">Versus the 46 entities, 28 metrics, and 15 decision rules already in the graph.</p>
+  </div>
+</div></section>
+
+<section class="final-section"><div class="container-wide">
+  <div class="reveal">
+    <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:12px;font-weight:500">Summary</div>
+    <h2 class="ch-title" style="text-align:center;max-width:560px;margin:0 auto 10px">The Intelligence Warehouse is the compounding asset.</h2>
+    <p style="text-align:center;color:var(--sub);font-size:15px;max-width:460px;margin:0 auto">Two use cases. One knowledge foundation. Six arenas, finally connected.</p>
+  </div>
+  <div class="final-grid reveal">
+    <div class="f-cell"><div class="f-val">2</div><div class="f-label">Use cases<br>in production</div></div>
+    <div class="f-cell"><div class="f-val">95.7%</div><div class="f-label">Average diagnostic<br>accuracy</div></div>
+    <div class="f-cell"><div class="f-val">13d</div><div class="f-label">Market Pulse<br>time to live</div></div>
+    <div class="f-cell"><div class="f-val">10%</div><div class="f-label">Market Pulse cost<br>vs. Sales Intelligence</div></div>
+  </div>
+</div></section>
+
+<div class="footer"><a href="index.html" class="footer-logo" style="text-decoration:none;color:var(--text);">iw<span>.</span></a><div class="footer-sub">The foundation AI agents need.</div></div>
+
+<script>
+(function(){
+  const DC={'Product':'#2D5A3D','Sales':'#3D7A5D','Distribution':'#5A8F6E','Geography':'#6B9F7E','Market Data':'#4A6B5A','Channel':'#7AAF8E','Competitor':'#3A6B4D','Consumer':'#5A7A6E','HCP':'#4D8A6A','Finance':'#6B8F7E'};
+  const MC='#C47A20',DEC='#B5453A';
+  const entities=[
+    {id:'brand',label:'Brand',domain:'Product',r:20},{id:'sub_brand',label:'Sub-Brand',domain:'Product',r:14},
+    {id:'category',label:'Category',domain:'Product',r:18},{id:'sku',label:'SKU',domain:'Product',r:16},
+    {id:'pack',label:'Pack / LUP',domain:'Product',r:12},{id:'therapy',label:'Therapy Area',domain:'Product',r:14},
+    {id:'territory',label:'Territory',domain:'Geography',r:16},{id:'state',label:'State',domain:'Geography',r:14},
+    {id:'zone',label:'Zone',domain:'Geography',r:13},{id:'city_tier',label:'City Tier',domain:'Geography',r:12},
+    {id:'gt',label:'General Trade',domain:'Channel',r:15},{id:'mt',label:'Modern Trade',domain:'Channel',r:14},
+    {id:'pharmacy',label:'Pharmacy',domain:'Channel',r:16},{id:'ecom',label:'E-Commerce',domain:'Channel',r:13},
+    {id:'distributor',label:'Distributor',domain:'Distribution',r:17},{id:'stockist',label:'Stockist',domain:'Distribution',r:13},
+    {id:'rsm',label:'RSM',domain:'Sales',r:14},{id:'asm',label:'ASM',domain:'Sales',r:13},{id:'outlet',label:'Outlet',domain:'Sales',r:15},
+    {id:'nielsen',label:'Nielsen IQ',domain:'Market Data',r:16},{id:'kantar',label:'Kantar',domain:'Market Data',r:14},{id:'iqvia',label:'IQVIA',domain:'Market Data',r:13},
+    {id:'competitor',label:'Competitor',domain:'Competitor',r:17},{id:'comp_sku',label:'Comp. SKU',domain:'Competitor',r:12},{id:'comp_scheme',label:'Comp. Scheme',domain:'Competitor',r:12},
+    {id:'dentist',label:'Dentist',domain:'HCP',r:14},{id:'gp',label:'GP',domain:'HCP',r:13},{id:'pharmacist',label:'Pharmacist',domain:'HCP',r:13},
+    {id:'symptom',label:'Symptom',domain:'Consumer',r:14},{id:'search',label:'Search Signal',domain:'Consumer',r:12},
+  ];
+  const metrics=[
+    {id:'m_share',label:'Market Share',r:12},{id:'m_nd',label:'Num. Distribution',r:11},{id:'m_wd',label:'Wtd. Distribution',r:11},
+    {id:'m_penetration',label:'Penetration',r:11},{id:'m_primary',label:'Primary Sales',r:11},{id:'m_secondary',label:'Secondary Sales',r:11},
+    {id:'m_gsv',label:'GSV',r:10},{id:'m_nsv',label:'NSV',r:10},{id:'m_reco',label:'Reco Share',r:11},
+  ];
+  const decisions=[
+    {id:'d_rca',label:'Share RCA',r:12},{id:'d_dist',label:'Distribution Gap',r:12},{id:'d_comp',label:'Comp. Response',r:12},
+    {id:'d_channel',label:'Channel Mix',r:11},{id:'d_pricing',label:'Pricing Action',r:11},
+  ];
+  const links=[
+    {source:'brand',target:'sub_brand'},{source:'brand',target:'category'},{source:'category',target:'therapy'},
+    {source:'sku',target:'brand'},{source:'sku',target:'pack'},
+    {source:'territory',target:'state'},{source:'state',target:'zone'},{source:'territory',target:'city_tier'},
+    {source:'outlet',target:'gt'},{source:'outlet',target:'mt'},{source:'outlet',target:'pharmacy'},{source:'outlet',target:'ecom'},
+    {source:'outlet',target:'distributor'},{source:'distributor',target:'stockist'},
+    {source:'rsm',target:'asm'},{source:'asm',target:'territory'},{source:'outlet',target:'territory'},
+    {source:'nielsen',target:'category'},{source:'nielsen',target:'zone'},{source:'kantar',target:'category'},
+    {source:'iqvia',target:'pharmacy'},{source:'iqvia',target:'therapy'},
+    {source:'competitor',target:'comp_sku'},{source:'competitor',target:'comp_scheme'},{source:'competitor',target:'category'},
+    {source:'dentist',target:'brand'},{source:'gp',target:'therapy'},{source:'pharmacist',target:'pharmacy'},
+    {source:'symptom',target:'therapy'},{source:'search',target:'brand'},{source:'search',target:'symptom'},
+    {source:'nielsen',target:'m_share'},{source:'nielsen',target:'m_nd'},{source:'nielsen',target:'m_wd'},
+    {source:'kantar',target:'m_penetration'},
+    {source:'distributor',target:'m_primary'},{source:'outlet',target:'m_secondary'},
+    {source:'sku',target:'m_gsv'},{source:'sku',target:'m_nsv'},
+    {source:'dentist',target:'m_reco'},{source:'pharmacist',target:'m_reco'},
+    {source:'m_share',target:'d_rca'},{source:'m_primary',target:'d_rca'},
+    {source:'m_nd',target:'d_dist'},{source:'m_wd',target:'d_dist'},
+    {source:'competitor',target:'d_comp'},{source:'m_share',target:'d_comp'},
+    {source:'m_secondary',target:'d_channel'},{source:'pharmacy',target:'d_channel'},
+    {source:'m_nsv',target:'d_pricing'},{source:'comp_sku',target:'d_pricing'},
+  ];
+  const nodes=[...entities.map(e=>({...e,type:'entity',color:DC[e.domain]})),...metrics.map(m=>({...m,type:'metric',color:MC,domain:'Metrics'})),...decisions.map(d=>({...d,type:'decision',color:DEC,domain:'Decisions'}))];
+  const svg=d3.select('#bkg-graph');const W=svg.node().parentElement.clientWidth,H=480;
+  svg.attr('viewBox',`0 0 ${W} ${H}`);const g=svg.append('g');
+  const zoom=d3.zoom().scaleExtent([.3,3]).on('zoom',e=>g.attr('transform',e.transform));svg.call(zoom);
+  const sim=d3.forceSimulation(nodes).force('link',d3.forceLink(links).id(d=>d.id).distance(50).strength(.4)).force('charge',d3.forceManyBody().strength(-150)).force('center',d3.forceCenter(W/2,H/2)).force('collision',d3.forceCollide().radius(d=>(d.r||14)+5)).force('x',d3.forceX(W/2).strength(.04)).force('y',d3.forceY(H/2).strength(.04));
+  const link=g.append('g').selectAll('line').data(links).join('line').attr('stroke','#E5E2DB').attr('stroke-width',1).attr('opacity',.6);
+  const node=g.append('g').selectAll('g').data(nodes).join('g').style('cursor','pointer').call(d3.drag().on('start',(e,d)=>{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y}).on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y}).on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null}));
+  node.filter(d=>d.type==='entity').append('circle').attr('r',d=>d.r).attr('fill',d=>d.color).attr('opacity',.9).attr('stroke','#fff').attr('stroke-width',1.5);
+  node.filter(d=>d.type==='metric').append('rect').attr('width',d=>d.r*1.6).attr('height',d=>d.r*1.6).attr('x',d=>-d.r*.8).attr('y',d=>-d.r*.8).attr('rx',2).attr('transform','rotate(45)').attr('fill',MC).attr('opacity',.9).attr('stroke','#fff').attr('stroke-width',1.5);
+  node.filter(d=>d.type==='decision').append('polygon').attr('points',d=>{const s=d.r*1.4;return`0,${-s*.7} ${s*.7},${s*.5} ${-s*.7},${s*.5}`}).attr('fill',DEC).attr('opacity',.9).attr('stroke','#fff').attr('stroke-width',1.5);
+  node.append('text').text(d=>d.label).attr('dy',d=>d.type==='entity'?(d.r+12):((d.r||12)+12)).attr('text-anchor','middle').attr('font-family',"'IBM Plex Sans',sans-serif").attr('font-size',10).attr('fill','#999').attr('font-weight',400);
+  sim.on('tick',()=>{link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);node.attr('transform',d=>`translate(${d.x},${d.y})`)});
+  setTimeout(()=>{svg.transition().duration(600).call(zoom.transform,d3.zoomIdentity.scale(.95))},500);
+})();
+const obs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;entry.target.classList.add('visible');entry.target.querySelectorAll('[data-count]').forEach(el=>{if(el.dataset.done)return;el.dataset.done='1';const end=parseInt(el.dataset.count),sfx=el.dataset.suffix||'',dur=800,start=performance.now();const tick=now=>{const p=Math.min((now-start)/dur,1);el.textContent=Math.round(end*(1-Math.pow(1-p,3)))+sfx;if(p<1)requestAnimationFrame(tick)};requestAnimationFrame(tick)});entry.target.querySelectorAll('.cost-fill').forEach(el=>{if(el.dataset.done)return;el.dataset.done='1';setTimeout(()=>{el.style.width=el.dataset.width+'%'},120)})})},{threshold:.1});
+document.querySelectorAll('.reveal,.metrics-strip,.cost-vis').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
