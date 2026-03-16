@@ -803,135 +803,7 @@
     gap: 0.5rem;
 }
 
-/* === SECTION 1B: THE CONTEXT PROBLEM === */
-
-.demo-context-section {
-    background: var(--bg-elevated);
-}
-
-.context-compare {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    max-width: 960px;
-    margin: 0 auto;
-}
-
-.context-col {
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    overflow: hidden;
-    background: var(--bg-card);
-}
-
-.context-col-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.85rem 1.25rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-    border-bottom: 1px solid var(--border);
-}
-
-.context-col-icon {
-    font-size: 1.1rem;
-}
-
-.context-col-header-old {
-    background: rgba(196, 69, 60, 0.04);
-    color: var(--red);
-}
-
-.context-col-header-new {
-    background: rgba(27, 107, 90, 0.04);
-    color: var(--accent);
-}
-
-.context-timeline {
-    padding: 1rem 1.25rem;
-}
-
-.context-step {
-    display: flex;
-    gap: 0.75rem;
-    align-items: flex-start;
-    margin-bottom: 0.85rem;
-}
-
-.context-step:last-child {
-    margin-bottom: 0;
-}
-
-.context-step-num {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: rgba(196, 69, 60, 0.08);
-    color: var(--red);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    font-weight: 700;
-    flex-shrink: 0;
-    margin-top: 1px;
-}
-
-.context-step-num-new {
-    background: rgba(27, 107, 90, 0.08);
-    color: var(--accent);
-}
-
-.context-step-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-}
-
-.context-step-body strong {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--text);
-}
-
-.context-step-body span {
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    line-height: 1.4;
-}
-
-.context-step-replaces {
-    font-size: 0.68rem !important;
-    color: var(--accent) !important;
-    font-style: italic;
-    margin-top: 0.15rem;
-    padding-left: 0.6rem;
-    border-left: 2px solid rgba(27, 107, 90, 0.25);
-    line-height: 1.35;
-}
-
-.context-duration {
-    padding: 0.75rem 1.25rem;
-    border-top: 1px solid var(--border);
-    font-family: var(--mono);
-    font-weight: 700;
-    text-align: center;
-    letter-spacing: -0.02em;
-}
-
-.context-duration-old {
-    font-size: 1.5rem;
-    color: var(--red);
-    background: rgba(196, 69, 60, 0.04);
-}
-
-.context-duration-new {
-    font-size: 1.5rem;
-    color: var(--accent);
-    background: rgba(27, 107, 90, 0.04);
-}
+/* (cortex + context sections removed — now on cortex.html) */
 
 /* === SECTION 2: WALK THE GRAPH === */
 
@@ -1379,9 +1251,6 @@
     }
     .race-panel {
         min-height: auto;
-    }
-    .context-compare {
-        grid-template-columns: 1fr;
     }
     .walk-controls {
         flex-direction: column;

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo | Graph Traversal vs Prompt Engineering</title>
-    <meta name="description" content="See why structured graph traversal beats prompt engineering for enterprise AI decisions. Interactive demo comparing approaches side-by-side.">
+    <title>Why You Need an Intelligence Warehouse</title>
+    <meta name="description" content="See why enterprises need an Intelligence Warehouse. Interactive demos showing the difference between graph-grounded AI and prompt engineering.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.intelligencewarehouse.com/demo.html">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -21,13 +21,13 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.intelligencewarehouse.com/demo.html">
-    <meta property="og:title" content="Demo | Graph Traversal vs Prompt Engineering">
-    <meta property="og:description" content="See why structured graph traversal beats prompt engineering for enterprise AI decisions.">
+    <meta property="og:title" content="Why You Need an Intelligence Warehouse">
+    <meta property="og:description" content="See why enterprises need an Intelligence Warehouse. Graph-grounded AI vs prompt engineering.">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Demo | Graph Traversal vs Prompt Engineering">
-    <meta name="twitter:description" content="See why structured graph traversal beats prompt engineering for enterprise AI decisions.">
+    <meta name="twitter:title" content="Why You Need an Intelligence Warehouse">
+    <meta name="twitter:description" content="See why enterprises need an Intelligence Warehouse. Graph-grounded AI vs prompt engineering.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,6 +46,7 @@
             <div class="nav-links">
                 <a href="learn.html">Why IW</a>
                 <a href="demo.html" class="active">Demo</a>
+                <a href="cortex.html">Cortex</a>
                 <a href="partners.html">Partners</a>
                 <a href="team.html">Team</a>
             </div>
@@ -63,6 +64,7 @@
     <div class="mobile-menu" id="mobileMenu">
         <a href="learn.html">Why IW</a>
         <a href="demo.html" class="active">Demo</a>
+        <a href="cortex.html">Cortex</a>
         <a href="partners.html">Partners</a>
         <a href="team.html">Team</a>
         <a href="#contact" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Request Demo</a>
@@ -134,133 +136,6 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
                     Replay
                 </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- SECTION 1B: THE CONTEXT PROBLEM              -->
-    <!-- ============================================ -->
-    <section class="section demo-context-section" id="context">
-        <div class="container">
-            <div class="section-label">THE DEEPER PROBLEM</div>
-            <h2 class="section-title">Even Before You Prompt</h2>
-            <p class="section-desc" style="max-width:720px;margin:0 auto 3rem;">
-                The demo above assumes you already have the rules. In reality, extracting business logic from domain experts is the real bottleneck.
-            </p>
-
-            <div class="context-compare" data-animate>
-                <!-- Traditional -->
-                <div class="context-col context-col-old">
-                    <div class="context-col-header context-col-header-old">
-                        <span class="context-col-icon">&#9201;</span>
-                        Traditional Approach
-                    </div>
-                    <div class="context-timeline">
-                        <div class="context-step">
-                            <div class="context-step-num">1</div>
-                            <div class="context-step-body">
-                                <strong>Domain expert interviews</strong>
-                                <span>Weeks of meetings to extract how decisions actually work</span>
-                            </div>
-                        </div>
-                        <div class="context-step">
-                            <div class="context-step-num">2</div>
-                            <div class="context-step-body">
-                                <strong>Document business rules</strong>
-                                <span>Translate conversations into structured logic manually</span>
-                            </div>
-                        </div>
-                        <div class="context-step">
-                            <div class="context-step-num">3</div>
-                            <div class="context-step-body">
-                                <strong>Engineering builds rule logic</strong>
-                                <span>Developers encode rules into prompts or code</span>
-                            </div>
-                        </div>
-                        <div class="context-step">
-                            <div class="context-step-num">4</div>
-                            <div class="context-step-body">
-                                <strong>Test against real data</strong>
-                                <span>Edge cases surface that break the rules</span>
-                            </div>
-                        </div>
-                        <div class="context-step">
-                            <div class="context-step-num">5</div>
-                            <div class="context-step-body">
-                                <strong>Back to domain experts</strong>
-                                <span>Clarify exceptions, thresholds, and overrides they forgot to mention</span>
-                            </div>
-                        </div>
-                        <div class="context-step">
-                            <div class="context-step-num">6</div>
-                            <div class="context-step-body">
-                                <strong>Rebuild, retest, repeat</strong>
-                                <span>3&ndash;5 cycles before rules stabilize</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="context-duration context-duration-old">8&ndash;12 months</div>
-                </div>
-
-                <!-- Morrie -->
-                <div class="context-col context-col-new">
-                    <div class="context-col-header context-col-header-new">
-                        <span class="context-col-icon">&#9889;</span>
-                        With Morrie
-                    </div>
-                    <div class="context-timeline">
-                        <div class="context-step">
-                            <div class="context-step-num context-step-num-new">1</div>
-                            <div class="context-step-body">
-                                <strong>Morrie converses with the expert</strong>
-                                <span>Extracts rules through natural dialogue, asks clarifying questions about thresholds, exceptions, and edge cases</span>
-                                <span class="context-step-replaces">Replaces weeks of interviews &mdash; Morrie guides the conversation, asks targeted follow-ups, and doesn&rsquo;t forget what was said last week</span>
-                            </div>
-                        </div>
-                        <div class="context-step">
-                            <div class="context-step-num context-step-num-new">2</div>
-                            <div class="context-step-body">
-                                <strong>Drafts a decision blueprint</strong>
-                                <span>Structured logic articulated back in real-time &mdash; expert sees their rules as a formal decision tree, not notes</span>
-                                <span class="context-step-replaces">Replaces manual documentation &mdash; no analyst translating meeting notes into logic. The blueprint is generated live during the conversation</span>
-                            </div>
-                        </div>
-                        <div class="context-step">
-                            <div class="context-step-num context-step-num-new">3</div>
-                            <div class="context-step-body">
-                                <strong>Validates against actual data</strong>
-                                <span>Simulates blueprint on 6 months of transactions (2.4M rows). Surfaces anomalies: &ldquo;3 cases didn&rsquo;t match any rule&rdquo;</span>
-                                <span class="context-step-replaces">Replaces engineering build + test cycle &mdash; no code needed. Morrie runs the blueprint against real data instantly</span>
-                            </div>
-                        </div>
-                        <div class="context-step">
-                            <div class="context-step-num context-step-num-new">4</div>
-                            <div class="context-step-body">
-                                <strong>Expert reviews anomalies</strong>
-                                <span>&ldquo;These 3 edge cases weren&rsquo;t in the original rules &mdash; should they be?&rdquo; Expert adds missing seasonal exception</span>
-                                <span class="context-step-replaces">Replaces months of back-and-forth &mdash; anomalies surface in the same session, not after deployment fails</span>
-                            </div>
-                        </div>
-                        <div class="context-step">
-                            <div class="context-step-num context-step-num-new">5</div>
-                            <div class="context-step-body">
-                                <strong>Morrie re-validates updated blueprint</strong>
-                                <span>Re-runs on the same 2.4M rows &mdash; anomalies drop to 0. All historical decisions now match</span>
-                                <span class="context-step-replaces">Replaces rebuild &amp; retest cycles &mdash; re-validation is instant, no engineering queue or sprint planning</span>
-                            </div>
-                        </div>
-                        <div class="context-step">
-                            <div class="context-step-num context-step-num-new">6</div>
-                            <div class="context-step-body">
-                                <strong>Blueprint locked with confidence</strong>
-                                <span>100% rule coverage on historical data. Decision blueprint ready for production</span>
-                                <span class="context-step-replaces">No &ldquo;let&rsquo;s try and see&rdquo; &mdash; the blueprint is proven against real data before it goes live</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="context-duration context-duration-new">Hours</div>
-                </div>
             </div>
         </div>
     </section>
@@ -365,7 +240,7 @@
                     <p class="footer-tagline">The foundation AI agents need.</p>
                 </div>
                 <div class="footer-links">
-                    <div class="footer-col"><h5>Platform</h5><a href="learn.html#architecture">Architecture</a><a href="learn.html#process">How It Works</a><a href="index.html#impact">Impact</a><a href="team.html">Team</a></div>
+                    <div class="footer-col"><h5>Platform</h5><a href="learn.html#architecture">Architecture</a><a href="learn.html#process">How It Works</a><a href="cortex.html">Cortex</a><a href="index.html#impact">Impact</a><a href="team.html">Team</a></div>
                     <div class="footer-col"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Blog</a><a href="#contact">Contact</a></div>
                     <div class="footer-col"><h5>Resources</h5><a href="IW-Whitepaper.pdf" target="_blank">Technical Paper</a><a href="#">API Docs</a><a href="partners.html">Partners</a><a href="#">Security</a></div>
                 </div>
