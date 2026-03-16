@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study: Global Snacks & Beverages Company</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #FAFAF8; --card: #FFFFFF; --text: #1C1C1C; --sub: #555555;
+  --muted: #999999; --border: #E5E2DB; --accent: #2D5A3D;
+  --accent-light: #EDF3EF; --accent-mid: #4A7A5D; --accent-soft: #D4E4DA;
+  --red: #B5453A; --red-light: #FDF0EE; --red-muted: #D4918A;
+  --amber: #C47A20; --amber-light: #FDF6EC;
+  --font: 'IBM Plex Sans', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+  --serif: Georgia, 'Times New Roman', serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; }
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.container { max-width: 780px; margin: 0 auto; padding: 0 32px; }
+.container-wide { max-width: 1000px; margin: 0 auto; padding: 0 32px; }
+
+/* TOPBAR */
+.topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(250,250,248,0.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0 40px; height: 48px; display: flex; align-items: center; justify-content: space-between; }
+.topbar-logo { font-family: var(--font); font-weight: 700; font-size: 15px; letter-spacing: -0.03em; color: var(--text); }
+.topbar-logo span { color: var(--accent); }
+.topbar-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 500; }
+
+/* HERO */
+.hero { padding: 128px 0 0; }
+.hero-eyebrow { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 500; display: flex; align-items: center; gap: 12px; }
+.hero-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--accent); }
+.hero h1 { font-family: var(--serif); font-size: clamp(30px,4.5vw,46px); font-weight: normal; line-height: 1.18; letter-spacing: -0.02em; color: var(--text); margin: 20px 0 24px; max-width: 680px; }
+.hero-body { font-size: 17px; color: var(--sub); line-height: 1.7; max-width: 540px; font-weight: 300; }
+.metrics-strip { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-top: 52px; }
+.ms-cell { padding: 28px 0; text-align: center; position: relative; }
+.ms-cell:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20px; bottom: 20px; width: 1px; background: var(--border); }
+.ms-val { font-family: var(--serif); font-size: 36px; font-weight: normal; color: var(--accent); letter-spacing: -0.02em; line-height: 1; }
+.ms-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: 8px; font-weight: 500; line-height: 1.5; }
+
+/* CHAPTER */
+.chapter { padding: 80px 0 0; }
+.ch-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; }
+.ch-num { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.08em; font-weight: 500; flex-shrink: 0; }
+.ch-line { flex: 1; height: 1px; background: var(--border); }
+.ch-title { font-family: var(--serif); font-size: clamp(26px,3.5vw,38px); font-weight: normal; line-height: 1.22; letter-spacing: -0.015em; margin-bottom: 14px; }
+.ch-lead { font-size: 17px; color: var(--sub); line-height: 1.7; max-width: 560px; margin-bottom: 44px; font-weight: 300; }
+.prose { font-size: 16px; color: var(--sub); line-height: 1.75; }
+.prose p + p { margin-top: 16px; }
+.prose strong { color: var(--text); font-weight: 600; }
+.stat-strip { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border-radius: 5px; overflow: hidden; margin: 36px 0; }
+.ss-cell { background: var(--card); padding: 22px 14px; text-align: center; }
+.ss-val { font-family: var(--serif); font-size: 26px; font-weight: normal; color: var(--text); letter-spacing: -0.01em; }
+.ss-label { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+/* POC */
+.poc-section { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 0; }
+.poc-bar { display: flex; border: 1px solid var(--border); border-radius: 5px; overflow: hidden; margin: 36px 0 28px; }
+.poc-bar-left { background: var(--red-light); padding: 24px 28px; flex: 0 0 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-right: 1px solid #F0D0CC; }
+.poc-bar-pct { font-family: var(--serif); font-size: 44px; font-weight: normal; color: var(--red); letter-spacing: -0.02em; line-height: 1; }
+.poc-bar-tag { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--red-muted); margin-top: 6px; font-weight: 500; }
+.poc-bar-right { padding: 24px 28px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.poc-bar-right p { font-size: 15px; color: var(--sub); line-height: 1.65; }
+.poc-bar-right strong { color: var(--text); }
+.poc-items { margin: 0; }
+.poc-item { display: grid; grid-template-columns: 16px 1fr; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--border); align-items: start; }
+.poc-item:last-child { border-bottom: none; }
+.poc-x { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--red); padding-top: 2px; }
+.poc-item p { font-size: 15px; color: var(--sub); line-height: 1.65; }
+.poc-item p strong { color: var(--text); font-weight: 600; }
+
+/* IW */
+.iw-section { padding: 80px 0; }
+.bkg-container { background: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin: 36px 0; position: relative; }
+.bkg-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-mid), var(--accent-soft)); z-index: 2; }
+.bkg-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.bkg-header-title { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 500; }
+.bkg-legend { display: flex; align-items: center; gap: 16px; }
+.bkg-legend-item { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.bkg-legend-circle { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid white; opacity: 0.9; }
+.bkg-legend-diamond { width: 8px; height: 8px; transform: rotate(45deg); border-radius: 1px; border: 1.5px solid white; opacity: 0.9; }
+.bkg-legend-triangle { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 9px solid var(--red); opacity: 0.9; }
+#bkg-graph { width: 100%; height: 480px; display: block; cursor: grab; }
+#bkg-graph:active { cursor: grabbing; }
+.bkg-stats { padding: 12px 24px; border-top: 1px solid var(--border); display: flex; gap: 24px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.bkg-stats strong { color: var(--text); font-weight: 600; }
+
+/* MORRIE */
+.morrie-section { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 0; }
+.morrie-badge { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.morrie-badge-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 15px; color: white; }
+.morrie-badge-text { font-weight: 600; font-size: 15px; }
+.morrie-badge-sub { font-size: 12px; color: var(--muted); }
+.morrie-chat { max-width: 580px; margin: 32px auto; display: flex; flex-direction: column; gap: 10px; }
+.m-msg { max-width: 84%; padding: 12px 16px; border-radius: 10px; font-size: 13.5px; line-height: 1.6; }
+.m-bot { align-self: flex-start; background: var(--accent-light); color: var(--accent); border-bottom-left-radius: 3px; }
+.m-bot-label { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-mid); margin-bottom: 4px; font-weight: 500; }
+.m-user { align-self: flex-end; background: var(--text); color: rgba(255,255,255,0.88); border-bottom-right-radius: 3px; }
+.m-sys { align-self: center; max-width: 90%; background: transparent; border: 1px dashed var(--border); color: var(--muted); font-family: var(--mono); font-size: 11px; text-align: center; padding: 8px 14px; border-radius: 5px; }
+
+/* RESULTS */
+.results-section { padding: 80px 0; }
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 36px 0; }
+.r-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 28px; position: relative; overflow: hidden; }
+.r-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent); }
+.r-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 500; margin-bottom: 10px; }
+.r-val { font-family: var(--serif); font-size: 48px; font-weight: normal; color: var(--accent); letter-spacing: -0.03em; line-height: 1; }
+.r-ctx { font-size: 13px; color: var(--sub); margin-top: 10px; line-height: 1.55; }
+.r-vs { display: inline-block; font-family: var(--mono); font-size: 10px; padding: 3px 7px; border-radius: 3px; background: var(--red-light); color: var(--red); margin-top: 6px; font-weight: 500; }
+
+/* FLYWHEEL */
+.fw-section { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 0; }
+.fw-table { width: 100%; margin: 36px 0; border-collapse: collapse; }
+.fw-table thead th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 500; padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--text); }
+.fw-table tbody td { padding: 18px 14px; font-size: 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.fw-table tbody tr:last-child td { border-bottom: none; }
+.fw-name { font-weight: 600; color: var(--text); }
+.fw-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.fw-v { font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.fw-g { color: var(--accent); }
+.fw-b { color: var(--text); }
+.fw-row-base td { background: var(--accent-light); }
+.cost-vis { margin: 44px 0; }
+.cost-vis-title { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 20px; font-weight: 500; }
+.cost-row { display: grid; grid-template-columns: 150px 1fr 50px; gap: 14px; align-items: center; margin-bottom: 12px; }
+.cost-label { font-size: 13px; color: var(--sub); text-align: right; }
+.cost-track { height: 28px; background: var(--bg); border-radius: 3px; overflow: hidden; border: 1px solid var(--border); }
+.cost-fill { height: 100%; border-radius: 2px; transition: width 1.2s cubic-bezier(0.22,1,0.36,1); width: 0; }
+.cf-1 { background: var(--accent); } .cf-2 { background: var(--accent-mid); } .cf-3 { background: #7FB38E; } .cf-4 { background: #A8D4B4; }
+.cost-pct { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--text); }
+.compound { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 28px; margin: 40px auto; max-width: 780px; }
+.compound h4 { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 12px; font-weight: 500; }
+.compound p { font-size: 14px; color: var(--sub); line-height: 1.7; }
+.compound strong { color: var(--text); }
+.compound-nums { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 18px; }
+.cn-cell { text-align: center; padding: 14px; border: 1px solid var(--border); border-radius: 5px; background: var(--card); }
+.cn-val { font-family: var(--serif); font-size: 22px; color: var(--accent); }
+.cn-label { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+/* FINAL */
+.final-section { padding: 72px 0 56px; text-align: center; }
+.final-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin: 40px 0 0; }
+.f-cell { background: var(--card); padding: 32px 14px; }
+.f-val { font-family: var(--serif); font-size: 36px; font-weight: normal; color: var(--accent); letter-spacing: -0.02em; }
+.f-label { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+.footer { padding: 40px 0; text-align: center; border-top: 1px solid var(--border); }
+.footer-logo { font-family: var(--font); font-weight: 700; font-size: 16px; letter-spacing: -0.03em; color: var(--text); }
+.footer-logo span { color: var(--accent); }
+.footer-sub { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+@media (max-width: 768px) {
+  .metrics-strip, .stat-strip { grid-template-columns: repeat(2,1fr); }
+  .ms-cell:nth-child(2)::after { display: none; }
+  .result-grid { grid-template-columns: 1fr; }
+  .final-grid { grid-template-columns: repeat(2,1fr); }
+  .cost-row { grid-template-columns: 1fr; gap: 4px; }
+  .cost-label { text-align: left; }
+  .compound-nums { grid-template-columns: 1fr; }
+  .poc-bar { flex-direction: column; }
+  .poc-bar-left { flex: 0 0 auto; border-right: none; border-bottom: 1px solid #F0D0CC; }
+  .container, .container-wide { padding: 0 20px; }
+  .hero { padding: 108px 0 0; }
+  .chapter { padding: 56px 0 0; }
+  #bkg-graph { height: 360px; }
+  .bkg-legend { flex-wrap: wrap; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="case-studies.html" class="topbar-logo" style="text-decoration:none;color:var(--text);">iw<span>.</span></a>
+  <div class="topbar-tag">Case Study</div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Consumer Packaged Goods / Snacks & Beverages</div>
+    <h1>How a Fortune 50 Snacks Company Built a Weather-Aware Demand Engine That Cut Stockouts by 34%</h1>
+    <p class="hero-body">When a heatwave hits North India, beverage demand spikes 40% in 72 hours. This company's supply chain found out from the stockout reports, not the weather forecast.</p>
+  </div>
+  <div class="container-wide" style="margin-top: 52px;">
+    <div class="metrics-strip">
+      <div class="ms-cell">
+        <div class="ms-val" data-count="96" data-suffix="%">--</div>
+        <div class="ms-label">Demand forecast<br>accuracy</div>
+      </div>
+      <div class="ms-cell">
+        <div class="ms-val" data-count="6" data-suffix=" wks">--</div>
+        <div class="ms-label">Kickoff to<br>production</div>
+      </div>
+      <div class="ms-cell">
+        <div class="ms-val" data-count="34" data-suffix="%">--</div>
+        <div class="ms-label">Reduction in<br>weather-driven stockouts</div>
+      </div>
+      <div class="ms-cell">
+        <div class="ms-val">&lt;9%</div>
+        <div class="ms-label">Relative cost per<br>subsequent use case</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 01 THE PROBLEM ═══ -->
+<div class="chapter">
+  <div class="container">
+    <div class="reveal">
+      <div class="ch-head"><div class="ch-num">01</div><div class="ch-line"></div></div>
+      <h2 class="ch-title">Temperature spikes 6 degrees in Rajasthan. Beverage demand surges. The supply chain finds out next week.</h2>
+      <p class="ch-lead">The company sells across climate zones so different they might as well be separate countries. A heatwave in North India, monsoon onset in Mumbai, a festival in Tamil Nadu -- each shifts demand by 20-40% in 48-72 hours. The supply chain operated on weekly cycles.</p>
+    </div>
+
+    <div class="stat-strip reveal">
+      <div class="ss-cell"><div class="ss-val">800K+</div><div class="ss-label">Retail outlets across<br>6 climate zones</div></div>
+      <div class="ss-cell"><div class="ss-val">1,800+</div><div class="ss-label">Distributors with varying<br>stock depth</div></div>
+      <div class="ss-cell"><div class="ss-val">48-72 hrs</div><div class="ss-label">Demand response to<br>weather events</div></div>
+      <div class="ss-cell"><div class="ss-val">7-10 days</div><div class="ss-label">Supply chain response<br>to same events</div></div>
+    </div>
+
+    <div class="prose reveal" style="margin-top: 36px;">
+      <p>
+        Beverages spike when temperatures cross 38C. Salty snacks surge during monsoon (indoor consumption). Small packs move in summer (on-the-go), large packs in monsoon (in-home). These patterns are well known. What's not codified is the <strong>regional variation, the lag structure, and the threshold effects</strong> that determine how much demand shifts, where, and how fast.
+      </p>
+      <p>
+        North India crosses 42C and beverage demand jumps 35-40% in 3 days. South India hits the same temperature and demand moves 12% because consumers there have different habits, more AC penetration, and different channel mix. A demand sensing model that doesn't encode these regional dynamics treats all of India as one country and gets the stock positioning wrong by the time the signal reaches the DC.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 02 FAILED APPROACH ═══ -->
+<section class="poc-section" style="margin-top: 80px;">
+  <div class="container">
+    <div class="reveal">
+      <div class="ch-head"><div class="ch-num">02</div><div class="ch-line"></div></div>
+      <h2 class="ch-title">The demand sensing engine treated<br>a heatwave in Jaipur the same as<br>a cool spell in Bengaluru.</h2>
+      <p class="ch-lead">The company had invested in a statistical demand sensing engine. It consumed 3 years of historical billing data, applied time-series decomposition, and generated weekly SKU-level forecasts by territory. The math was sound. The forecasts missed every weather-driven demand event by 5-7 days.</p>
+    </div>
+
+    <div class="poc-bar reveal">
+      <div class="poc-bar-left">
+        <div class="poc-bar-pct">~61%</div>
+        <div class="poc-bar-tag">Forecast Accuracy</div>
+      </div>
+      <div class="poc-bar-right">
+        <p>The engine produced <strong>smooth, trend-following forecasts</strong> that worked well in stable periods but failed precisely when accuracy mattered most: during weather transitions, festivals, and regional events. These are exactly the moments that drive stockouts and excess inventory. The engine was accurate when nothing was happening and wrong when everything was.</p>
+      </div>
+    </div>
+
+    <div class="poc-items reveal">
+      <div class="poc-item">
+        <div class="poc-x">&times;</div>
+        <p><strong>No weather signal integration.</strong> The model consumed historical sales and seasonality indices. It had no connection to temperature, rainfall, humidity, or AQI data. When a late monsoon delayed the snacks surge by 2 weeks in Western India, the engine had already triggered pre-season builds that sat in DCs as excess inventory.</p>
+      </div>
+      <div class="poc-item">
+        <div class="poc-x">&times;</div>
+        <p><strong>National model, regional reality.</strong> The engine applied one seasonality curve across all zones. But North India's summer starts 4-6 weeks before South India's. A heatwave in Delhi has a completely different demand signature than the same temperature in Chennai. Regional elasticity -- how much demand moves per degree -- was not modeled.</p>
+      </div>
+      <div class="poc-item">
+        <div class="poc-x">&times;</div>
+        <p><strong>Weekly cycles for 48-hour events.</strong> Forecasts refreshed weekly. Weather-driven demand shifts happen in 2-3 days. By the time the next forecast reflected the spike, distributors were already stocked out. The response lag between signal and replenishment action was 7-10 days. The demand event was often over by then.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 03 IW APPROACH ═══ -->
+<section class="iw-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="ch-head"><div class="ch-num">03</div><div class="ch-line"></div></div>
+      <h2 class="ch-title">Encode the demand universe:<br>climate, geography, products, and<br>the rules that connect them.</h2>
+      <p class="ch-lead">The Intelligence Warehouse models every entity that affects demand: SKUs, regions, climate zones, distributors, DCs, channels -- and the decision rules that experienced planners use to adjust stock positions when weather shifts. Agents traverse the graph to produce replenishment decisions, not just forecasts.</p>
+    </div>
+  </div>
+
+  <div class="container-wide">
+    <div class="bkg-container reveal">
+      <div class="bkg-header">
+        <div class="bkg-header-title">Business Knowledge Graph</div>
+        <div class="bkg-legend">
+          <div class="bkg-legend-item"><div class="bkg-legend-circle" style="background: var(--accent);"></div>Entity</div>
+          <div class="bkg-legend-item"><div class="bkg-legend-diamond" style="background: var(--amber);"></div>Metric</div>
+          <div class="bkg-legend-item"><div class="bkg-legend-triangle"></div>Decision</div>
+        </div>
+      </div>
+      <svg id="bkg-graph"></svg>
+      <div class="bkg-stats">
+        <span><strong>41</strong> entities</span>
+        <span><strong>24</strong> metrics</span>
+        <span><strong>16</strong> decision rules</span>
+        <span><strong>8</strong> domain clusters</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MORRIE -->
+<section class="morrie-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="morrie-badge">
+        <div class="morrie-badge-icon">M</div>
+        <div>
+          <div class="morrie-badge-text">Knowledge Elicitation via Morrie</div>
+          <div class="morrie-badge-sub">Adaptive sessions with demand planners, supply chain leads, and regional heads</div>
+        </div>
+      </div>
+      <div class="prose" style="margin-bottom: 32px;">
+        <p>The graph was populated through <strong>structured conversational sessions with supply chain stakeholders</strong> using Morrie. Not "what data feeds your forecast?" but "when a heatwave hits your region, what do you actually do in the next 48 hours, and how do you decide how much to pre-position where?" 16 sessions. Every node traceable to a specific conversation.</p>
+      </div>
+    </div>
+
+    <div class="morrie-chat reveal">
+      <div class="m-msg m-bot">
+        <div class="m-bot-label">Morrie</div>
+        Last April, temperatures in Rajasthan crossed 42C a week earlier than expected. Walk me through what happened to your beverage demand and what you did about it.
+      </div>
+      <div class="m-msg m-user">Demand spiked about 35% in 3 days. But our forecast still showed the pre-summer baseline. By the time the weekly number refreshed, Jaipur and Jodhpur distributors were stocked out on 200ml and 250ml packs. We lost about 4 days of sales in those markets. I had to do emergency secondary dispatches from the Ahmedabad DC, which took another 3 days.</div>
+      <div class="m-msg m-sys">Event captured: Temp_Threshold_42C &rarr; Beverage_Demand_Spike (35%, 72hr lag). Regional: Rajasthan. Pack_Sensitivity: small packs first. Supply_Response_Lag: 7 days. Lost_Sales flagged.</div>
+      <div class="m-msg m-bot">
+        <div class="m-bot-label">Morrie</div>
+        That 42C threshold is interesting. Is it the same everywhere, or does demand respond differently in South India at the same temperature?
+      </div>
+      <div class="m-msg m-user">Completely different. Chennai hits 42C regularly and demand moves maybe 10-12%. People there have AC, they drink water, the consumption habit is different. In North India, 42C means everyone is buying cold beverages from every kirana and pan shop. The elasticity is 3x higher in the North. And in monsoon it flips -- salty snacks surge 25% in Mumbai when it rains because people are sitting at home, but in Delhi monsoon barely moves the needle.</div>
+      <div class="m-msg m-sys">Regional_Elasticity model created: North_Temp_Elasticity 3x South. Monsoon_Snack_Surge: West India (25%) vs North India (minimal). Climate_Zone &rarr; Category_Response mapping built.</div>
+      <div class="m-msg m-bot">
+        <div class="m-bot-label">Morrie</div>
+        So the demand response is category-specific, region-specific, and the thresholds are different in each zone. When you know a heatwave is coming 3-4 days out, what's your ideal pre-positioning playbook?
+      </div>
+      <div class="m-msg m-user">If I had 3 days notice I'd do two things: push extra secondary from DC to the top 15 distributors in the affected zone, and shift the mix to 70% small packs because that's what moves in heat. But right now I get the signal from stockout reports, not weather data. By then I'm already behind.</div>
+      <div class="m-msg m-sys">Decision rule created: Heatwave_Preposition (3-day lead) &rarr; DC_to_Top15_Distributors + Pack_Mix_Shift_70pct_Small. Current gap: reactive (stockout signal) vs proactive (weather signal).</div>
+    </div>
+    <p class="reveal" style="text-align: center; font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 28px;">
+      16 sessions &middot; 41 entities, 24 metrics, 16 decision rules &middot; Every node traceable to a specific conversation
+    </p>
+  </div>
+</section>
+
+<!-- ═══ 04 RESULTS ═══ -->
+<section class="results-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="ch-head"><div class="ch-num">04</div><div class="ch-line"></div></div>
+      <h2 class="ch-title">First use case: Weather-Driven Demand Intelligence</h2>
+      <p class="ch-lead">72-hour demand forecasts by region, adjusted in real-time for temperature, rainfall, humidity, and events. Automated pre-positioning alerts to DC and distributor level. Pack-mix shift recommendations by climate zone.</p>
+    </div>
+
+    <div class="result-grid reveal">
+      <div class="r-card">
+        <div class="r-label">Forecast Accuracy</div>
+        <div class="r-val" data-count="96" data-suffix="%">--</div>
+        <div class="r-ctx">On weather-sensitive SKUs during transition periods. Validated against actuals across 3 climate zones over 8 weeks.</div>
+        <div class="r-vs">Previous engine: ~61% during weather events</div>
+      </div>
+      <div class="r-card">
+        <div class="r-label">Time to Production</div>
+        <div class="r-val" data-count="6" data-suffix=" wks">--</div>
+        <div class="r-ctx">Kickoff to live deployment. Includes knowledge elicitation, graph build, weather API integration, DC/distributor mapping, and agent deployment.</div>
+      </div>
+    </div>
+    <div class="result-grid reveal">
+      <div class="r-card">
+        <div class="r-label">Stockout Reduction</div>
+        <div class="r-val" data-count="34" data-suffix="%">--</div>
+        <div class="r-ctx">Reduction in weather-driven stockouts across pilot zones, driven by 3-day pre-positioning alerts and automated DC-to-distributor dispatch triggers.</div>
+      </div>
+      <div class="r-card">
+        <div class="r-label">Response Time</div>
+        <div class="r-val">3 days</div>
+        <div class="r-ctx">Signal-to-replenishment time, down from 7-10 days. The graph surfaces the weather signal, maps it to regional demand elasticity, and triggers the pre-positioning playbook automatically.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 05 FLYWHEEL ═══ -->
+<section class="fw-section">
+  <div class="container-wide">
+    <div class="reveal">
+      <div class="ch-head"><div class="ch-num">05</div><div class="ch-line"></div></div>
+      <h2 class="ch-title">Build the graph once.<br>Deploy use cases at a fraction.</h2>
+      <p class="ch-lead">The first use case encoded the demand universe: SKUs, regions, climate zones, distributors, DCs, channels, and the weather-demand relationships between them. Every subsequent use case rides on that foundation.</p>
+    </div>
+
+    <table class="fw-table reveal">
+      <thead><tr><th style="width:34%">Use Case</th><th>BKG Reuse</th><th>Accuracy</th><th>Time to Live</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr class="fw-row-base">
+          <td><div class="fw-name">Weather-Driven Demand Intelligence</div><div class="fw-desc">Regional demand forecasting, pre-positioning alerts, pack-mix shift, DC dispatch triggers</div></td>
+          <td><span class="fw-v fw-b">Baseline</span></td>
+          <td><span class="fw-v fw-g">96.1%</span></td>
+          <td><span class="fw-v fw-b">6 weeks</span></td>
+          <td><span class="fw-v fw-b">100%</span></td>
+        </tr>
+        <tr>
+          <td><div class="fw-name">Sales Execution Intelligence</div><div class="fw-desc">Beat-level nudges, outlet prioritization, SKU gap closure, sales loss recovery</div></td>
+          <td><span class="fw-v fw-g">78%</span></td>
+          <td><span class="fw-v fw-g">95.8%</span></td>
+          <td><span class="fw-v fw-g">11 days</span></td>
+          <td><span class="fw-v fw-g">9%</span></td>
+        </tr>
+        <tr>
+          <td><div class="fw-name">Trade Promotion Effectiveness</div><div class="fw-desc">Scheme ROI decomposition, slab compliance, retailer leakage, payout vs. incremental lift</div></td>
+          <td><span class="fw-v fw-g">74%</span></td>
+          <td><span class="fw-v fw-g">95.4%</span></td>
+          <td><span class="fw-v fw-g">12 days</span></td>
+          <td><span class="fw-v fw-g">8%</span></td>
+        </tr>
+        <tr>
+          <td><div class="fw-name">Field Force Effectiveness</div><div class="fw-desc">Beat efficiency scoring, outlet conversion analysis, peer benchmarking, ASM coaching triggers</div></td>
+          <td><span class="fw-v fw-g">82%</span></td>
+          <td><span class="fw-v fw-g">95.9%</span></td>
+          <td><span class="fw-v fw-g">9 days</span></td>
+          <td><span class="fw-v fw-g">7%</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cost-vis reveal">
+      <div class="cost-vis-title">Relative Implementation Cost</div>
+      <div class="cost-row">
+        <div class="cost-label">Weather Demand</div>
+        <div class="cost-track"><div class="cost-fill cf-1" data-width="100"></div></div>
+        <div class="cost-pct">100%</div>
+      </div>
+      <div class="cost-row">
+        <div class="cost-label">Sales Execution</div>
+        <div class="cost-track"><div class="cost-fill cf-2" data-width="9"></div></div>
+        <div class="cost-pct">9%</div>
+      </div>
+      <div class="cost-row">
+        <div class="cost-label">Trade Promo</div>
+        <div class="cost-track"><div class="cost-fill cf-3" data-width="8"></div></div>
+        <div class="cost-pct">8%</div>
+      </div>
+      <div class="cost-row">
+        <div class="cost-label">Field Force</div>
+        <div class="cost-track"><div class="cost-fill cf-4" data-width="7"></div></div>
+        <div class="cost-pct">7%</div>
+      </div>
+    </div>
+
+    <div class="compound reveal">
+      <h4>Why It Compounds</h4>
+      <p>Sales execution, trade promo analysis, and field force coaching all operate on the same entity model: SKUs, outlets, distributors, regions, climate zones, DCs. The ontology and metrics from use case 1 carry directly. Sales execution reuses the outlet-distributor-SKU graph; trade promo adds scheme entities; field force adds beat-level metrics. Only domain-specific decision rules need to be built.</p>
+      <div class="compound-nums">
+        <div class="cn-cell"><div class="cn-val">7</div><div class="cn-label">New entities<br>for use cases 2-4</div></div>
+        <div class="cn-cell"><div class="cn-val">10</div><div class="cn-label">New metrics<br>for use cases 2-4</div></div>
+        <div class="cn-cell"><div class="cn-val">12</div><div class="cn-label">New decision rules<br>for use cases 2-4</div></div>
+      </div>
+      <p style="margin-top: 16px; font-size: 13px; color: var(--muted);">Versus the 41 entities, 24 metrics, and 16 decision rules already in the graph.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINAL ═══ -->
+<section class="final-section">
+  <div class="container-wide">
+    <div class="reveal">
+      <div style="font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; font-weight: 500;">Summary</div>
+      <h2 class="ch-title" style="text-align: center; max-width: 560px; margin: 0 auto 10px;">The Intelligence Warehouse is the compounding asset.</h2>
+      <p style="text-align: center; color: var(--sub); font-size: 15px; max-width: 460px; margin: 0 auto;">Four use cases. One knowledge foundation. Each one faster, cheaper, and more accurate.</p>
+    </div>
+    <div class="final-grid reveal">
+      <div class="f-cell"><div class="f-val">4</div><div class="f-label">Use cases<br>in production</div></div>
+      <div class="f-cell"><div class="f-val">95.8%</div><div class="f-label">Average decision<br>accuracy</div></div>
+      <div class="f-cell"><div class="f-val">~11d</div><div class="f-label">Avg. time for<br>subsequent use cases</div></div>
+      <div class="f-cell"><div class="f-val">~8%</div><div class="f-label">Avg. cost per<br>additional use case</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <a href="index.html" class="footer-logo" style="text-decoration:none;color:var(--text);">iw<span>.</span></a>
+  <div class="footer-sub">The foundation AI agents need.</div>
+</div>
+
+<script>
+(function() {
+  const DC = {
+    'Product':'#2D5A3D','Distribution':'#3D7A5D','Sales Force':'#5A8F6E',
+    'Outlet':'#4A6B5A','Geography':'#6B9F7E','Demand':'#7AAF8E','Trade Promo':'#3A6B4D',
+    'Weather':'#5A7A6E',
+  };
+  const MC = '#C47A20', DEC = '#B5453A';
+
+  const entities = [
+    {id:'outlet',label:'Outlet',domain:'Outlet',r:20},
+    {id:'channel',label:'Channel',domain:'Outlet',r:14},
+    {id:'sub_channel',label:'Sub-Channel',domain:'Outlet',r:12},
+    {id:'sku',label:'SKU',domain:'Product',r:20},
+    {id:'brand',label:'Brand',domain:'Product',r:16},
+    {id:'sub_brand',label:'Sub-Brand',domain:'Product',r:13},
+    {id:'category',label:'Category',domain:'Product',r:15},
+    {id:'pack',label:'Pack Size',domain:'Product',r:12},
+    {id:'salesperson',label:'Salesperson',domain:'Sales Force',r:17},
+    {id:'beat',label:'Beat',domain:'Sales Force',r:14},
+    {id:'asm',label:'ASM',domain:'Sales Force',r:13},
+    {id:'rsm',label:'RSM',domain:'Sales Force',r:13},
+    {id:'distributor',label:'Distributor',domain:'Distribution',r:18},
+    {id:'depot',label:'Depot / DC',domain:'Distribution',r:15},
+    {id:'order',label:'Order',domain:'Distribution',r:14},
+    {id:'inventory',label:'Inventory',domain:'Distribution',r:13},
+    {id:'territory',label:'Territory',domain:'Geography',r:15},
+    {id:'state',label:'State',domain:'Geography',r:14},
+    {id:'zone',label:'Zone',domain:'Geography',r:13},
+    {id:'climate_zone',label:'Climate Zone',domain:'Weather',r:18},
+    {id:'temp',label:'Temperature',domain:'Weather',r:14},
+    {id:'rainfall',label:'Rainfall',domain:'Weather',r:14},
+    {id:'humidity',label:'Humidity',domain:'Weather',r:12},
+    {id:'event',label:'Event / Festival',domain:'Weather',r:13},
+    {id:'forecast',label:'Forecast',domain:'Demand',r:15},
+    {id:'elasticity',label:'Demand Elasticity',domain:'Demand',r:14},
+    {id:'scheme',label:'Trade Scheme',domain:'Trade Promo',r:14},
+    {id:'competitor',label:'Competitor',domain:'Trade Promo',r:13},
+  ];
+
+  const metrics = [
+    {id:'m_demand',label:'Demand Index',r:12},{id:'m_fill',label:'Fill Rate',r:12},
+    {id:'m_elasticity',label:'Temp Elasticity',r:12},{id:'m_stockout',label:'Stockout Rate',r:11},
+    {id:'m_lead',label:'Response Lag',r:11},{id:'m_packmix',label:'Pack Mix',r:11},
+    {id:'m_vol',label:'Volume Ach.',r:11},{id:'m_dcutil',label:'DC Utilization',r:11},
+  ];
+
+  const decisions = [
+    {id:'d_preposition',label:'Pre-Position Stock',r:12},{id:'d_packmix',label:'Shift Pack Mix',r:12},
+    {id:'d_dispatch',label:'Emergency Dispatch',r:12},{id:'d_restock',label:'Restock Alert',r:11},
+    {id:'d_escalate',label:'Escalate Gap',r:11},
+  ];
+
+  const links = [
+    {source:'outlet',target:'channel'},{source:'channel',target:'sub_channel'},
+    {source:'sku',target:'brand'},{source:'brand',target:'sub_brand'},
+    {source:'brand',target:'category'},{source:'sku',target:'pack'},
+    {source:'salesperson',target:'beat'},{source:'beat',target:'outlet'},
+    {source:'salesperson',target:'asm'},{source:'asm',target:'rsm'},
+    {source:'outlet',target:'distributor'},{source:'distributor',target:'depot'},
+    {source:'outlet',target:'order'},{source:'order',target:'sku'},
+    {source:'distributor',target:'inventory'},{source:'inventory',target:'sku'},
+    {source:'outlet',target:'territory'},{source:'territory',target:'state'},
+    {source:'state',target:'zone'},
+    {source:'zone',target:'climate_zone'},
+    {source:'climate_zone',target:'temp'},{source:'climate_zone',target:'rainfall'},
+    {source:'climate_zone',target:'humidity'},{source:'climate_zone',target:'event'},
+    {source:'climate_zone',target:'elasticity'},
+    {source:'elasticity',target:'category'},{source:'elasticity',target:'pack'},
+    {source:'forecast',target:'sku'},{source:'forecast',target:'territory'},
+    {source:'forecast',target:'climate_zone'},
+    {source:'scheme',target:'sku'},{source:'scheme',target:'channel'},
+    {source:'competitor',target:'sku'},
+    {source:'temp',target:'m_demand'},{source:'rainfall',target:'m_demand'},
+    {source:'distributor',target:'m_fill'},{source:'climate_zone',target:'m_elasticity'},
+    {source:'outlet',target:'m_stockout'},{source:'depot',target:'m_lead'},
+    {source:'sku',target:'m_packmix'},{source:'territory',target:'m_vol'},
+    {source:'depot',target:'m_dcutil'},
+    {source:'m_demand',target:'d_preposition'},{source:'m_elasticity',target:'d_preposition'},
+    {source:'m_packmix',target:'d_packmix'},{source:'m_demand',target:'d_packmix'},
+    {source:'m_stockout',target:'d_dispatch'},{source:'m_fill',target:'d_restock'},
+    {source:'m_vol',target:'d_escalate'},{source:'m_lead',target:'d_escalate'},
+  ];
+
+  const nodes = [
+    ...entities.map(e => ({...e,type:'entity',color:DC[e.domain]})),
+    ...metrics.map(m => ({...m,type:'metric',color:MC,domain:'Metrics'})),
+    ...decisions.map(d => ({...d,type:'decision',color:DEC,domain:'Decisions'})),
+  ];
+
+  const svg = d3.select('#bkg-graph');
+  const W = svg.node().parentElement.clientWidth, H = 480;
+  svg.attr('viewBox',`0 0 ${W} ${H}`);
+  const g = svg.append('g');
+  const zoom = d3.zoom().scaleExtent([0.3,3]).on('zoom',e=>g.attr('transform',e.transform));
+  svg.call(zoom);
+
+  const sim = d3.forceSimulation(nodes)
+    .force('link',d3.forceLink(links).id(d=>d.id).distance(55).strength(0.4))
+    .force('charge',d3.forceManyBody().strength(-160))
+    .force('center',d3.forceCenter(W/2,H/2))
+    .force('collision',d3.forceCollide().radius(d=>(d.r||14)+5))
+    .force('x',d3.forceX(W/2).strength(0.04))
+    .force('y',d3.forceY(H/2).strength(0.04));
+
+  const link = g.append('g').selectAll('line').data(links).join('line')
+    .attr('stroke','#E5E2DB').attr('stroke-width',1).attr('opacity',0.6);
+
+  const node = g.append('g').selectAll('g').data(nodes).join('g')
+    .style('cursor','pointer')
+    .call(d3.drag()
+      .on('start',(e,d)=>{if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;})
+      .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
+      .on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;})
+    );
+
+  node.filter(d=>d.type==='entity').append('circle')
+    .attr('r',d=>d.r).attr('fill',d=>d.color).attr('opacity',0.9)
+    .attr('stroke','#fff').attr('stroke-width',1.5);
+
+  node.filter(d=>d.type==='metric').append('rect')
+    .attr('width',d=>d.r*1.6).attr('height',d=>d.r*1.6)
+    .attr('x',d=>-d.r*0.8).attr('y',d=>-d.r*0.8).attr('rx',2)
+    .attr('transform','rotate(45)')
+    .attr('fill',MC).attr('opacity',0.9).attr('stroke','#fff').attr('stroke-width',1.5);
+
+  node.filter(d=>d.type==='decision').append('polygon')
+    .attr('points',d=>{const s=d.r*1.4;return`0,${-s*0.7} ${s*0.7},${s*0.5} ${-s*0.7},${s*0.5}`;})
+    .attr('fill',DEC).attr('opacity',0.9).attr('stroke','#fff').attr('stroke-width',1.5);
+
+  node.append('text').text(d=>d.label)
+    .attr('dy',d=>d.type==='entity'?(d.r+12):((d.r||12)+12))
+    .attr('text-anchor','middle')
+    .attr('font-family',"'IBM Plex Sans',sans-serif")
+    .attr('font-size',10).attr('fill','#999').attr('font-weight',400);
+
+  sim.on('tick',()=>{
+    link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y)
+      .attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+    node.attr('transform',d=>`translate(${d.x},${d.y})`);
+  });
+
+  setTimeout(()=>{svg.transition().duration(600).call(zoom.transform,d3.zoomIdentity.scale(0.95));},500);
+})();
+
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(!entry.isIntersecting) return;
+    entry.target.classList.add('visible');
+    entry.target.querySelectorAll('[data-count]').forEach(el=>{
+      if(el.dataset.done) return; el.dataset.done='1';
+      const end=parseInt(el.dataset.count),sfx=el.dataset.suffix||'',dur=800,start=performance.now();
+      const tick=(now)=>{const p=Math.min((now-start)/dur,1);el.textContent=Math.round(end*(1-Math.pow(1-p,3)))+sfx;if(p<1)requestAnimationFrame(tick);};
+      requestAnimationFrame(tick);
+    });
+    entry.target.querySelectorAll('.cost-fill').forEach(el=>{
+      if(el.dataset.done) return; el.dataset.done='1';
+      setTimeout(()=>{el.style.width=el.dataset.width+'%';},120);
+    });
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal,.metrics-strip,.cost-vis').forEach(el=>obs.observe(el));
+</script>
+
+</body>
+</html>
