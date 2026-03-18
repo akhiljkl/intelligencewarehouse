@@ -1,0 +1,65 @@
+# Intelligence Warehouse
+
+> The structured context layer where AI agents query understanding, not just data.
+
+Intelligence Warehouse solves context fragmentation — the #1 reason enterprise AI agent projects fail. While data warehouses store what happened, Intelligence Warehouse stores how the business decides.
+
+## What is Intelligence Warehouse?
+
+Intelligence Warehouse is enterprise context infrastructure for AI agents. It warehouses three things that data warehouses don't:
+
+1. **Ontology** — What things mean and how they relate (e.g., product hierarchies, sales territories, supply chain nodes)
+2. **Metrics** — How the business measures itself, with explicit formulas, thresholds, and calculation logic
+3. **Decisions** — How the business decides, with trigger conditions, authority chains, and escalation paths
+
+AI agents connect via MCP (Model Context Protocol) and query structured decision logic — not just retrieved text chunks.
+
+## Key Differentiators
+
+- Not RAG: Structured, traversable decision graphs — not retrieved text chunks
+- Not a vector database: Ontology, metrics, and decisions as first-class graph nodes
+- Not agent memory: Enterprise-grade decision infrastructure, not session-level recall
+- Graph traversal discovers cross-functional decisions no single team could see in isolation
+- MORRIE engine extracts tribal knowledge from domain experts through structured interviews
+
+## Enterprise Results
+
+- Fortune 100 Telecom: 96% decision accuracy in 6 weeks, 11 days per subsequent use case
+- Fortune 50 CPG: 96% forecast accuracy, 34% stockout reduction in 6 weeks
+- Global Healthcare: 96% diagnostic accuracy, same-day signal-to-insight
+
+## MCP Server Integration
+
+Intelligence Warehouse exposes itself as an MCP server with 4 tools:
+- `resolve_entity` — Resolve any business entity to its full graph hierarchy
+- `compute_metric` — Compute any codified metric at any granularity
+- `evaluate_rule` — Run a decision rule and get action + authority chain
+- `traverse_path` — Walk from any node to any related decision
+
+Model-agnostic: works with Claude, GPT, Gemini, and custom agents.
+
+## Company
+
+Built by Questt AI. Based in San Francisco.
+
+## Links
+
+- Homepage: https://www.intelligencewarehouse.com/
+- Why Intelligence Warehouse: https://www.intelligencewarehouse.com/learn.html
+- Architecture & Demo: https://www.intelligencewarehouse.com/demo.html
+- Cortex (Conversational Interface): https://www.intelligencewarehouse.com/cortex.html
+- Case Studies: https://www.intelligencewarehouse.com/case-studies.html
+- Partners: https://www.intelligencewarehouse.com/partners.html
+- Team: https://www.intelligencewarehouse.com/team.html
+- Blog: https://www.intelligencewarehouse.com/blog/
+- Technical Whitepaper: https://www.intelligencewarehouse.com/IW-Whitepaper.pdf
+
+## Blog Articles
+
+- We Deployed Context Infrastructure at 3 Fortune 100 Companies. Here's What We Learned: https://www.intelligencewarehouse.com/blog/context-infrastructure-enterprise-ai.html
+- Context Fragmentation: The Real Reason Your AI Agent Projects Keep Failing: https://www.intelligencewarehouse.com/blog/context-fragmentation-why-ai-agents-fail.html
+- Knowledge Graphs vs RAG for AI Agents: Why Retrieval Isn't Enough: https://www.intelligencewarehouse.com/blog/knowledge-graph-vs-rag-ai-agents.html
+
+## Contact
+
+Email: hello@intelligencewarehouse.com

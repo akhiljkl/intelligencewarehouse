@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Intelligence Warehouse™</title>
+    <meta name="description" content="Insights on context infrastructure, enterprise AI, knowledge graphs, and decision intelligence from the team building Intelligence Warehouse.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.intelligencewarehouse.com/blog/">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X17PMES96Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-X17PMES96Q');
+    </script>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.intelligencewarehouse.com/blog/">
+    <meta property="og:title" content="Blog | Intelligence Warehouse">
+    <meta property="og:description" content="Insights on context infrastructure, enterprise AI, and decision intelligence.">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blog | Intelligence Warehouse">
+    <meta name="twitter:description" content="Insights on context infrastructure, enterprise AI, and decision intelligence.">
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "Intelligence Warehouse Blog",
+        "description": "Insights on context infrastructure, enterprise AI, knowledge graphs, and decision intelligence.",
+        "url": "https://www.intelligencewarehouse.com/blog/",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Intelligence Warehouse",
+            "url": "https://www.intelligencewarehouse.com"
+        }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .blog-hero {
+            padding-top: 10rem;
+            padding-bottom: 3rem;
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 6rem;
+        }
+        .blog-card {
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+        .blog-card-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent-light);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .blog-card-eyebrow span {
+            color: var(--text-dim);
+        }
+        .blog-card h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+        }
+        .blog-card-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 1.5rem;
+        }
+        .blog-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .blog-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.3rem 0.7rem;
+            border-radius: 100px;
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+        }
+        .blog-card-cta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 1.5rem;
+        }
+        .blog-card-cta svg {
+            transition: transform 0.2s ease;
+        }
+        .blog-card:hover .blog-card-cta svg {
+            transform: translateX(4px);
+        }
+
+        @media (max-width: 768px) {
+            .blog-card { padding: 1.5rem; }
+            .blog-card h3 { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="../index.html" class="nav-logo">
+                <div class="logo-mark">iw<span class="logo-dot">.</span></div>
+            </a>
+            <div class="nav-links">
+                <a href="../learn.html">Why IW</a>
+                <a href="../demo.html">Demo</a>
+                <a href="../cortex.html">Cortex</a>
+                <a href="../case-studies.html">Case Studies</a>
+                <a href="../blog/" class="active">Blog</a>
+                <a href="../partners.html">Partners</a>
+                <a href="../team.html">Team</a>
+            </div>
+            <div class="nav-actions">
+                <a href="../index.html#contact" class="btn btn-ghost">Contact</a>
+                <a href="../index.html#contact" class="btn btn-primary">Request Demo</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="../learn.html">Why IW</a>
+        <a href="../demo.html">Demo</a>
+        <a href="../cortex.html">Cortex</a>
+        <a href="../case-studies.html">Case Studies</a>
+        <a href="../blog/" class="active">Blog</a>
+        <a href="../partners.html">Partners</a>
+        <a href="../team.html">Team</a>
+        <a href="../index.html#contact" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Request Demo</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="section blog-hero">
+        <div class="container">
+            <div class="section-label">BLOG</div>
+            <h1 class="section-title">Insights on Context<br>Infrastructure for AI</h1>
+            <p class="section-desc" style="max-width:640px;margin:0 auto;">
+                From the team building the enterprise decision layer that AI agents need. Lessons from Fortune 100 deployments, architecture deep dives, and the future of context engineering.
+            </p>
+        </div>
+    </section>
+
+    <!-- Blog Cards -->
+    <section class="section" style="padding-top:0;">
+        <div class="container">
+            <div class="blog-grid">
+
+                <!-- Article 1 -->
+                <a href="context-infrastructure-enterprise-ai.html" class="blog-card" data-animate>
+                    <div class="blog-card-eyebrow">Context Infrastructure <span>March 18, 2026 &middot; 8 min read</span></div>
+                    <h3>We Deployed Context Infrastructure at 3 Fortune 100 Companies. Here's What We Learned.</h3>
+                    <p class="blog-card-desc">Foundation Capital called context graphs "AI's trillion-dollar opportunity." We've been deploying them. Here are the hard-won lessons from 3 enterprise deployments that achieved 96%+ decision accuracy.</p>
+                    <div class="blog-card-tags">
+                        <span class="blog-tag">Enterprise AI</span>
+                        <span class="blog-tag">Context Graph</span>
+                        <span class="blog-tag">Case Study</span>
+                    </div>
+                    <div class="blog-card-cta">
+                        Read article <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                    </div>
+                </a>
+
+                <!-- Article 2 -->
+                <a href="context-fragmentation-why-ai-agents-fail.html" class="blog-card" data-animate>
+                    <div class="blog-card-eyebrow">Problem Framing <span>March 18, 2026 &middot; 6 min read</span></div>
+                    <h3>Context Fragmentation: The Real Reason Your AI Agent Projects Keep Failing</h3>
+                    <p class="blog-card-desc">Your enterprise has 10 AI pilots. None are in production. The problem isn't the models, the data, or the team. It's context fragmentation — and almost nobody is talking about it.</p>
+                    <div class="blog-card-tags">
+                        <span class="blog-tag">Context Fragmentation</span>
+                        <span class="blog-tag">Enterprise AI</span>
+                        <span class="blog-tag">Architecture</span>
+                    </div>
+                    <div class="blog-card-cta">
+                        Read article <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                    </div>
+                </a>
+
+                <!-- Article 3 -->
+                <a href="knowledge-graph-vs-rag-ai-agents.html" class="blog-card" data-animate>
+                    <div class="blog-card-eyebrow">Technical Deep Dive <span>March 18, 2026 &middot; 7 min read</span></div>
+                    <h3>Knowledge Graphs vs RAG for AI Agents: Why Retrieval Isn't Enough</h3>
+                    <p class="blog-card-desc">RAG gets you to 70-80% accuracy. Enterprise decisions need 95%+. Here's why structured context graphs outperform retrieval — and when to use each approach.</p>
+                    <div class="blog-card-tags">
+                        <span class="blog-tag">Knowledge Graph</span>
+                        <span class="blog-tag">RAG</span>
+                        <span class="blog-tag">Technical</span>
+                    </div>
+                    <div class="blog-card-cta">
+                        Read article <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section section-cta" id="contact">
+        <div class="container">
+            <div class="cta-content" data-animate>
+                <div class="section-label">GET STARTED</div>
+                <h2 class="section-title">Build the Foundation<br>Your AI Agents Need</h2>
+                <p class="section-desc" style="max-width:550px;margin:0 auto 2.5rem;">Stop building agents on fragmented context. Start with the infrastructure layer that makes AI actually work.</p>
+                <div class="cta-actions">
+                    <a href="mailto:hello@intelligencewarehouse.com" class="btn btn-primary btn-lg">Request a Demo <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="nav-logo" style="margin-bottom:1rem;">
+                        <div class="logo-mark">iw<span class="logo-dot">.</span></div>
+                    </div>
+                    <p class="footer-tagline">The foundation AI agents need.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col"><h5>Platform</h5><a href="../learn.html#architecture">Architecture</a><a href="../learn.html#process">How It Works</a><a href="../index.html#impact">Impact</a><a href="../team.html">Team</a></div>
+                    <div class="footer-col"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="../blog/">Blog</a><a href="../index.html#contact">Contact</a></div>
+                    <div class="footer-col"><h5>Resources</h5><a href="../IW-Whitepaper.pdf" target="_blank">Technical Paper</a><a href="../case-studies.html">Case Studies</a><a href="../partners.html">Partners</a><a href="#">Security</a></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Intelligence Warehouse&trade;. All rights reserved.</span>
+                <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../main.js"></script>
+</body>
+</html>

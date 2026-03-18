@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We Deployed Context Infrastructure at 3 Fortune 100 Companies. Here's What We Learned. | Intelligence Warehouse™</title>
+    <meta name="description" content="Hard-won lessons from deploying context infrastructure at three Fortune 100 enterprises. Why AI agent projects fail, and the missing layer that fixes them.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.intelligencewarehouse.com/blog/context-infrastructure-enterprise-ai.html">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X17PMES96Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-X17PMES96Q');
+    </script>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.intelligencewarehouse.com/blog/context-infrastructure-enterprise-ai.html">
+    <meta property="og:title" content="We Deployed Context Infrastructure at 3 Fortune 100 Companies. Here's What We Learned.">
+    <meta property="og:description" content="Hard-won lessons from deploying context infrastructure at three Fortune 100 enterprises. Why AI agent projects fail, and the missing layer that fixes them.">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="We Deployed Context Infrastructure at 3 Fortune 100 Companies. Here's What We Learned.">
+    <meta name="twitter:description" content="Hard-won lessons from deploying context infrastructure at three Fortune 100 enterprises. Why AI agent projects fail, and the missing layer that fixes them.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        .blog-hero {
+            padding-top: 10rem;
+            padding-bottom: 3rem;
+        }
+        .blog-article {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 1.5rem 6rem;
+        }
+        .blog-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-tertiary, #999);
+            letter-spacing: 0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .blog-meta span + span::before {
+            content: '\00b7';
+            margin: 0 0.75rem;
+        }
+        .blog-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            line-height: 1.15;
+            color: var(--text-primary, #111);
+            margin-bottom: 1.5rem;
+        }
+        .blog-subtitle {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--text-secondary, #555);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+        .blog-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+        .blog-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 500;
+            background: var(--bg-elevated, #f5f5f5);
+            color: var(--text-secondary, #555);
+            padding: 0.3rem 0.75rem;
+            border-radius: 100px;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+        .blog-body h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            color: var(--text-primary, #111);
+            margin: 3rem 0 1rem;
+            line-height: 1.3;
+        }
+        .blog-body h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary, #111);
+            margin: 2rem 0 0.75rem;
+            line-height: 1.4;
+        }
+        .blog-body p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-secondary, #555);
+            margin-bottom: 1.25rem;
+        }
+        .blog-body a {
+            color: var(--accent, #ff6b35);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .blog-body a:hover {
+            opacity: 0.8;
+        }
+        .blog-body blockquote {
+            border-left: 3px solid var(--accent, #ff6b35);
+            margin: 2rem 0;
+            padding: 1rem 1.5rem;
+            font-style: italic;
+            color: var(--text-secondary, #555);
+            background: transparent;
+        }
+        .blog-body blockquote p {
+            margin-bottom: 0;
+        }
+        .blog-body ul, .blog-body ol {
+            margin: 1rem 0 1.5rem 1.25rem;
+            color: var(--text-secondary, #555);
+        }
+        .blog-body li {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+        .blog-body strong {
+            color: var(--text-primary, #111);
+            font-weight: 600;
+        }
+        .blog-callout {
+            background: var(--bg-elevated, #f5f5f5);
+            border-radius: 12px;
+            padding: 1.75rem 2rem;
+            margin: 2rem 0;
+        }
+        .blog-callout p {
+            margin-bottom: 0.5rem;
+        }
+        .blog-callout p:last-child {
+            margin-bottom: 0;
+        }
+        .blog-callout .callout-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent, #ff6b35);
+            margin-bottom: 0.75rem;
+        }
+        .blog-divider {
+            width: 40px;
+            height: 2px;
+            background: var(--accent, #ff6b35);
+            margin: 3rem 0;
+            border: none;
+        }
+        .blog-cta {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 3rem 2rem;
+            background: var(--bg-elevated, #f5f5f5);
+            border-radius: 12px;
+        }
+        .blog-cta p {
+            font-size: 1.05rem;
+            color: var(--text-secondary, #555);
+            margin-bottom: 1.5rem;
+        }
+        @media (max-width: 768px) {
+            .blog-hero {
+                padding-top: 7rem;
+            }
+            .blog-article {
+                padding: 0 1rem 4rem;
+            }
+            .blog-callout {
+                padding: 1.25rem 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="../index.html" class="nav-logo">
+                <div class="logo-mark">iw<span class="logo-dot">.</span></div>
+            </a>
+            <div class="nav-links">
+                <a href="../learn.html">Why IW</a>
+                <a href="../demo.html">Demo</a>
+                <a href="../cortex.html">Cortex</a>
+                <a href="../case-studies.html">Case Studies</a>
+                <a href="../blog/context-infrastructure-enterprise-ai.html" class="active">Blog</a>
+                <a href="../partners.html">Partners</a>
+                <a href="../team.html">Team</a>
+            </div>
+            <div class="nav-actions">
+                <a href="../index.html#contact" class="btn btn-ghost">Contact</a>
+                <a href="../index.html#contact" class="btn btn-primary">Request Demo</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="../learn.html">Why IW</a>
+        <a href="../demo.html">Demo</a>
+        <a href="../cortex.html">Cortex</a>
+        <a href="../case-studies.html">Case Studies</a>
+        <a href="../blog/context-infrastructure-enterprise-ai.html">Blog</a>
+        <a href="../partners.html">Partners</a>
+        <a href="../team.html">Team</a>
+        <a href="../index.html#contact" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Request Demo</a>
+    </div>
+
+    <!-- Blog Hero -->
+    <section class="blog-hero">
+        <div class="container">
+            <div class="blog-article">
+                <div class="blog-meta">
+                    <span>March 18, 2026</span>
+                    <span>12 min read</span>
+                </div>
+                <h1 class="blog-title">We Deployed Context Infrastructure at 3 Fortune 100 Companies. Here's What We Learned.</h1>
+                <p class="blog-subtitle">Every enterprise AI team we talk to has the same complaint: their agents have access to mountains of data but can't actually make good decisions. The problem isn't the models. It's the missing layer underneath.</p>
+                <div class="blog-tags">
+                    <span class="blog-tag">Context Infrastructure</span>
+                    <span class="blog-tag">Enterprise AI</span>
+                    <span class="blog-tag">Decision Intelligence</span>
+                    <span class="blog-tag">AI Agents</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Content -->
+    <article class="blog-article">
+        <div class="blog-body">
+
+            <p>Over the past eighteen months, our team at <a href="https://www.intelligencewarehouse.com">Intelligence Warehouse</a> (part of Questt AI) has deployed what we call "context infrastructure" at three Fortune 100 enterprises &mdash; a telecom, a CPG company, and a global healthcare organization. Each had spent millions on AI. Each had agents in production. And each was stuck at roughly the same place: 60-70% accuracy on decisions that mattered.</p>
+
+            <p>This post is about what we learned. Not the polished version. The real version &mdash; including the things that surprised us, the assumptions we got wrong, and the framework that emerged.</p>
+
+            <h2>The Pattern We Kept Seeing</h2>
+
+            <p>When Foundation Capital published their thesis on <a href="https://foundationcapital.com/context-graphs-ais-trillion-dollar-opportunity/" target="_blank" rel="noopener">context graphs as AI's trillion-dollar opportunity</a>, it crystallized something we'd been observing in the field. Their argument is that context &mdash; not just data &mdash; is the binding constraint on AI's enterprise value. We'd been living that reality for months.</p>
+
+            <p>Here's what the pattern looks like from inside these organizations:</p>
+
+            <ul>
+                <li>An AI team builds a promising agent or copilot. It demos well.</li>
+                <li>They connect it to the data warehouse, the vector store, maybe a knowledge graph.</li>
+                <li>They put it in front of real users making real decisions.</li>
+                <li>Accuracy craters. Not because the model is bad, but because it doesn't understand the business context surrounding the data.</li>
+            </ul>
+
+            <p>A revenue number is just a number. Without knowing which entities roll up into it, which formula calculates it, which thresholds trigger action, and which exceptions apply on Tuesdays in Q4 &mdash; an agent can't do anything useful with it.</p>
+
+            <p>We started calling this <strong>context fragmentation</strong>. And it turns out it's a category-level problem.</p>
+
+            <h2>Context Fragmentation Is Not a Data Problem</h2>
+
+            <p>This is the thing that took us the longest to articulate. Every enterprise we worked with assumed their AI accuracy problem was a data problem. More data, better data, cleaner data. They'd already invested in Snowflake or Databricks. They had vector databases. Some had knowledge graphs.</p>
+
+            <p>None of it was enough.</p>
+
+            <p>The issue is that there's a layer between raw data and good decisions &mdash; a layer made up of business definitions, metric formulas, decision rules, and the institutional knowledge that experienced operators carry in their heads. This layer doesn't live in any database. It lives in spreadsheets, Confluence pages, Slack threads, and most critically, in the minds of your best people.</p>
+
+            <blockquote>
+                <p>Data warehouses solved data fragmentation. What we needed was something that solved context fragmentation &mdash; a structured layer where AI agents could query understanding, not just data.</p>
+            </blockquote>
+
+            <p>That realization is what led us to build the Intelligence Warehouse.</p>
+
+            <h2>What We Mean by "Context Infrastructure"</h2>
+
+            <p>There's been a useful proliferation of tools in adjacent spaces. Gartner is writing about the "context mesh." Several startups are building agent memory layers, context management platforms, and enterprise graphs. These are all real and valuable efforts.</p>
+
+            <p>But there's an important distinction we had to learn the hard way: <strong>agent memory is not enterprise context</strong>.</p>
+
+            <p>Developer-oriented memory tools &mdash; systems like session stores, conversation memory, and retrieval caches &mdash; solve a real problem for individual agent interactions. They help an agent remember what happened in the last conversation or retrieve relevant chunks from a document.</p>
+
+            <p>Enterprise context infrastructure is a different thing. It's the structured, governed, queryable representation of how a business actually works. It's not what the agent remembers. It's what the agent needs to know before it can even begin reasoning.</p>
+
+            <h3>The three layers that emerged</h3>
+
+            <p>Across all three deployments, we converged on the same three-layer architecture:</p>
+
+            <div class="blog-callout">
+                <div class="callout-label">Architecture</div>
+                <p><strong>L1: Business Ontology</strong> &mdash; The entities, relationships, and hierarchies that define the business domain. What is a "customer"? How does a "region" relate to a "market"? What rolls up into what?</p>
+                <p><strong>L2: Metrics &amp; Formulas</strong> &mdash; The precise calculations that define KPIs. Not just "revenue" but the exact formula, the data sources, the edge cases, the adjustments.</p>
+                <p><strong>L3: Decision Rules</strong> &mdash; The conditional logic that governs action. If churn risk exceeds X and lifetime value exceeds Y, then escalate. The rules that sit in your best operator's head.</p>
+            </div>
+
+            <p>When agents can query all three layers, something qualitative changes in their output. They stop hallucinating business logic. They stop confusing metrics. They start making decisions that look like they came from a 10-year veteran of the organization.</p>
+
+            <h2>Lessons from Three Deployments</h2>
+
+            <h3>Lesson 1: The hardest knowledge to capture is the most valuable</h3>
+
+            <p>At the telecom company, we spent the first two weeks trying to extract business rules from documentation. We found maybe 30% of what we needed. The rest lived entirely in the heads of senior network planners &mdash; people who'd been at the company for 15 or 20 years and had never been asked to articulate how they actually made decisions.</p>
+
+            <p>We built a structured interview process (we call it MORRIE internally) specifically designed to extract this tribal knowledge. It asks operators to walk through real decisions, probing not just what they decided but why &mdash; what thresholds they were watching, what exceptions they knew about, what patterns they'd learned to recognize.</p>
+
+            <p>The output isn't a document. It's structured context that agents can query at decision time.</p>
+
+            <div class="blog-callout">
+                <div class="callout-label">Deployment Result</div>
+                <p><strong>Fortune 100 Telecom:</strong> Decision accuracy went from ~65% to 96% in six weeks. The delta wasn't a better model. It was giving the existing model the context it was missing.</p>
+            </div>
+
+            <h3>Lesson 2: Context has to be computable, not just retrievable</h3>
+
+            <p>At the CPG company, they had a sophisticated forecasting pipeline and good data infrastructure. The problem was that their demand planning agents couldn't reason about promotions, seasonality adjustments, and regional exceptions the way their best planners could.</p>
+
+            <p>The critical insight: it wasn't enough to store context as text that agents could retrieve via RAG. Context needs to be structured so agents can compute with it. When an agent needs to forecast demand for a SKU, it needs to resolve the entity (which product family, which region), compute the relevant metrics (using the exact formula the business uses, not a hallucinated approximation), and evaluate the decision rules (what promotional lifts apply, what safety stock thresholds are in effect).</p>
+
+            <p>This is why we built the Intelligence Warehouse as an MCP server with discrete operations &mdash; resolve_entity, compute_metric, evaluate_rule, traverse_path &mdash; rather than as a document store. Agents don't retrieve context. They query it programmatically.</p>
+
+            <div class="blog-callout">
+                <div class="callout-label">Deployment Result</div>
+                <p><strong>Fortune 50 CPG:</strong> 96% forecast accuracy with a 34% reduction in stockouts. Six-week deployment. The forecasting model didn't change. The context layer underneath it did.</p>
+            </div>
+
+            <h3>Lesson 3: Speed of context assembly determines speed of insight</h3>
+
+            <p>The healthcare deployment was different. The clinical teams weren't struggling with accuracy on individual decisions. They were struggling with the time it took to assemble enough context to make any decision at all. A diagnostic recommendation that requires pulling from five different systems, cross-referencing three different protocols, and checking two regulatory constraints takes hours of manual work.</p>
+
+            <p>We learned that context infrastructure isn't just about accuracy. It's about the latency of understanding. When the Intelligence Warehouse provides pre-structured context &mdash; with the ontology already mapped, the metrics already defined, and the decision rules already codified &mdash; agents can go from signal to insight in seconds instead of hours.</p>
+
+            <div class="blog-callout">
+                <div class="callout-label">Deployment Result</div>
+                <p><strong>Global Healthcare Organization:</strong> 96% diagnostic accuracy with same-day signal-to-insight. The clinical staff had the same data before. What changed was the speed at which AI could assemble the context around it.</p>
+            </div>
+
+            <h2>What This Means for the Market</h2>
+
+            <p>We're watching the AI infrastructure stack mature in real time. The data layer is solved. The model layer is commoditizing. The orchestration layer is crowded. But the context layer &mdash; the part that makes AI actually understand a business &mdash; is still early.</p>
+
+            <p>Foundation Capital's framing of this as a trillion-dollar opportunity resonates with what we see in the field. Every enterprise running AI agents will need some form of context infrastructure. The question is what that looks like.</p>
+
+            <p>Our bet &mdash; and it is a bet, informed by three hard deployments &mdash; is that it looks like a warehouse. Not a warehouse for data (that exists), but a warehouse for intelligence. A structured, governed, queryable system that encodes how a business actually works and exposes it to any agent, any workflow, any decision point.</p>
+
+            <p>We think the analogy is precise: just as data warehouses emerged to solve data fragmentation in the analytics era, intelligence warehouses will emerge to solve context fragmentation in the agentic era. That's the category we're building.</p>
+
+            <h2>Where We Go from Here</h2>
+
+            <p>We're still early. Three deployments have taught us an enormous amount, but the surface area of this problem is vast. Every industry vertical has different context structures. Every enterprise has different tribal knowledge. The tooling for extracting, structuring, and serving context at enterprise scale is still being invented.</p>
+
+            <p>What we know for certain: the enterprises that invest in context infrastructure now will have a durable advantage as AI agents become the primary interface for business operations. Models will keep getting better. Data will keep getting cheaper. But the structured understanding of how your specific business works &mdash; that's a moat.</p>
+
+            <hr class="blog-divider">
+
+            <div class="blog-cta">
+                <p>If you're running AI agents in production and hitting the context wall, we'd like to compare notes. We're working with a small number of enterprises on context infrastructure deployments.</p>
+                <a href="../index.html#contact" class="btn btn-primary btn-lg">Start a Conversation <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+            </div>
+
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="nav-logo" style="margin-bottom:1rem;">
+                        <div class="logo-mark">iw<span class="logo-dot">.</span></div>
+                            </div>
+                    <p class="footer-tagline">The foundation AI agents need.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col"><h5>Platform</h5><a href="../learn.html#architecture">Architecture</a><a href="../learn.html#process">How It Works</a><a href="../index.html#impact">Impact</a><a href="../team.html">Team</a></div>
+                    <div class="footer-col"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Blog</a><a href="../index.html#contact">Contact</a></div>
+                    <div class="footer-col"><h5>Resources</h5><a href="../IW-Whitepaper.pdf" target="_blank">Technical Paper</a><a href="#">API Docs</a><a href="../partners.html">Partners</a><a href="#">Security</a></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Intelligence Warehouse&trade;. All rights reserved.</span>
+                <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../main.js"></script>
+</body>
+</html>

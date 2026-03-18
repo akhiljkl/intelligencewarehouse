@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Graphs vs RAG for AI Agents: Why Retrieval Isn't Enough | Intelligence Warehouse™</title>
+    <meta name="description" content="RAG plateaus at 70-80% accuracy for enterprise AI agents. Learn why structured knowledge graphs outperform retrieval-augmented generation for complex decision-making.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.intelligencewarehouse.com/blog/knowledge-graph-vs-rag-ai-agents.html">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-X17PMES96Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-X17PMES96Q');
+    </script>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.intelligencewarehouse.com/blog/knowledge-graph-vs-rag-ai-agents.html">
+    <meta property="og:title" content="Knowledge Graphs vs RAG for AI Agents: Why Retrieval Isn't Enough">
+    <meta property="og:description" content="RAG plateaus at 70-80% accuracy for enterprise AI agents. Learn why structured knowledge graphs outperform retrieval-augmented generation for complex decision-making.">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Knowledge Graphs vs RAG for AI Agents: Why Retrieval Isn't Enough">
+    <meta name="twitter:description" content="RAG plateaus at 70-80% accuracy for enterprise AI agents. Learn why structured knowledge graphs outperform retrieval-augmented generation for complex decision-making.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+
+    <style>
+        /* Blog-specific styles */
+        .blog-hero {
+            padding-top: 10rem;
+            padding-bottom: 3rem;
+        }
+        .blog-hero .container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .blog-hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.25rem;
+        }
+        .blog-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-tertiary, #888);
+            margin-bottom: 0.75rem;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .blog-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .blog-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .blog-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 100px;
+            background: var(--bg-elevated, rgba(255,255,255,0.06));
+            color: var(--text-secondary, #aaa);
+            border: 1px solid var(--border, rgba(255,255,255,0.08));
+            text-transform: lowercase;
+        }
+        .blog-article {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 1.5rem 6rem;
+        }
+        .blog-body h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+        .blog-body h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .blog-body p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-secondary, #aaa);
+            margin-bottom: 1.25rem;
+        }
+        .blog-body strong {
+            color: var(--text-primary, #fff);
+        }
+        .blog-body blockquote {
+            border-left: 3px solid var(--accent, #00C2FF);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--bg-elevated, rgba(255,255,255,0.03));
+            border-radius: 0 8px 8px 0;
+        }
+        .blog-body blockquote p {
+            margin-bottom: 0;
+            font-style: italic;
+        }
+        .blog-callout {
+            background: var(--bg-elevated, rgba(255,255,255,0.03));
+            border: 1px solid var(--border, rgba(255,255,255,0.08));
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+        }
+        .blog-callout p {
+            margin-bottom: 0.75rem;
+        }
+        .blog-callout p:last-child {
+            margin-bottom: 0;
+        }
+        .blog-body code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            background: var(--bg-elevated, rgba(255,255,255,0.06));
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            color: var(--accent, #00C2FF);
+        }
+        .blog-body pre {
+            background: var(--bg-elevated, rgba(255,255,255,0.03));
+            border: 1px solid var(--border, rgba(255,255,255,0.08));
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+        .blog-body pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: var(--text-secondary, #aaa);
+        }
+        .blog-body ul, .blog-body ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .blog-body li {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-secondary, #aaa);
+            margin-bottom: 0.5rem;
+        }
+        .blog-body li strong {
+            color: var(--text-primary, #fff);
+        }
+
+        /* Spectrum comparison table */
+        .spectrum-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+        }
+        .spectrum-table thead th {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-tertiary, #888);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--border, rgba(255,255,255,0.12));
+        }
+        .spectrum-table tbody td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--border, rgba(255,255,255,0.06));
+            vertical-align: top;
+            color: var(--text-secondary, #aaa);
+            line-height: 1.5;
+        }
+        .spectrum-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .spectrum-table .row-label {
+            font-weight: 600;
+            color: var(--text-primary, #fff);
+            white-space: nowrap;
+        }
+        .spectrum-table .row-highlight td {
+            background: var(--bg-elevated, rgba(255,255,255,0.03));
+        }
+        .spectrum-table .row-highlight .row-label {
+            color: var(--accent, #00C2FF);
+        }
+
+        /* Comparison boxes */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .comparison-box {
+            background: var(--bg-elevated, rgba(255,255,255,0.03));
+            border: 1px solid var(--border, rgba(255,255,255,0.08));
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+        }
+        .comparison-box h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.75rem;
+        }
+        .comparison-box.box-fail h4 {
+            color: #ff6b6b;
+        }
+        .comparison-box.box-pass h4 {
+            color: #51cf66;
+        }
+        .comparison-box p, .comparison-box li {
+            font-size: 0.92rem !important;
+            line-height: 1.6 !important;
+        }
+        @media (max-width: 640px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="../index.html" class="nav-logo">
+                <div class="logo-mark">iw<span class="logo-dot">.</span></div>
+            </a>
+            <div class="nav-links">
+                <a href="../learn.html">Why IW</a>
+                <a href="../demo.html">Demo</a>
+                <a href="../cortex.html">Cortex</a>
+                <a href="../case-studies.html">Case Studies</a>
+                <a href="../partners.html">Partners</a>
+                <a href="../team.html">Team</a>
+            </div>
+            <div class="nav-actions">
+                <a href="../index.html#contact" class="btn btn-ghost">Contact</a>
+                <a href="../index.html#contact" class="btn btn-primary">Request Demo</a>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="../learn.html">Why IW</a>
+        <a href="../demo.html">Demo</a>
+        <a href="../cortex.html">Cortex</a>
+        <a href="../case-studies.html">Case Studies</a>
+        <a href="../partners.html">Partners</a>
+        <a href="../team.html">Team</a>
+        <a href="../index.html#contact" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Request Demo</a>
+    </div>
+
+    <!-- Blog Hero -->
+    <section class="blog-hero section">
+        <div class="container">
+            <div class="blog-meta">
+                <span>March 2026</span>
+                <span>12 min read</span>
+                <span>Architecture</span>
+            </div>
+            <h1>Knowledge Graphs vs RAG for AI Agents: Why Retrieval Isn't Enough</h1>
+            <p style="font-size:1.1rem;color:var(--text-secondary, #aaa);line-height:1.7;max-width:640px;">Everyone is building RAG pipelines. But enterprise AI accuracy plateaus at 70-80% because retrieval cannot replace reasoning. Here is what actually works.</p>
+            <div class="blog-tags">
+                <span class="blog-tag">knowledge graph vs RAG</span>
+                <span class="blog-tag">AI agent architecture</span>
+                <span class="blog-tag">structured context</span>
+                <span class="blog-tag">GraphRAG</span>
+                <span class="blog-tag">enterprise AI</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Body -->
+    <article class="blog-article">
+        <div class="blog-body">
+
+            <h2>The 80% Ceiling</h2>
+
+            <p>If you have built an enterprise AI agent in the last two years, you have probably hit the same wall. The prototype works great on demo day. Accuracy looks promising in controlled tests. Then you deploy it against real operational decisions and watch it plateau somewhere between 70 and 80 percent.</p>
+
+            <p>The instinct is to fix the retrieval pipeline. Better chunking strategies. Reranking models. Hybrid search. More embeddings, more vectors, more context window. And some of these do help, incrementally. But the ceiling remains because <strong>the problem was never retrieval. The problem is that retrieved text chunks cannot encode decision logic.</strong></p>
+
+            <p>This is the gap that separates AI demos from AI infrastructure. And understanding it requires looking honestly at what RAG does well, where it breaks, and what the alternative actually looks like in production.</p>
+
+            <h2>What RAG Does Well</h2>
+
+            <p>RAG (Retrieval-Augmented Generation) solved a real problem. LLMs have fixed training data. RAG lets them reference current, domain-specific information at inference time by retrieving relevant text chunks from a vector database and injecting them into the prompt.</p>
+
+            <p>For a large class of tasks, this works remarkably well:</p>
+
+            <ul>
+                <li><strong>Question answering over documentation</strong> -- "What is our refund policy for enterprise contracts?"</li>
+                <li><strong>Summarization with source grounding</strong> -- pulling the right paragraphs from a 200-page report.</li>
+                <li><strong>Search-style tasks</strong> -- finding the most relevant information across a corpus of unstructured text.</li>
+            </ul>
+
+            <p>In all of these cases, the answer exists in the text. The challenge is finding the right chunk and presenting it coherently. RAG handles this. It is the right tool for information retrieval tasks.</p>
+
+            <h3>Where RAG Breaks Down</h3>
+
+            <p>RAG breaks when the answer does not exist in any single text chunk, or when the answer requires reasoning across multiple domains, relationships, and constraints simultaneously. In other words: it breaks on decisions.</p>
+
+            <p>Enterprise decisions are almost never single-variable lookups. They involve evaluating conditions across organizational boundaries, applying thresholds that interact with each other, and weighing trade-offs that depend on context no document fully captures.</p>
+
+            <blockquote>
+                <p>RAG retrieves what was written down. Enterprise decisions depend on what was never written down -- the relationships, thresholds, and exception logic that experienced operators carry in their heads.</p>
+            </blockquote>
+
+            <p>The text chunks RAG retrieves are flat. They are ordered by semantic similarity, not by causal or logical relationship. When an LLM receives five chunks about discount policy, two about customer segmentation, and one about margin thresholds, it has no structural way to understand how these pieces connect. It can only guess based on language patterns.</p>
+
+            <h2>Knowledge Graphs for AI Agents: The Practical Version</h2>
+
+            <p>The academic definition of a knowledge graph involves ontologies, RDF triples, and SPARQL queries. That version has existed for decades and has not solved the enterprise AI problem. The practical version looks different.</p>
+
+            <p>A knowledge graph for AI agents needs to encode three things:</p>
+
+            <ol>
+                <li><strong>What things are</strong> (Ontology) -- the entities, their properties, and how they relate to each other. Not just "Customer" as a node, but Customer linked to Segment, Account History, Contract Terms, and Regional Rules.</li>
+                <li><strong>How we measure</strong> (Metrics) -- the computed values that drive decisions. Lifetime value. Churn probability. Margin contribution. These are not static data; they are derived from traversing relationships.</li>
+                <li><strong>How we decide</strong> (Decisions) -- the actual logic. If churn risk exceeds a threshold AND lifetime value is above a tier AND the discount request falls within regional authority, then the decision path branches in a specific way.</li>
+            </ol>
+
+            <p>This is what makes it an <strong>intelligence</strong> graph rather than a data graph. It does not just store relationships. It encodes the reasoning patterns that experienced operators use to make decisions.</p>
+
+            <h2>The Discount Decision: RAG vs. Structured Context</h2>
+
+            <p>Suppose an AI agent needs to decide whether to approve a 15% discount for a key account. This is not a hypothetical. Pricing decisions like this happen thousands of times a day in enterprise sales organizations.</p>
+
+            <div class="comparison-grid">
+                <div class="comparison-box box-fail">
+                    <h4>RAG Approach</h4>
+                    <p>The agent retrieves chunks about discount policy, customer history, and pricing guidelines. It finds text saying "discounts above 10% require VP approval" and another chunk about "key accounts eligible for preferred pricing." It generates a plausible-sounding answer that misses the fact that this customer's region has a margin floor of 22%, the product line has a Q1 promotion cap already hit, and the account's payment history triggered a credit hold last month.</p>
+                    <p style="margin-top:0.75rem;"><strong>Result:</strong> Approves discount. Three policy violations.</p>
+                </div>
+                <div class="comparison-box box-pass">
+                    <h4>Structured Context Approach</h4>
+                    <p>The agent traverses the graph: <code>resolve_entity</code> identifies the customer node and its connections. <code>compute_metric</code> calculates real-time margin impact. <code>evaluate_rule</code> checks the discount against regional margin floor, promotion caps, and credit status. <code>traverse_path</code> discovers that the payment history node connects to a credit hold that disqualifies preferred pricing.</p>
+                    <p style="margin-top:0.75rem;"><strong>Result:</strong> Recommends 8% with rationale citing three constraints.</p>
+                </div>
+            </div>
+
+            <p>The difference is not in the quality of the retrieval. The difference is structural. RAG found relevant text. The structured approach traversed connected logic. Graph traversal discovers multivariate decisions that no single team could see in isolation -- the credit hold was set by Finance, the margin floor by Regional Ops, the promotion cap by Marketing. No single document contains all three constraints.</p>
+
+            <h2>The Context Architecture Spectrum</h2>
+
+            <p>This is not a binary choice between RAG and knowledge graphs. There is a spectrum, and understanding where different approaches sit on it helps clarify what you actually need.</p>
+
+            <div style="overflow-x:auto;">
+            <table class="spectrum-table">
+                <thead>
+                    <tr>
+                        <th>Approach</th>
+                        <th>What It Retrieves</th>
+                        <th>Decision Capability</th>
+                        <th>Enterprise Accuracy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="row-label">Vector Search</td>
+                        <td>Nearest text chunks by embedding similarity</td>
+                        <td>None. Returns information, not logic.</td>
+                        <td>50-65%</td>
+                    </tr>
+                    <tr>
+                        <td class="row-label">RAG</td>
+                        <td>Text chunks with reranking and context injection</td>
+                        <td>Inferred from language. No structural guarantees.</td>
+                        <td>70-80%</td>
+                    </tr>
+                    <tr>
+                        <td class="row-label">GraphRAG</td>
+                        <td>Entities and relationships extracted from text, then retrieved</td>
+                        <td>Relationship-aware retrieval. Still no encoded decision rules.</td>
+                        <td>80-88%</td>
+                    </tr>
+                    <tr class="row-highlight">
+                        <td class="row-label">Structured Intelligence</td>
+                        <td>Traversable ontology, computed metrics, and encoded decision logic</td>
+                        <td>Full multivariate decision evaluation via graph traversal.</td>
+                        <td>93-97%</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+
+            <p>Vector search and RAG occupy the left side -- they are retrieval tools. GraphRAG (as described by Microsoft and others) moves toward structure by extracting entities and relationships from text, but it still treats the graph as a retrieval index. The extracted relationships are descriptive, not prescriptive. They tell you what is related, not how to decide.</p>
+
+            <p>Structured Intelligence sits at the far right. The graph is not extracted from text after the fact. It is <strong>built deliberately</strong> by encoding how domain experts actually think -- their ontologies, their metrics, their decision rules. The AI agent does not retrieve context and hope the LLM reasons correctly. It traverses decision logic and arrives at answers that are structurally sound.</p>
+
+            <h2>Why This Matters for Agent Architectures</h2>
+
+            <p>The shift from retrieval to structured context changes what an AI agent fundamentally is. With RAG, the agent is a search engine that can talk. With structured intelligence, the agent is a decision system that can explain.</p>
+
+            <div class="blog-callout">
+                <p><strong>Agent memory tools</strong> (Mem0, Zep, Cognee) add persistence to agent conversations. They remember what happened. They do not encode how to decide.</p>
+                <p><strong>Vector databases</strong> (Pinecone, Weaviate) store and retrieve embeddings. They are the infrastructure under RAG. The same retrieval ceiling applies.</p>
+                <p><strong>Graph databases</strong> (Neo4j) store relationships. They are storage engines. They do not come with an ontology of what things mean, how to measure them, or how to decide.</p>
+                <p><strong>Orchestration frameworks</strong> (LangChain, LlamaIndex) connect LLMs to tools and data sources. They route queries. They do not structure the knowledge those queries run against.</p>
+                <p>None of these structure decision logic. Each solves a real problem -- memory, storage, retrieval, orchestration -- but none provides the agent with a model of how the business thinks.</p>
+            </div>
+
+            <p>This is why you can use all of these tools together and still plateau. The missing layer is not better retrieval, better memory, or better orchestration. It is structured context -- a traversable model of the entities, metrics, and decision rules that govern your domain.</p>
+
+            <h2>When to Use What</h2>
+
+            <p>Not every AI use case requires structured intelligence. Here is a practical framework:</p>
+
+            <h3>Use RAG when:</h3>
+            <ul>
+                <li>The answer exists in text and the task is finding it.</li>
+                <li>Decisions are single-variable or low-stakes (FAQ bots, document Q&A, summarization).</li>
+                <li>You need a working prototype fast and accuracy above 75% is acceptable.</li>
+            </ul>
+
+            <h3>Use GraphRAG when:</h3>
+            <ul>
+                <li>Relationships between entities matter for answer quality.</li>
+                <li>You need to reason across multiple documents or data sources.</li>
+                <li>Your domain has clear entity types and you want better retrieval, not decision automation.</li>
+            </ul>
+
+            <h3>Use Structured Intelligence when:</h3>
+            <ul>
+                <li>The agent needs to make or recommend decisions, not just retrieve information.</li>
+                <li>Decisions involve multiple variables from different organizational domains (finance, operations, compliance).</li>
+                <li>Accuracy above 90% is a requirement, not an aspiration.</li>
+                <li>The decision logic exists as tribal knowledge that has never been documented.</li>
+                <li>You need auditability -- the ability to trace exactly why a decision was made.</li>
+            </ul>
+
+            <p>The first two are retrieval problems. The third is a knowledge architecture problem. If your agents are making decisions that affect revenue, operations, or compliance, you are dealing with the third.</p>
+
+            <h2>The Path Forward</h2>
+
+            <p>The industry's current trajectory -- more parameters, better embeddings, longer context windows -- will continue to improve RAG incrementally. But it will not close the gap between retrieval and reasoning. That gap is architectural.</p>
+
+            <p>Closing it requires building a structured context layer: an intelligence graph that encodes what things are, how they are measured, and how decisions get made. That graph becomes the foundation that every agent, every model, and every workflow queries against. Build it once, and every subsequent use case compounds on the knowledge already encoded.</p>
+
+            <p>The question is not whether to use RAG or knowledge graphs. It is whether your AI agents are retrieving text or traversing intelligence. For enterprise decisions, the difference between those two approaches is the difference between a demo and a production system.</p>
+
+        </div>
+    </article>
+
+    <!-- CTA -->
+    <section class="section section-cta" id="contact">
+        <div class="container">
+            <div class="cta-content" data-animate>
+                <div class="section-label">GET STARTED</div>
+                <h2 class="section-title">Build the Foundation<br>Your AI Agents Need</h2>
+                <p class="section-desc" style="max-width:550px;margin:0 auto 2.5rem;">Stop building agents on fragmented context. Start with the infrastructure layer that makes AI actually work.</p>
+                <div class="cta-actions">
+                    <a href="mailto:hello@intelligencewarehouse.com" class="btn btn-primary btn-lg">Request a Demo <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></a>
+                    <a href="../partners.html" class="btn btn-outline btn-lg">Partner With Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="nav-logo" style="margin-bottom:1rem;">
+                        <div class="logo-mark">iw<span class="logo-dot">.</span></div>
+                    </div>
+                    <p class="footer-tagline">The foundation AI agents need.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col"><h5>Platform</h5><a href="../learn.html#architecture">Architecture</a><a href="../learn.html#process">How It Works</a><a href="../index.html#impact">Impact</a><a href="../team.html">Team</a></div>
+                    <div class="footer-col"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Blog</a><a href="../index.html#contact">Contact</a></div>
+                    <div class="footer-col"><h5>Resources</h5><a href="../IW-Whitepaper.pdf" target="_blank">Technical Paper</a><a href="#">API Docs</a><a href="../partners.html">Partners</a><a href="#">Security</a></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Intelligence Warehouse&trade;. All rights reserved.</span>
+                <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../main.js"></script>
+</body>
+</html>
