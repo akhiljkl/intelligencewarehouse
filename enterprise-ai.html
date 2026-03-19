@@ -18,1587 +18,1032 @@
       gtag('config', 'G-X17PMES96Q');
     </script>
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.intelligencewarehouse.com/enterprise-ai.html">
-    <meta property="og:title" content="Enterprise AI That Works | Intelligence Warehouse">
-    <meta property="og:description" content="Why 95% of AI agent projects fail and how context infrastructure changes the math.">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Enterprise AI That Works | Intelligence Warehouse">
-    <meta name="twitter:description" content="Why 95% of AI agent projects fail and how context infrastructure changes the math.">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
-        /* === PAGE-SPECIFIC STYLES === */
-
-        .ea-hero {
-            padding: 10rem 0 5rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        :root {
+            --bg: #0A0A0A;
+            --bg-card: #111111;
+            --bg-elevated: #161616;
+            --accent: #1B6B5A;
+            --accent-light: #24846F;
+            --orange: #FF6B00;
+            --teal: #0d9488;
+            --green: #00C87A;
+            --blue: #2563eb;
+            --red: #EF4444;
+            --copper: #B8734A;
+            --text: #F5F5F5;
+            --text-secondary: #999999;
+            --text-dim: #555555;
+            --border: rgba(255,255,255,0.08);
+            --glow-accent: rgba(27,107,90,0.15);
         }
 
-        .ea-hero::before {
-            content: '';
-            position: absolute;
-            top: -200px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 900px;
-            height: 900px;
-            background: radial-gradient(circle, rgba(27,107,90,0.06) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .ea-hero .container { position: relative; z-index: 1; }
+        html { scroll-behavior: smooth; }
 
-        .ea-hero-eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.45rem 1rem 0.45rem 0.65rem;
-            border-radius: 100px;
-            border: 1px solid var(--stone);
-            background: rgba(27,107,90,0.04);
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            color: var(--accent);
-            margin-bottom: 2rem;
-            font-family: var(--mono);
-            text-transform: uppercase;
-        }
-
-        .ea-hero-eyebrow .dot {
-            width: 8px; height: 8px;
-            background: var(--accent-light);
-            border-radius: 50%;
-            animation: eyebrowPulse 2.5s ease-in-out infinite;
-        }
-
-        .ea-hero h1 {
-            font-family: var(--serif);
-            font-size: clamp(2.2rem, 4.5vw, 3.5rem);
-            font-weight: 400;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-            margin-bottom: 1.5rem;
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
             color: var(--text);
-        }
-
-        .ea-hero-sub {
-            font-size: clamp(1rem, 1.4vw, 1.15rem);
-            color: var(--text-secondary);
-            max-width: 640px;
-            margin: 0 auto 3rem;
-            line-height: 1.8;
-        }
-
-        .ea-stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .ea-stat-item {
-            background: var(--bg-card);
-            padding: 1.75rem 1rem;
-            text-align: center;
-        }
-
-        .ea-stat-value {
-            font-family: var(--serif);
-            font-size: 2rem;
-            font-weight: 400;
-            color: var(--text);
-            line-height: 1;
-            margin-bottom: 0.5rem;
-        }
-
-        .ea-stat-value .accent { color: var(--accent); }
-
-        .ea-stat-label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            line-height: 1.4;
-        }
-
-        .ea-stat-source {
-            margin-top: 0.35rem;
-        }
-
-        .ea-stat-source a {
-            font-family: var(--mono);
-            font-size: 0.6rem;
-            color: var(--accent);
-            opacity: 0.7;
-            text-decoration: none;
-            border-bottom: 1px dotted rgba(27,107,90,0.3);
-            transition: opacity 0.2s;
-        }
-
-        .ea-stat-source a:hover { opacity: 1; }
-
-        /* === SECTIONS === */
-
-        .ea-section { padding: 6rem 0; }
-        .ea-section-alt { background: var(--bg-elevated); }
-
-        .ea-section-label {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .ea-section-title {
-            font-family: var(--serif);
-            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-            font-weight: 400;
-            line-height: 1.15;
-            letter-spacing: -0.01em;
-            margin-bottom: 1rem;
-            color: var(--text);
-        }
-
-        .ea-section-desc {
-            font-size: 1.05rem;
-            color: var(--text-secondary);
-            max-width: 640px;
-            line-height: 1.7;
-            margin-bottom: 3rem;
-        }
-
-        /* Source link style used everywhere */
-        .source-link {
-            font-family: var(--mono);
-            font-size: 0.65rem;
-            color: var(--accent);
-            text-decoration: none;
-            border-bottom: 1px dotted rgba(27,107,90,0.3);
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-        .source-link:hover {
-            opacity: 0.8;
-            border-bottom-style: solid;
-        }
-
-        /* === SECTION 1: ROI === */
-
-        .roi-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .roi-card {
-            border-radius: 12px;
-            padding: 2.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .roi-card-without {
-            background: #fff;
-            border: 1px solid var(--border);
-        }
-
-        .roi-card-with {
-            background: linear-gradient(135deg, rgba(27,107,90,0.04), rgba(27,107,90,0.08));
-            border: 1px solid rgba(27,107,90,0.15);
-        }
-
-        .roi-card-label {
-            font-family: var(--mono);
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-        }
-
-        .roi-card-without .roi-card-label { color: var(--red); }
-        .roi-card-with .roi-card-label { color: var(--accent); }
-
-        .roi-line {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            padding: 0.85rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .roi-line:last-child { border-bottom: none; }
-
-        .roi-line-label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .roi-line-value {
-            font-family: var(--mono);
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .roi-card-with .roi-line-value { color: var(--accent); }
-        .roi-card-without .roi-line-value { color: var(--red); }
-
-        /* === 200 AGENT ANALYSIS === */
-
-        .scale-analysis {
-            margin-bottom: 3rem;
-        }
-
-        .scale-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .scale-header h3 {
-            font-family: var(--serif);
-            font-size: 1.6rem;
-            color: var(--text);
-            margin-bottom: 0.5rem;
-        }
-
-        .scale-header p {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-        }
-
-        .scale-showdown {
-            display: grid;
-            grid-template-columns: 1fr 80px 1fr;
-            gap: 0;
-            align-items: stretch;
-            margin-bottom: 2.5rem;
-        }
-
-        .scale-col {
-            border-radius: 16px;
-            padding: 2.5rem 2rem;
-            text-align: center;
-        }
-
-        .scale-col-build {
-            background: #fff;
-            border: 1px solid var(--border);
-        }
-
-        .scale-col-iw {
-            background: linear-gradient(135deg, rgba(27,107,90,0.05), rgba(27,107,90,0.1));
-            border: 2px solid rgba(27,107,90,0.2);
-        }
-
-        .scale-col-label {
-            font-family: var(--mono);
-            font-size: 0.6rem;
-            font-weight: 700;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-        }
-
-        .scale-col-build .scale-col-label { color: var(--red); }
-        .scale-col-iw .scale-col-label { color: var(--accent); }
-
-        .scale-metric {
-            margin-bottom: 2rem;
-        }
-
-        .scale-metric:last-child { margin-bottom: 0; }
-
-        .scale-metric-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            margin-bottom: 0.4rem;
-        }
-
-        .scale-metric-value {
-            font-family: var(--serif);
-            font-size: 2.8rem;
-            line-height: 1;
-            margin-bottom: 0.25rem;
-        }
-
-        .scale-col-build .scale-metric-value { color: var(--red); }
-        .scale-col-iw .scale-metric-value { color: var(--accent); }
-
-        .scale-metric-sub {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-        }
-
-        .scale-vs {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .scale-vs-text {
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-dim);
-            writing-mode: vertical-rl;
-            letter-spacing: 0.1em;
-        }
-
-        .scale-savings {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border: 2px solid var(--accent);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .scale-saving-item {
-            background: var(--bg-card);
-            padding: 1.75rem 1rem;
-            text-align: center;
-        }
-
-        .scale-saving-value {
-            font-family: var(--serif);
-            font-size: 2.2rem;
-            color: var(--accent);
-            line-height: 1;
-            margin-bottom: 0.35rem;
-        }
-
-        .scale-saving-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            line-height: 1.3;
-        }
-
-        .scale-saving-math {
-            font-family: var(--mono);
-            font-size: 0.6rem;
-            color: var(--text-dim);
-            margin-top: 0.3rem;
-        }
-
-        /* === SECTION 2: BUILD VS BUY === */
-
-        .bvb-evidence {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .bvb-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-        }
-
-        .bvb-card-source {
-            font-family: var(--mono);
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .bvb-card-source a {
-            color: var(--accent);
-            text-decoration: none;
-            border-bottom: 1px dotted rgba(27,107,90,0.3);
-            text-transform: none;
-            letter-spacing: 0;
-            font-size: 0.65rem;
-        }
-
-        .bvb-card-source a:hover { border-bottom-style: solid; }
-
-        .bvb-card-stat {
-            font-family: var(--serif);
-            font-size: 2.5rem;
-            color: var(--text);
-            margin-bottom: 0.5rem;
-            line-height: 1;
-        }
-
-        .bvb-card-stat .red { color: var(--red); }
-
-        .bvb-card-text {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .bvb-thesis {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .bvb-thesis-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .bvb-thesis-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .bvb-thesis-icon.fc { background: rgba(37,99,235,0.08); color: var(--blue); }
-        .bvb-thesis-icon.at { background: rgba(27,107,90,0.08); color: var(--accent); }
-
-        .bvb-thesis-source {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            font-weight: 600;
-        }
-
-        .bvb-thesis-source a {
-            color: var(--accent);
-            text-decoration: none;
-            border-bottom: 1px dotted rgba(27,107,90,0.3);
-            text-transform: none;
-            letter-spacing: 0;
-        }
-
-        .bvb-thesis-source a:hover { border-bottom-style: solid; }
-
-        .bvb-thesis-quote {
-            font-family: var(--serif);
-            font-size: 1.35rem;
-            line-height: 1.45;
-            color: var(--text);
-            margin-bottom: 1rem;
-        }
-
-        .bvb-thesis-body {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        .bvb-cost-table {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .bvb-table-header {
-            display: grid;
-            grid-template-columns: 2fr 1.5fr 1fr 1fr;
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
             padding: 1rem 2rem;
-            background: var(--bg-elevated);
+            display: flex; align-items: center; justify-content: space-between;
+            backdrop-filter: blur(20px);
+            background: rgba(10,10,10,0.8);
             border-bottom: 1px solid var(--border);
         }
+        .nav-logo { font-weight: 800; font-size: 1.4rem; color: var(--accent); text-decoration: none; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.03em; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .nav-cta { background: var(--accent); color: white; padding: 0.5rem 1.25rem; border-radius: 100px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
+        .nav-cta:hover { background: var(--accent-light); transform: translateY(-1px); }
 
-        .bvb-table-header span {
-            font-family: var(--mono);
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-dim);
+        /* SECTIONS */
+        section { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .full-width { max-width: 100%; padding: 6rem 0; }
+
+        .eyebrow {
+            text-transform: uppercase; font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 0.12em; color: var(--accent); margin-bottom: 0.75rem;
         }
 
-        .bvb-table-row {
-            display: grid;
-            grid-template-columns: 2fr 1.5fr 1fr 1fr;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid var(--border);
-            align-items: center;
+        h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
+        h3 { font-size: 1.5rem; font-weight: 700; line-height: 1.3; }
+
+        .subtitle { color: var(--text-secondary); font-size: 1.25rem; margin-top: 1rem; max-width: 700px; font-weight: 400; }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            padding-top: 5rem; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 20%; left: 50%; width: 800px; height: 800px;
+            background: radial-gradient(circle, var(--glow-accent) 0%, transparent 70%);
+            transform: translate(-50%, -50%); pointer-events: none;
+            animation: glowPulse 8s ease-in-out infinite;
+        }
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.1); }
         }
 
-        .bvb-table-row:last-child { border-bottom: none; }
-        .bvb-table-row.highlight { background: rgba(27,107,90,0.03); }
-
-        .bvb-table-row span {
-            font-size: 0.88rem;
-            color: var(--text-secondary);
+        .hero-number {
+            font-size: clamp(6rem, 15vw, 12rem); font-weight: 900; line-height: 0.9;
+            background: linear-gradient(135deg, var(--text), var(--text-secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            position: relative; z-index: 1;
         }
+        .hero h1 { position: relative; z-index: 1; margin-top: 0.5rem; }
+        .hero .subtitle { position: relative; z-index: 1; }
 
-        .bvb-table-row span:first-child {
-            font-weight: 500;
-            color: var(--text);
+        .source-strip {
+            margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border);
+            position: relative; z-index: 1;
         }
-
-        .bvb-table-row.highlight span {
-            color: var(--accent);
-            font-weight: 600;
+        .source-strip a {
+            display: block; color: var(--text-dim); font-size: 0.75rem; text-decoration: none;
+            margin-bottom: 0.35rem; transition: color 0.2s;
         }
+        .source-strip a:hover { color: var(--text-secondary); }
+        .source-strip a span { color: var(--text-secondary); font-weight: 600; }
 
-        /* === SECTION 3: ARCHITECTURE (TERMINAL STYLE) === */
-
-        .arch-terminal-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            max-width: 1000px;
-            margin: 0 auto 2rem;
-        }
-
-        .arch-terminal {
-            background: #1a1a1a;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #333;
-        }
-
-        .arch-terminal-bar {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 14px;
-            background: #252525;
-            border-bottom: 1px solid #333;
-        }
-
-        .arch-terminal-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .arch-terminal-dot.r { background: #ff5f57; }
-        .arch-terminal-dot.y { background: #febc2e; }
-        .arch-terminal-dot.g { background: #28c840; }
-
-        .arch-terminal-title {
-            font-family: var(--mono);
-            font-size: 0.65rem;
-            color: #888;
-            margin-left: 8px;
-            letter-spacing: 0.03em;
-        }
-
-        .arch-terminal-body {
-            padding: 1.25rem;
-            font-family: var(--mono);
-            font-size: 0.75rem;
-            line-height: 1.7;
-            color: #ccc;
-            overflow-x: auto;
-        }
-
-        .arch-terminal-body .comment { color: #6a9955; }
-        .arch-terminal-body .keyword { color: #569cd6; }
-        .arch-terminal-body .string { color: #ce9178; }
-        .arch-terminal-body .func { color: #dcdcaa; }
-        .arch-terminal-body .num { color: #b5cea8; }
-        .arch-terminal-body .type { color: #4ec9b0; }
-        .arch-terminal-body .param { color: #9cdcfe; }
-        .arch-terminal-body .op { color: #d4d4d4; }
-        .arch-terminal-body .prompt { color: #6a9955; user-select: none; }
-        .arch-terminal-body .output { color: #4ec9b0; }
-        .arch-terminal-body .dimmed { color: #666; }
-        .arch-terminal-body .highlight { color: #dcdcaa; }
-        .arch-terminal-body .warn { color: #d7ba7d; }
-        .arch-terminal-body .accent-t { color: #4fc1a6; }
-        .arch-terminal-body .error-t { color: #f44747; }
-
-        .arch-terminal.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .arch-flow-visual {
-            max-width: 1000px;
-            margin: 0 auto 2rem;
-            background: #1a1a1a;
-            border-radius: 12px;
-            border: 1px solid #333;
-            padding: 2.5rem 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .arch-flow-visual::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 30px 30px;
-            pointer-events: none;
-        }
-
-        .arch-flow-layers {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        .arch-flow-layer {
-            text-align: center;
-            padding: 1.25rem 1.5rem;
-            position: relative;
-        }
-
-        .arch-flow-box {
-            padding: 0.75rem 1.25rem;
-            border-radius: 8px;
-            font-family: var(--mono);
-            font-size: 0.72rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-            white-space: nowrap;
-        }
-
-        .arch-flow-box.data {
-            background: rgba(37,99,235,0.15);
-            border: 1px solid rgba(37,99,235,0.3);
-            color: #7bb3ff;
-        }
-
-        .arch-flow-box.graph {
-            background: rgba(217,119,6,0.15);
-            border: 1px solid rgba(217,119,6,0.3);
-            color: #f0c674;
-        }
-
-        .arch-flow-box.traverse {
-            background: rgba(196,69,60,0.15);
-            border: 1px solid rgba(196,69,60,0.3);
-            color: #f07178;
-        }
-
-        .arch-flow-box.mcp {
-            background: rgba(27,107,90,0.2);
-            border: 1px solid rgba(27,107,90,0.4);
-            color: #4fc1a6;
-        }
-
-        .arch-flow-box.agent {
-            background: rgba(184,115,74,0.15);
-            border: 1px solid rgba(184,115,74,0.3);
-            color: #e0a370;
-        }
-
-        .arch-flow-sub {
-            font-size: 0.6rem;
-            color: #666;
-            font-family: var(--mono);
-        }
-
-        .arch-flow-arrow {
-            color: #444;
-            font-size: 1.2rem;
-            padding: 0 0.25rem;
-            font-family: var(--mono);
-        }
-
-        .arch-flow-caption {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-family: var(--mono);
-            font-size: 0.68rem;
-            color: #555;
-            position: relative;
-            z-index: 1;
-        }
-
-        .arch-model-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: rgba(27,107,90,0.05);
-            border: 1px solid rgba(27,107,90,0.12);
-            border-radius: 100px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .arch-model-badge span {
-            font-family: var(--mono);
-            font-size: 0.72rem;
-            font-weight: 500;
-            color: var(--accent);
-        }
-
-        .arch-model-badge .sep {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: rgba(27,107,90,0.3);
-        }
-
-        /* === SECTION 4: NEO4J === */
-
-        .neo-comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 3rem;
-        }
-
-        .neo-col { padding: 2.5rem; }
-        .neo-col:first-child { border-right: 1px solid var(--border); }
-
-        .neo-col-header {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+        /* QUESTION HEADERS */
+        .q-header {
+            display: inline-flex; align-items: center; gap: 0.75rem;
             margin-bottom: 1.5rem;
         }
-
-        .neo-col:first-child .neo-col-header { color: var(--text-dim); }
-        .neo-col:last-child .neo-col-header { color: var(--accent); }
-
-        .neo-row {
-            padding: 0.85rem 0;
-            border-bottom: 1px solid var(--border);
+        .q-number {
+            background: var(--accent); color: white; font-size: 0.7rem; font-weight: 800;
+            padding: 0.3rem 0.7rem; border-radius: 100px; letter-spacing: 0.08em;
         }
 
-        .neo-row:last-child { border-bottom: none; }
-
-        .neo-row-label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-bottom: 0.25rem;
-            font-weight: 500;
+        /* ROI COMPARISON */
+        .comparison-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+            margin-top: 2.5rem;
         }
-
-        .neo-row-value {
-            font-size: 0.9rem;
-            color: var(--text);
-            line-height: 1.4;
+        .comp-card {
+            background: var(--bg-card); border-radius: 12px; padding: 2.5rem;
+            border: 1px solid var(--border); position: relative; overflow: hidden;
         }
-
-        .neo-col:first-child .neo-row-value { color: var(--text-secondary); }
-        .neo-col:last-child .neo-row-value { color: var(--text); font-weight: 500; }
-
-        .neo-analogy {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2.5rem;
-            text-align: center;
+        .comp-card.bad { border-color: rgba(239,68,68,0.3); }
+        .comp-card.good { border-color: rgba(27,107,90,0.4); }
+        .comp-card.bad::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: var(--red);
         }
-
-        .neo-analogy-text {
-            font-family: var(--serif);
-            font-size: 1.5rem;
-            line-height: 1.4;
-            color: var(--text);
-            margin-bottom: 1rem;
+        .comp-card.good::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: var(--accent);
         }
-
-        .neo-analogy-sub {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            max-width: 560px;
-            margin: 0 auto;
-            line-height: 1.6;
+        .comp-label {
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; margin-bottom: 1.5rem;
         }
+        .comp-card.bad .comp-label { color: var(--red); }
+        .comp-card.good .comp-label { color: var(--accent-light); }
 
-        .neo-build-list {
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem 2.5rem;
-            margin-bottom: 3rem;
+        .stat-row {
+            display: flex; justify-content: space-between; align-items: baseline;
+            padding: 0.75rem 0; border-bottom: 1px solid var(--border);
         }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { color: var(--text-dim); font-size: 0.8rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+        .stat-value { font-size: 1.6rem; font-weight: 800; }
+        .stat-value.red { color: var(--red); }
+        .stat-value.green { color: var(--green); }
+        .stat-sub { color: var(--text-dim); font-size: 0.75rem; margin-top: 0.15rem; }
 
-        .neo-build-title {
-            font-family: var(--mono);
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--red);
-            margin-bottom: 1.25rem;
+        /* BIG STATS ROW */
+        .big-stats {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+            margin: 3rem 0; padding: 3rem 0;
+            border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
         }
-
-        .neo-build-items {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.6rem;
+        .big-stat { text-align: center; }
+        .big-stat-number {
+            font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 900; line-height: 1;
+            color: var(--accent);
         }
+        .big-stat-label { font-size: 1rem; font-weight: 600; margin-top: 0.5rem; }
+        .big-stat-sub { color: var(--text-dim); font-size: 0.85rem; margin-top: 0.25rem; }
 
-        .neo-build-item {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-size: 0.88rem;
-            color: var(--text-secondary);
+        /* RESEARCH CARDS */
+        .research-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+            margin-top: 2.5rem;
         }
-
-        .neo-build-item .x-mark {
-            width: 20px;
-            height: 20px;
-            border-radius: 6px;
-            background: rgba(196,69,60,0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: var(--red);
-            font-size: 0.65rem;
-            font-weight: 700;
+        .research-card {
+            background: var(--bg-card); border-radius: 12px; padding: 2rem;
+            border: 1px solid var(--border); transition: border-color 0.3s;
         }
-
-        /* === CTA === */
-
-        .ea-cta { padding: 6rem 0; text-align: center; }
-        .ea-cta-inner { max-width: 600px; margin: 0 auto; }
-
-        .ea-cta h2 {
-            font-family: var(--serif);
-            font-size: clamp(1.8rem, 3vw, 2.5rem);
-            font-weight: 400;
-            line-height: 1.15;
-            margin-bottom: 1rem;
-            color: var(--text);
+        .research-card:hover { border-color: rgba(27,107,90,0.3); }
+        .research-source {
+            font-size: 0.72rem; font-weight: 700; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem;
         }
+        .research-number {
+            font-size: 3.5rem; font-weight: 900; line-height: 1; margin-bottom: 0.5rem;
+        }
+        .research-text { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
+        .research-link {
+            display: inline-block; margin-top: 1rem; color: var(--text-dim);
+            font-size: 0.72rem; text-decoration: none; font-family: 'JetBrains Mono', monospace;
+            transition: color 0.2s;
+        }
+        .research-link:hover { color: var(--accent); }
 
-        .ea-cta p {
-            font-size: 1rem;
-            color: var(--text-secondary);
+        /* ARCHITECTURE */
+        .arch-section { padding: 6rem 0; }
+        .arch-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .arch-canvas-wrap {
+            position: relative; width: 100%; height: 420px;
+            margin: 3rem 0 1rem; background: var(--bg-card); border-radius: 16px;
+            border: 1px solid var(--border); overflow: hidden;
+        }
+        #archCanvas { width: 100%; height: 100%; }
+
+        .arch-labels {
+            display: flex; justify-content: space-between; padding: 0 3%;
             margin-bottom: 2rem;
-            line-height: 1.7;
+        }
+        .arch-label {
+            text-align: center; font-size: 0.72rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim);
+        }
+        .arch-label span { display: block; color: var(--text-secondary); font-size: 0.68rem; font-weight: 400; text-transform: none; letter-spacing: 0; margin-top: 0.2rem; }
+
+        .arch-tools {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .arch-tool {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+            padding: 1rem; text-align: center;
+        }
+        .arch-tool code {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 600;
+            display: block; margin-bottom: 0.4rem;
+        }
+        .arch-tool .desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; }
+
+        .model-strip {
+            text-align: center; margin-top: 1.5rem; color: var(--text-dim);
+            font-size: 0.82rem; font-weight: 500;
+        }
+        .model-strip strong { color: var(--text-secondary); }
+
+        /* TRAVERSAL TERMINAL */
+        .terminal {
+            background: #0C0C0C; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; overflow: hidden; margin: 2.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .terminal-bar {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.75rem 1rem; background: #1A1A1A; border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .terminal-dot.r { background: #FF5F57; }
+        .terminal-dot.y { background: #FFBD2E; }
+        .terminal-dot.g { background: #28CA42; }
+        .terminal-title { color: var(--text-dim); font-size: 0.72rem; margin-left: 0.5rem; }
+
+        .terminal-body { padding: 1.5rem; font-size: 0.82rem; line-height: 1.8; }
+        .terminal-body .prompt { color: var(--accent); }
+        .terminal-body .cmd { color: var(--text); }
+        .terminal-body .comment { color: var(--text-dim); }
+        .terminal-body .output { color: var(--text-secondary); }
+        .terminal-body .success { color: var(--green); }
+        .terminal-body .warn { color: var(--copper); }
+        .terminal-body .info { color: var(--blue); }
+        .terminal-body .highlight { color: var(--accent-light); font-weight: 600; }
+
+        .terminal-line {
+            opacity: 0; transform: translateY(6px);
+            animation: termLine 0.3s ease forwards;
         }
 
-        .ea-cta-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
+        @keyframes termLine {
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* === RESPONSIVE === */
+        /* AGENT TIMELINE */
+        .timeline {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+            margin: 2.5rem 0; position: relative;
+        }
+        .timeline::before {
+            content: ''; position: absolute; top: 3.5rem; left: 5%; right: 5%;
+            height: 2px; background: var(--border);
+        }
+        .timeline-step { text-align: center; position: relative; padding: 0 1rem; }
+        .timeline-dot {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--bg-card); border: 2px solid var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.25rem; font-weight: 800; font-size: 0.85rem;
+            position: relative; z-index: 2;
+        }
+        .timeline-day { font-size: 0.72rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem; }
+        .timeline-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .timeline-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
 
+        /* NEO4J SECTION */
+        .analogy-block {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+            padding: 3rem; text-align: center; margin: 2.5rem 0;
+        }
+        .analogy-block .analogy-text {
+            font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700;
+            color: var(--accent); line-height: 1.3;
+        }
+        .analogy-block .analogy-sub {
+            color: var(--text-secondary); font-size: 1.1rem; margin-top: 1rem;
+        }
+
+        .still-build {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+            margin-top: 2rem;
+        }
+        .still-build-item {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.6rem 0; font-size: 0.9rem; color: var(--text-secondary);
+        }
+        .still-build-item .x { color: var(--red); font-weight: 700; font-size: 1rem; }
+
+        /* BOTTOM LINE */
+        .bottom-line {
+            text-align: center; font-size: 1.1rem; color: var(--text-secondary);
+            max-width: 700px; margin: 1rem auto 0; font-weight: 500;
+        }
+        .bottom-line strong { color: var(--text); }
+
+        /* CTA */
+        .cta-section {
+            text-align: center; padding: 6rem 2rem 4rem;
+            position: relative;
+        }
+        .cta-section::before {
+            content: ''; position: absolute; bottom: 0; left: 50%; width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--glow-accent) 0%, transparent 70%);
+            transform: translate(-50%, 50%); pointer-events: none;
+        }
+        .cta-stats {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+            margin: 3rem auto; max-width: 800px; position: relative; z-index: 1;
+        }
+        .cta-stat-num { font-size: 2rem; font-weight: 800; color: var(--accent); }
+        .cta-stat-label { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.25rem; }
+
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: var(--accent); color: white; padding: 0.85rem 2rem;
+            border-radius: 100px; text-decoration: none; font-weight: 700;
+            font-size: 1rem; transition: all 0.25s; position: relative; z-index: 1;
+        }
+        .cta-btn:hover { background: var(--accent-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(27,107,90,0.3); }
+
+        /* SCROLL ANIMATIONS */
+        [data-animate] {
+            opacity: 0; transform: translateY(24px);
+            transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        [data-animate].visible { opacity: 1; transform: translateY(0); }
+
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            .ea-stats-bar { grid-template-columns: repeat(2, 1fr); }
-            .roi-grid { grid-template-columns: 1fr; }
-            .scale-showdown { grid-template-columns: 1fr; }
-            .scale-vs { display: none; }
-            .scale-savings { grid-template-columns: 1fr; }
-            .bvb-evidence { grid-template-columns: 1fr; }
-            .bvb-table-header, .bvb-table-row { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-            .arch-terminal-grid { grid-template-columns: 1fr; }
-            .arch-terminal.full-width { grid-column: auto; }
-            .arch-flow-layers { flex-direction: column; gap: 0.5rem; }
-            .arch-flow-arrow { transform: rotate(90deg); }
-            .neo-comparison { grid-template-columns: 1fr; }
-            .neo-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
-            .neo-build-items { grid-template-columns: 1fr; }
+            nav { padding: 0.75rem 1rem; }
+            .nav-links { display: none; }
+            section { padding: 4rem 1.25rem; }
+            .comparison-grid, .research-grid, .still-build { grid-template-columns: 1fr; }
+            .big-stats { grid-template-columns: 1fr; gap: 1.5rem; }
+            .timeline { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .timeline::before { display: none; }
+            .arch-canvas-wrap { height: 300px; }
+            .arch-tools { grid-template-columns: 1fr 1fr; }
+            .cta-stats { grid-template-columns: 1fr 1fr; }
+        }
+
+        .divider {
+            border: none; border-top: 1px solid var(--border);
+            margin: 0;
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav class="nav" id="nav">
-        <div class="nav-inner">
-            <a href="index.html" class="nav-logo">
-                <div class="logo-mark">iw<span class="logo-dot">.</span></div>
-            </a>
-            <div class="nav-links">
-                <a href="learn.html">Why IW</a>
-                <a href="demo.html">Demo</a>
-                <a href="cortex.html">Cortex</a>
-                <a href="case-studies.html">Case Studies</a>
-                <a href="blog/">Blog</a>
-                <a href="partners.html">Partners</a>
-                <a href="team.html">Team</a>
-            </div>
-            <div class="nav-actions">
-                <a href="#contact" class="btn btn-ghost">Contact</a>
-                <a href="#contact" class="btn btn-primary">Request Demo</a>
-            </div>
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-    </nav>
+<!-- NAV -->
+<nav>
+    <a href="/" class="nav-logo">iw.</a>
+    <div class="nav-links">
+        <a href="#roi">ROI</a>
+        <a href="#build-vs-buy">Build vs Buy</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#graph-db">Graph DB</a>
+    </div>
+    <a href="mailto:hello@intelligencewarehouse.com" class="nav-cta">Get a Demo</a>
+</nav>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="learn.html">Why IW</a>
-        <a href="demo.html">Demo</a>
-        <a href="cortex.html">Cortex</a>
-        <a href="case-studies.html">Case Studies</a>
-        <a href="blog/">Blog</a>
-        <a href="partners.html">Partners</a>
-        <a href="team.html">Team</a>
-        <a href="#contact" class="btn btn-primary" style="margin-top:1.5rem;width:100%;text-align:center;">Request Demo</a>
+<!-- HERO -->
+<section class="hero" id="top">
+    <div class="hero-number" data-animate data-counter="95">95%</div>
+    <h1 data-animate style="animation-delay:0.1s">of AI pilots deliver zero P&L impact.</h1>
+    <p class="subtitle" data-animate style="animation-delay:0.2s">Not because models are bad.<br>Because they have no context.</p>
+
+    <div class="source-strip" data-animate style="animation-delay:0.3s">
+        <a href="https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots" target="_blank"><span>MIT — The GenAI Divide, 2025</span> — 95% of AI pilots fail to deliver measurable P&L impact</a>
+        <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank"><span>McKinsey — State of AI, 2025</span> — Only 6% of organizations achieve &gt;5% EBIT impact from AI</a>
+        <a href="https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027" target="_blank"><span>Gartner, June 2025</span> — 40%+ of agentic AI projects will be canceled by 2027</a>
+    </div>
+</section>
+
+<hr class="divider">
+
+<!-- Q1: ROI -->
+<section id="roi">
+    <div class="q-header" data-animate>
+        <span class="q-number">QUESTION 1</span>
+    </div>
+    <h2 data-animate>What's the ROI?</h2>
+    <p class="subtitle" data-animate>An enterprise needs ~200 agents across functions. Here's the math.</p>
+
+    <div class="comparison-grid" data-animate>
+        <div class="comp-card bad">
+            <div class="comp-label">Build Each Agent From Scratch</div>
+            <div class="stat-row">
+                <div class="stat-label">Total Cost</div>
+                <div><div class="stat-value red">$30M – $100M</div><div class="stat-sub">200 agents × $150K–$500K each</div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Time to Deploy</div>
+                <div><div class="stat-value red">8 – 15 years</div><div class="stat-sub">Sequential builds, 6–12 months each</div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Accuracy</div>
+                <div><div class="stat-value red">~62%</div><div class="stat-sub">RAG ceiling without context structure</div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Agents That Work</div>
+                <div><div class="stat-value red">44 of 200</div><div class="stat-sub">22% success rate (MIT)</div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Switch LLM</div>
+                <div><div class="stat-value red" style="font-size:1.1rem">Re-prompt, re-test, re-validate</div></div>
+            </div>
+        </div>
+
+        <div class="comp-card good">
+            <div class="comp-label">Build on Intelligence Warehouse</div>
+            <div class="stat-row">
+                <div class="stat-label">Total Cost</div>
+                <div><div class="stat-value green">&lt; $3M</div><div class="stat-sub">Fixed infra + &lt;10% marginal per agent</div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Time to Deploy</div>
+                <div><div class="stat-value green">&lt; 2 years</div><div class="stat-sub">6 weeks first + 11 days each after</div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Accuracy</div>
+                <div><div class="stat-value green">96%</div><div class="stat-sub">Proven at Fortune 50 scale</div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Agents That Work</div>
+                <div><div class="stat-value green">200 of 200</div><div class="stat-sub">Same graph, all connected</div></div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-label">Switch LLM</div>
+                <div><div class="stat-value green" style="font-size:1.1rem">Zero. Intelligence in graph.</div></div>
+            </div>
+        </div>
     </div>
 
-    <!-- ============================== -->
-    <!-- HERO -->
-    <!-- ============================== -->
-    <section class="ea-hero">
-        <div class="container">
-            <div class="ea-hero-eyebrow">
-                <span class="dot"></span>
-                Enterprise AI Decision Brief
+    <div class="big-stats" data-animate>
+        <div class="big-stat">
+            <div class="big-stat-number" data-counter-target="97">90–97%</div>
+            <div class="big-stat-label">Cost Reduction</div>
+            <div class="big-stat-sub">$30M+ → &lt; $3M</div>
+        </div>
+        <div class="big-stat">
+            <div class="big-stat-number">4–7×</div>
+            <div class="big-stat-label">Faster Deployment</div>
+            <div class="big-stat-sub">15 years → &lt; 2 years</div>
+        </div>
+        <div class="big-stat">
+            <div class="big-stat-number">4.5×</div>
+            <div class="big-stat-label">More Working Agents</div>
+            <div class="big-stat-sub">44 survive → 200 work</div>
+        </div>
+    </div>
+
+    <p class="bottom-line" data-animate><strong>Build the graph once.</strong> Every agent after that is marginal cost.</p>
+</section>
+
+<hr class="divider">
+
+<!-- Q2: BUILD VS BUY -->
+<section id="build-vs-buy">
+    <div class="q-header" data-animate>
+        <span class="q-number">QUESTION 2</span>
+    </div>
+    <h2 data-animate>Build or Buy?</h2>
+    <p class="subtitle" data-animate>Every major research firm answered this in 2025.</p>
+
+    <div class="research-grid" data-animate>
+        <div class="research-card">
+            <div class="research-source">MIT — The GenAI Divide, Aug 2025</div>
+            <div class="research-number">3×</div>
+            <div class="research-text">Buying from specialized vendors succeeds 67% of the time. Building internally: ~22%. Foundation infrastructure should be bought, not built.</div>
+            <a class="research-link" href="https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots" target="_blank">fortune.com/mit-report →</a>
+        </div>
+        <div class="research-card">
+            <div class="research-source">McKinsey — State of AI, Nov 2025</div>
+            <div class="research-number">6%</div>
+            <div class="research-text">Only 6% of organizations are AI high performers with &gt;5% EBIT impact. What separates them: redesigned workflows around structured context, not better models.</div>
+            <a class="research-link" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank">mckinsey.com/state-of-ai →</a>
+        </div>
+        <div class="research-card">
+            <div class="research-source">Gartner — Agentic AI Forecast, Jun 2025</div>
+            <div class="research-number">40%+</div>
+            <div class="research-text">Of agentic AI projects will be canceled by 2027 due to escalating costs and unclear business value. Only ~130 of thousands of vendors are real.</div>
+            <a class="research-link" href="https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027" target="_blank">gartner.com/agentic-ai →</a>
+        </div>
+        <div class="research-card">
+            <div class="research-source">Foundation Capital — Context Graphs, Dec 2025</div>
+            <div class="research-number" style="font-size:2rem; line-height:1.3;">"Trillion-dollar<br>opportunity"</div>
+            <div class="research-text">The next platforms won't add AI to data. They'll capture the decision traces that make data actionable. Systems of record capture what happened. Agents need the why.</div>
+            <a class="research-link" href="https://foundationcapital.com/ideas/context-graphs-ais-trillion-dollar-opportunity" target="_blank">foundationcapital.com/context-graphs →</a>
+        </div>
+    </div>
+
+    <p class="bottom-line" data-animate style="margin-top:2.5rem"><strong>The consensus:</strong> Don't build context infrastructure. Buy it. Build agents on top.</p>
+</section>
+
+<hr class="divider">
+
+<!-- Q3: HOW IT WORKS -->
+<section id="how-it-works" class="arch-section">
+    <div class="arch-container">
+        <div class="q-header" data-animate>
+            <span class="q-number">QUESTION 3</span>
+        </div>
+        <h2 data-animate>How It Works</h2>
+        <p class="subtitle" data-animate>Intelligence stays in the graph. Agents query it. Models are swappable.</p>
+
+        <!-- ANIMATED ARCHITECTURE DIAGRAM -->
+        <div class="arch-canvas-wrap" data-animate>
+            <canvas id="archCanvas"></canvas>
+        </div>
+
+        <div class="arch-labels" data-animate>
+            <div class="arch-label">Your Data<span>Already have this</span></div>
+            <div class="arch-label" style="color:var(--accent)">Intelligence Graph<span>We build this</span></div>
+            <div class="arch-label" style="color:var(--green)">MCP Server<span>We expose this</span></div>
+            <div class="arch-label">Your Agents<span>You build these</span></div>
+        </div>
+
+        <!-- MCP TOOLS -->
+        <h3 data-animate style="margin-top:2.5rem; margin-bottom:1rem;">4 Tools. Any LLM. Full Access.</h3>
+        <div class="arch-tools" data-animate>
+            <div class="arch-tool">
+                <code style="color:var(--blue)">resolve_entity()</code>
+                <div class="desc">Map any entity to its full hierarchy, relationships, and ownership</div>
             </div>
-            <h1>95% of AI Pilots Deliver<br>Zero P&L Impact.<br><span class="text-gradient">Here's the Fix.</span></h1>
-            <p class="ea-hero-sub">
-                The gap between AI demo and AI value isn't the model.<br>
-                It's the absence of structured context infrastructure.
-            </p>
-            <div class="ea-stats-bar">
-                <div class="ea-stat-item">
-                    <div class="ea-stat-value"><span class="accent">95%</span></div>
-                    <div class="ea-stat-label">AI pilots deliver no measurable P&L impact</div>
-                    <div class="ea-stat-source"><a href="https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo/" target="_blank" rel="noopener">MIT 2025 &nearr;</a></div>
-                </div>
-                <div class="ea-stat-item">
-                    <div class="ea-stat-value"><span class="accent">80%</span></div>
-                    <div class="ea-stat-label">of companies report no earnings from gen AI</div>
-                    <div class="ea-stat-source"><a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener">McKinsey 2025 &nearr;</a></div>
-                </div>
-                <div class="ea-stat-item">
-                    <div class="ea-stat-value"><span class="accent">40%</span></div>
-                    <div class="ea-stat-label">of agentic AI projects will be canceled by 2027</div>
-                    <div class="ea-stat-source"><a href="https://byteiota.com/gartner-40-agentic-ai-projects-fail-heres-why/" target="_blank" rel="noopener">Gartner &nearr;</a></div>
-                </div>
-                <div class="ea-stat-item">
-                    <div class="ea-stat-value"><span class="accent">3x</span></div>
-                    <div class="ea-stat-label">higher success rate when buying vs building</div>
-                    <div class="ea-stat-source"><a href="https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo/" target="_blank" rel="noopener">MIT 2025 &nearr;</a></div>
-                </div>
+            <div class="arch-tool">
+                <code style="color:var(--green)">compute_metric()</code>
+                <div class="desc">Calculate any KPI at any granularity with traceable formulas</div>
+            </div>
+            <div class="arch-tool">
+                <code style="color:var(--copper)">evaluate_rule()</code>
+                <div class="desc">Execute decision rules with authority chains and exception handling</div>
+            </div>
+            <div class="arch-tool">
+                <code style="color:var(--text)">traverse_path()</code>
+                <div class="desc">Discover cross-functional decisions no team could see alone</div>
             </div>
         </div>
-    </section>
 
+        <div class="model-strip" data-animate>
+            Works with <strong>Claude</strong> · <strong>GPT</strong> · <strong>Gemini</strong> · <strong>Llama</strong> · <strong>Any model</strong> — zero knowledge loss on switch
+        </div>
 
-    <!-- ============================== -->
-    <!-- SECTION 1: ROI + 200 AGENT ANALYSIS -->
-    <!-- ============================== -->
-    <section class="ea-section" id="roi">
-        <div class="container">
-            <div class="ea-section-label">THE ROI QUESTION</div>
-            <h2 class="ea-section-title">The Math With and Without<br>Context Infrastructure</h2>
-            <p class="ea-section-desc">
-                Industry average for building one enterprise AI agent from scratch: $150K&ndash;$500K, 6&ndash;12 months, 78% failure rate. Each new use case restarts the clock.
-                <a href="https://www.azilen.com/blog/ai-agent-development-cost/" target="_blank" rel="noopener" class="source-link">Source &nearr;</a>
-            </p>
+        <!-- QUERY TRAVERSAL TERMINAL -->
+        <h3 data-animate style="margin-top:3.5rem; margin-bottom:0.25rem;">A Query Hits the Graph</h3>
+        <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:1rem;" data-animate>"Should we markdown GlowMax Men 50ml in North zone?"</p>
 
-            <div class="roi-grid">
-                <!-- WITHOUT IW -->
-                <div class="roi-card roi-card-without">
-                    <div class="roi-card-label">Without Intelligence Warehouse</div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">First use case</span>
-                        <span class="roi-line-value">$150K &ndash; $500K+</span>
-                    </div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">Time to production</span>
-                        <span class="roi-line-value">6 &ndash; 12 months</span>
-                    </div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">Second use case</span>
-                        <span class="roi-line-value">~Same cost, same risk</span>
-                    </div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">Success rate (internal build)</span>
-                        <span class="roi-line-value">~22%</span>
-                    </div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">Model switch cost</span>
-                        <span class="roi-line-value">Re-prompt, re-test, re-validate</span>
-                    </div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">Cross-functional decisions</span>
-                        <span class="roi-line-value">Manual, siloed</span>
-                    </div>
-                </div>
-
-                <!-- WITH IW -->
-                <div class="roi-card roi-card-with">
-                    <div class="roi-card-label">With Intelligence Warehouse</div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">First use case</span>
-                        <span class="roi-line-value">6 weeks to production</span>
-                    </div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">Time to production</span>
-                        <span class="roi-line-value">6 weeks (proven at Fortune 50)</span>
-                    </div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">Each subsequent use case</span>
-                        <span class="roi-line-value">&lt;10% marginal cost</span>
-                    </div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">Decision accuracy</span>
-                        <span class="roi-line-value">96% (across 3 deployments)</span>
-                    </div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">Model switch cost</span>
-                        <span class="roi-line-value">Zero. Intelligence stays in the graph.</span>
-                    </div>
-                    <div class="roi-line">
-                        <span class="roi-line-label">Cross-functional decisions</span>
-                        <span class="roi-line-value">Auto-discovered via traversal</span>
-                    </div>
-                </div>
+        <div class="terminal" data-animate id="queryTerminal">
+            <div class="terminal-bar">
+                <div class="terminal-dot r"></div>
+                <div class="terminal-dot y"></div>
+                <div class="terminal-dot g"></div>
+                <div class="terminal-title">iw traversal_engine</div>
             </div>
-
-            <!-- 200 AGENT SCALE ANALYSIS -->
-            <div class="scale-analysis">
-                <div class="scale-header">
-                    <h3>Now Multiply That by 200 Agents</h3>
-                    <p>Most enterprises need 150&ndash;300 agents across functions. Here's what the math looks like at scale.</p>
-                </div>
-
-                <div class="scale-showdown">
-                    <div class="scale-col scale-col-build">
-                        <div class="scale-col-label">Build from scratch</div>
-                        <div class="scale-metric">
-                            <div class="scale-metric-label">Total Cost</div>
-                            <div class="scale-metric-value">$30M&ndash;$100M</div>
-                            <div class="scale-metric-sub">200 agents &times; $150K&ndash;$500K each</div>
-                        </div>
-                        <div class="scale-metric">
-                            <div class="scale-metric-label">Time to Deploy All</div>
-                            <div class="scale-metric-value">8&ndash;15 yrs</div>
-                            <div class="scale-metric-sub">Sequential builds, each 6&ndash;12 months</div>
-                        </div>
-                        <div class="scale-metric">
-                            <div class="scale-metric-label">Expected Accuracy</div>
-                            <div class="scale-metric-value">~70%</div>
-                            <div class="scale-metric-sub">RAG ceiling without structured context</div>
-                        </div>
-                        <div class="scale-metric">
-                            <div class="scale-metric-label">Agents That Survive</div>
-                            <div class="scale-metric-value">~44</div>
-                            <div class="scale-metric-sub">22% success rate &times; 200 attempts</div>
-                        </div>
-                    </div>
-
-                    <div class="scale-vs">
-                        <div class="scale-vs-text">VS</div>
-                    </div>
-
-                    <div class="scale-col scale-col-iw">
-                        <div class="scale-col-label">With Intelligence Warehouse</div>
-                        <div class="scale-metric">
-                            <div class="scale-metric-label">Total Cost</div>
-                            <div class="scale-metric-value">&lt;$3M</div>
-                            <div class="scale-metric-sub">Fixed infra + &lt;10% marginal per agent</div>
-                        </div>
-                        <div class="scale-metric">
-                            <div class="scale-metric-label">Time to Deploy All</div>
-                            <div class="scale-metric-value">&lt;2 yrs</div>
-                            <div class="scale-metric-sub">6 weeks first + 11 days each after</div>
-                        </div>
-                        <div class="scale-metric">
-                            <div class="scale-metric-label">Decision Accuracy</div>
-                            <div class="scale-metric-value">96%</div>
-                            <div class="scale-metric-sub">Proven across Fortune 50 deployments</div>
-                        </div>
-                        <div class="scale-metric">
-                            <div class="scale-metric-label">Agents That Work</div>
-                            <div class="scale-metric-value">200</div>
-                            <div class="scale-metric-sub">Same graph, same context, all connected</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="scale-savings">
-                    <div class="scale-saving-item">
-                        <div class="scale-saving-value">90&ndash;97%</div>
-                        <div class="scale-saving-label">Cost reduction</div>
-                        <div class="scale-saving-math">$30M+ &rarr; &lt;$3M</div>
-                    </div>
-                    <div class="scale-saving-item">
-                        <div class="scale-saving-value">4&ndash;7x</div>
-                        <div class="scale-saving-label">Faster deployment</div>
-                        <div class="scale-saving-math">10+ years &rarr; &lt;2 years</div>
-                    </div>
-                    <div class="scale-saving-item">
-                        <div class="scale-saving-value">4.5x</div>
-                        <div class="scale-saving-label">More working agents</div>
-                        <div class="scale-saving-math">44 survive &rarr; 200 work</div>
-                    </div>
-                </div>
+            <div class="terminal-body" id="terminalBody">
+                <!-- Lines injected by JS -->
             </div>
         </div>
-    </section>
 
+        <!-- BUILDING NEW AGENTS -->
+        <h3 data-animate style="margin-top:3.5rem;">Agent #201 Takes 11 Days. Not 11 Months.</h3>
+        <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:1.5rem;" data-animate>Same graph. Same 4 tools. No retraining. No re-extraction.</p>
 
-    <!-- ============================== -->
-    <!-- SECTION 2: BUILD VS BUY -->
-    <!-- ============================== -->
-    <section class="ea-section ea-section-alt" id="build-vs-buy">
-        <div class="container">
-            <div class="ea-section-label">BUILD VS BUY</div>
-            <h2 class="ea-section-title">What the Data Actually Says</h2>
-            <p class="ea-section-desc">
-                The question isn't whether to use AI. It's whether to build the context layer yourself or deploy one that's already proven.
-            </p>
-
-            <!-- Evidence cards -->
-            <div class="bvb-evidence">
-                <div class="bvb-card">
-                    <div class="bvb-card-source">McKinsey &mdash; State of AI 2025 <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener">&nearr;</a></div>
-                    <div class="bvb-card-stat"><span class="red">6%</span></div>
-                    <div class="bvb-card-text">Only 6% of organizations qualify as "AI high performers" with &gt;5% EBIT impact. The rest are stuck in experiment mode. The single strongest predictor of success? Fundamentally redesigning workflows&mdash;not better models.</div>
-                </div>
-                <div class="bvb-card">
-                    <div class="bvb-card-source">MIT &mdash; The GenAI Divide 2025 <a href="https://fortune.com/2025/08/18/mit-report-95-percent-generative-ai-pilots-at-companies-failing-cfo/" target="_blank" rel="noopener">&nearr;</a></div>
-                    <div class="bvb-card-stat"><span class="red">3x</span></div>
-                    <div class="bvb-card-text">Purchasing AI tools from specialized vendors succeeds 67% of the time. Internal builds succeed only ~22%. A 3x success rate gap. The conclusion: foundational infrastructure should be bought, not built.</div>
-                </div>
-                <div class="bvb-card">
-                    <div class="bvb-card-source">Gartner &mdash; Agentic AI Forecast <a href="https://byteiota.com/gartner-40-agentic-ai-projects-fail-heres-why/" target="_blank" rel="noopener">&nearr;</a></div>
-                    <div class="bvb-card-stat"><span class="red">40%+</span></div>
-                    <div class="bvb-card-text">More than 40% of agentic AI projects will be canceled by end of 2027 due to escalating costs, unclear business value, and inadequate risk controls. The projects that survive share one trait: structured context.</div>
-                </div>
-                <div class="bvb-card">
-                    <div class="bvb-card-source">Industry Aggregate <a href="https://www.landbase.com/blog/agentic-ai-statistics" target="_blank" rel="noopener">&nearr;</a></div>
-                    <div class="bvb-card-stat"><span class="red">80%</span></div>
-                    <div class="bvb-card-text">Of a custom software's total cost occurs after initial launch. Maintenance alone consumes 50&ndash;75% of total cost. Each enhancement costs 3&ndash;4x the original development. The build path doesn't get cheaper&mdash;it compounds.</div>
-                </div>
+        <div class="timeline" data-animate>
+            <div class="timeline-step">
+                <div class="timeline-dot">1</div>
+                <div class="timeline-day">Day 1</div>
+                <div class="timeline-title">Connect</div>
+                <div class="timeline-desc">Plug into IW via MCP. 4 standard tools. No custom integration.</div>
             </div>
-
-            <!-- Foundation Capital thesis -->
-            <div class="bvb-thesis">
-                <div class="bvb-thesis-header">
-                    <div class="bvb-thesis-icon fc">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                    </div>
-                    <div>
-                        <div class="bvb-thesis-source">Foundation Capital <a href="https://foundationcapital.com/ideas/context-graphs-ais-trillion-dollar-opportunity" target="_blank" rel="noopener">&nearr;</a></div>
-                    </div>
-                </div>
-                <div class="bvb-thesis-quote">
-                    "The next trillion-dollar platforms won't be built by adding AI to existing data. They'll be built by capturing the decision traces that make data actionable."
-                </div>
-                <div class="bvb-thesis-body">
-                    Enterprise value is shifting from systems of record to systems of agents. The missing layer is the <strong>Context Graph</strong>&mdash;decision traces stitched across entities and time, where precedent becomes searchable. Systems of record capture <em>what happened</em>, but agents need access to the <em>why</em>: how rules were applied, where exceptions were granted, how conflicts were resolved, who approved what. That's what Intelligence Warehouse captures.
-                </div>
+            <div class="timeline-step">
+                <div class="timeline-dot">2</div>
+                <div class="timeline-day">Days 2–3</div>
+                <div class="timeline-title">Scope</div>
+                <div class="timeline-desc">Pick which ontology nodes, metrics, and rules this agent accesses.</div>
             </div>
-
-            <!-- Atlan thesis -->
-            <div class="bvb-thesis">
-                <div class="bvb-thesis-header">
-                    <div class="bvb-thesis-icon at">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-                    </div>
-                    <div>
-                        <div class="bvb-thesis-source">Atlan &mdash; Gartner MQ Leader <a href="https://atlan.com/know/data-catalog-for-ai/" target="_blank" rel="noopener">&nearr;</a></div>
-                    </div>
-                </div>
-                <div class="bvb-thesis-quote">
-                    "No agent can reason effectively about a business it doesn't understand."
-                </div>
-                <div class="bvb-thesis-body">
-                    Atlan validates the category: AI agents need a context layer to understand what your data means, how teams work, how your company defines "revenue." Without it, agents produce semantically wrong outputs at scale. Atlan focuses on <strong>metadata and data definitions</strong>. Intelligence Warehouse goes further&mdash;capturing the <strong>decision logic, rules, thresholds, and authority chains</strong> that drive actual operations.
-                </div>
+            <div class="timeline-step">
+                <div class="timeline-dot">3</div>
+                <div class="timeline-day">Days 4–7</div>
+                <div class="timeline-title">Configure</div>
+                <div class="timeline-desc">Set authority chains, escalation paths, autonomy thresholds.</div>
             </div>
-
-            <!-- Cost comparison table -->
-            <div class="bvb-cost-table">
-                <div class="bvb-table-header">
-                    <span>Approach</span>
-                    <span>Cost</span>
-                    <span>Timeline</span>
-                    <span>Success Rate</span>
-                </div>
-                <div class="bvb-table-row">
-                    <span>Simple single-task agent</span>
-                    <span>$5K &ndash; $40K</span>
-                    <span>2&ndash;4 weeks</span>
-                    <span>&mdash;</span>
-                </div>
-                <div class="bvb-table-row">
-                    <span>Mid-complexity RAG agent</span>
-                    <span>$40K &ndash; $150K</span>
-                    <span>3&ndash;5 months</span>
-                    <span>~22%</span>
-                </div>
-                <div class="bvb-table-row">
-                    <span>Enterprise multi-agent system</span>
-                    <span>$150K &ndash; $500K+</span>
-                    <span>6&ndash;12 months</span>
-                    <span>~22%</span>
-                </div>
-                <div class="bvb-table-row highlight">
-                    <span>Intelligence Warehouse</span>
-                    <span>Fixed infrastructure</span>
-                    <span>6 weeks</span>
-                    <span>96% accuracy</span>
-                </div>
+            <div class="timeline-step">
+                <div class="timeline-dot">4</div>
+                <div class="timeline-day">Days 8–11</div>
+                <div class="timeline-title">Ship</div>
+                <div class="timeline-desc">96% accuracy from day one. Full audit trail. Production-ready.</div>
             </div>
         </div>
-    </section>
 
+        <p class="bottom-line" data-animate style="margin-top:1rem;"><strong>First agent: 6 weeks.</strong> Every agent after: 11 days. Marginal cost: &lt;10%.</p>
+    </div>
+</section>
 
-    <!-- ============================== -->
-    <!-- SECTION 3: ARCHITECTURE (TECHNICAL) -->
-    <!-- ============================== -->
-    <section class="ea-section" id="architecture">
-        <div class="container">
-            <div class="ea-section-label">THE ARCHITECTURE</div>
-            <h2 class="ea-section-title">From Data to Decision:<br>How It Actually Works</h2>
-            <p class="ea-section-desc">
-                Four layers. Each builds on the previous. Here's what's running under the hood.
-            </p>
+<hr class="divider">
 
-            <!-- Pipeline Flow Visual -->
-            <div class="arch-flow-visual">
-                <div class="arch-flow-layers">
-                    <div class="arch-flow-layer">
-                        <div class="arch-flow-box data">ERP / CRM / POS / WMS</div>
-                        <div class="arch-flow-sub">raw data</div>
-                    </div>
-                    <div class="arch-flow-arrow">&rarr;</div>
-                    <div class="arch-flow-layer">
-                        <div class="arch-flow-box graph">Intelligence Graph</div>
-                        <div class="arch-flow-sub">ontology + metrics + decisions</div>
-                    </div>
-                    <div class="arch-flow-arrow">&rarr;</div>
-                    <div class="arch-flow-layer">
-                        <div class="arch-flow-box traverse">Traversal Engine</div>
-                        <div class="arch-flow-sub">cross-function discovery</div>
-                    </div>
-                    <div class="arch-flow-arrow">&rarr;</div>
-                    <div class="arch-flow-layer">
-                        <div class="arch-flow-box mcp">MCP Server</div>
-                        <div class="arch-flow-sub">4 tools &middot; any LLM</div>
-                    </div>
-                    <div class="arch-flow-arrow">&rarr;</div>
-                    <div class="arch-flow-layer">
-                        <div class="arch-flow-box agent">Outcome Agents</div>
-                        <div class="arch-flow-sub">90% autonomous</div>
-                    </div>
-                </div>
-                <div class="arch-flow-caption">Intelligence stays in the warehouse. Agents query it. Models are swappable.</div>
+<!-- Q4: GRAPH DB -->
+<section id="graph-db">
+    <div class="q-header" data-animate>
+        <span class="q-number">QUESTION 4</span>
+    </div>
+    <h2 data-animate>"We're buying a graph database.<br>Do we still need IW?"</h2>
+
+    <div class="analogy-block" data-animate>
+        <div class="analogy-text">"We're buying PostgreSQL.<br>Do we still need Salesforce?"</div>
+        <div class="analogy-sub">A graph database is a storage engine. Intelligence Warehouse is the system that makes it useful.</div>
+    </div>
+
+    <h3 data-animate>With a graph DB alone, you still need to build:</h3>
+
+    <div class="still-build" data-animate>
+        <div class="still-build-item"><span class="x">✕</span> Unified business ontology</div>
+        <div class="still-build-item"><span class="x">✕</span> Tribal knowledge extraction</div>
+        <div class="still-build-item"><span class="x">✕</span> Executable decision rules</div>
+        <div class="still-build-item"><span class="x">✕</span> Formula computation engine</div>
+        <div class="still-build-item"><span class="x">✕</span> Authority & governance chains</div>
+        <div class="still-build-item"><span class="x">✕</span> Cross-functional traversal</div>
+        <div class="still-build-item"><span class="x">✕</span> MCP agent orchestration</div>
+        <div class="still-build-item"><span class="x">✕</span> Full audit trail infrastructure</div>
+    </div>
+
+    <p class="bottom-line" data-animate style="margin-top:2rem;"><strong>The database is 5% of the value.</strong> The intelligence system is the other 95%.</p>
+</section>
+
+<hr class="divider">
+
+<!-- CTA -->
+<section class="cta-section">
+    <div style="position:relative; z-index:1;">
+        <div class="nav-logo" style="font-size:3rem; margin-bottom:1rem; display:block; text-decoration:none;">iw.</div>
+        <h2 data-animate>See It on Your Data.</h2>
+
+        <div class="cta-stats" data-animate>
+            <div>
+                <div class="cta-stat-num">3</div>
+                <div class="cta-stat-label">Fortune 50/100<br>Deployments</div>
             </div>
+            <div>
+                <div class="cta-stat-num">96%</div>
+                <div class="cta-stat-label">Decision<br>Accuracy</div>
+            </div>
+            <div>
+                <div class="cta-stat-num">6 wks</div>
+                <div class="cta-stat-label">To<br>Production</div>
+            </div>
+            <div>
+                <div class="cta-stat-num">&lt;10%</div>
+                <div class="cta-stat-label">Marginal Cost<br>Per New Agent</div>
+            </div>
+        </div>
 
-            <!-- Terminal Grid -->
-            <div class="arch-terminal-grid">
-                <!-- Terminal 1: Graph Schema -->
-                <div class="arch-terminal">
-                    <div class="arch-terminal-bar">
-                        <div class="arch-terminal-dot r"></div>
-                        <div class="arch-terminal-dot y"></div>
-                        <div class="arch-terminal-dot g"></div>
-                        <span class="arch-terminal-title">intelligence_graph.schema</span>
-                    </div>
-                    <div class="arch-terminal-body">
-<span class="comment">// Three node types. Connected. Traversable.</span><br>
-<br>
-<span class="type">OntologyNode</span> {<br>
-&nbsp;&nbsp;<span class="param">entity</span>: <span class="string">"SKU:GXM-50"</span><br>
-&nbsp;&nbsp;<span class="param">hierarchy</span>: <span class="string">"Men's &rarr; Skin &rarr; Grooming"</span><br>
-&nbsp;&nbsp;<span class="param">aliases</span>: [<span class="string">"GlowMax Men 50ml"</span>]<br>
-}<br>
-<br>
-<span class="type">MetricNode</span> {<br>
-&nbsp;&nbsp;<span class="param">name</span>: <span class="string">"sell_through_rate"</span><br>
-&nbsp;&nbsp;<span class="param">formula</span>: <span class="func">units_sold</span> / <span class="func">units_received</span><br>
-&nbsp;&nbsp;<span class="param">grain</span>: <span class="string">"SKU &times; Zone &times; Week"</span><br>
-}<br>
-<br>
-<span class="type">DecisionNode</span> {<br>
-&nbsp;&nbsp;<span class="param">rule</span>: <span class="string">"IF sell_through &lt; 15%<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND days_of_inventory &gt; 45<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;THEN markdown 10%"</span><br>
-&nbsp;&nbsp;<span class="param">authority</span>: <span class="string">"Zone Sales Manager"</span><br>
+        <a href="mailto:hello@intelligencewarehouse.com" class="cta-btn" data-animate>Get a Demo →</a>
+    </div>
+</section>
+
+<script>
+// ========================================
+// SCROLL ANIMATIONS
+// ========================================
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+
+// ========================================
+// ARCHITECTURE CANVAS — ANIMATED FLOW
+// ========================================
+const archCanvas = document.getElementById('archCanvas');
+const ctx = archCanvas.getContext('2d');
+let archW, archH, dpr;
+
+function resizeArch() {
+    const rect = archCanvas.parentElement.getBoundingClientRect();
+    dpr = window.devicePixelRatio || 1;
+    archW = rect.width;
+    archH = rect.height;
+    archCanvas.width = archW * dpr;
+    archCanvas.height = archH * dpr;
+    archCanvas.style.width = archW + 'px';
+    archCanvas.style.height = archH + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
-                    </div>
-                </div>
+resizeArch();
+window.addEventListener('resize', resizeArch);
 
-                <!-- Terminal 2: Traversal -->
-                <div class="arch-terminal">
-                    <div class="arch-terminal-bar">
-                        <div class="arch-terminal-dot r"></div>
-                        <div class="arch-terminal-dot y"></div>
-                        <div class="arch-terminal-dot g"></div>
-                        <span class="arch-terminal-title">traversal_engine.run</span>
-                    </div>
-                    <div class="arch-terminal-body">
-<span class="prompt">$</span> <span class="func">traverse</span> --from <span class="string">"reorder_decision"</span> --depth <span class="num">3</span><br>
-<br>
-<span class="dimmed">Walking graph...</span><br>
-<br>
-<span class="output">  reorder_decision</span><br>
-<span class="dimmed">  &nbsp;&nbsp;&#9492;&#9472;&rarr;</span> <span class="warn">inventory_velocity</span> <span class="dimmed">(metric)</span><br>
-<span class="dimmed">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9492;&#9472;&rarr;</span> <span class="error-t">markdown_decision</span> <span class="dimmed">(decision)</span><br>
-<br>
-<span class="accent-t">&#10004; NEW COMBINED DECISION DISCOVERED</span><br>
-<br>
-<span class="dimmed">&nbsp;&nbsp;Supply Chain owns reorder.</span><br>
-<span class="dimmed">&nbsp;&nbsp;Pricing owns markdown.</span><br>
-<span class="dimmed">&nbsp;&nbsp;Neither team sees the combined action.</span><br>
-<br>
-<span class="highlight">&nbsp;&nbsp;"If markdown imminent on slow-movers,</span><br>
-<span class="highlight">&nbsp;&nbsp;&nbsp;reduce reorder 40% AND accelerate</span><br>
-<span class="highlight">&nbsp;&nbsp;&nbsp;promotion cadence."</span><br>
-<br>
-<span class="accent-t">&#10004;</span> <span class="dimmed">Decision logged &middot; Authority: VP Supply Chain</span>
-                    </div>
-                </div>
+// Define boxes
+function getBoxes() {
+    const pad = archW * 0.03;
+    const gapFrac = 0.025;
+    const gap = archW * gapFrac;
+    const totalGap = gap * 3;
+    const totalPad = pad * 2;
+    const available = archW - totalPad - totalGap;
 
-                <!-- Terminal 3: MCP Tools -->
-                <div class="arch-terminal">
-                    <div class="arch-terminal-bar">
-                        <div class="arch-terminal-dot r"></div>
-                        <div class="arch-terminal-dot y"></div>
-                        <div class="arch-terminal-dot g"></div>
-                        <span class="arch-terminal-title">mcp_server.tools</span>
-                    </div>
-                    <div class="arch-terminal-body">
-<span class="comment">// 4 tools. Any LLM. Full context.</span><br>
-<br>
-<span class="prompt">$</span> <span class="func">resolve_entity</span>(<span class="string">"GlowMax Men 50ml"</span>)<br>
-<span class="output">&nbsp;&nbsp;&rarr; SKU:GXM-50 &rarr; Men's Grooming &rarr; Skin Care</span><br>
-<br>
-<span class="prompt">$</span> <span class="func">compute_metric</span>(<span class="string">"sell_through"</span>, sku=<span class="string">"GXM-50"</span>)<br>
-<span class="output">&nbsp;&nbsp;&rarr; 22% </span><span class="dimmed">(formula: 440/2000, grain: North Zone)</span><br>
-<br>
-<span class="prompt">$</span> <span class="func">evaluate_rule</span>(<span class="string">"markdown_decision"</span>, sku=<span class="string">"GXM-50"</span>)<br>
-<span class="output">&nbsp;&nbsp;&rarr; ACTION: markdown 10%</span><br>
-<span class="output">&nbsp;&nbsp;&rarr; AUTHORITY: Zone Sales Manager</span><br>
-<br>
-<span class="prompt">$</span> <span class="func">traverse_path</span>(<span class="string">"days_of_inventory"</span> &rarr; <span class="string">"*"</span>)<br>
-<span class="output">&nbsp;&nbsp;&rarr; 3 connected decisions found</span><br>
-<span class="output">&nbsp;&nbsp;&rarr; 1 new cross-functional opportunity</span>
-                    </div>
-                </div>
+    const w1 = available * 0.18;
+    const w2 = available * 0.32;
+    const w3 = available * 0.20;
+    const w4 = available * 0.30;
+    const h = archH * 0.7;
+    const y = archH * 0.12;
 
-                <!-- Terminal 4: Agent Execution -->
-                <div class="arch-terminal">
-                    <div class="arch-terminal-bar">
-                        <div class="arch-terminal-dot r"></div>
-                        <div class="arch-terminal-dot y"></div>
-                        <div class="arch-terminal-dot g"></div>
-                        <span class="arch-terminal-title">agent.execute &mdash; supply_chain_agent</span>
-                    </div>
-                    <div class="arch-terminal-body">
-<span class="prompt">$</span> agent run --function <span class="string">"supply_chain"</span><br>
-<br>
-<span class="dimmed">[09:14:02]</span> <span class="accent-t">Resolving</span> 847 SKUs across 12 zones<br>
-<span class="dimmed">[09:14:03]</span> <span class="accent-t">Computing</span> fill_rate, DOI, velocity<br>
-<span class="dimmed">[09:14:04]</span> <span class="accent-t">Evaluating</span> 23 decision rules<br>
-<span class="dimmed">[09:14:04]</span> <span class="accent-t">Traversing</span> cross-functional paths<br>
-<br>
-<span class="dimmed">[09:14:05]</span> <span class="output">&#10004; 21 decisions auto-executed</span><br>
-<span class="dimmed">[09:14:05]</span> <span class="warn">&#9679; 2 escalated to human (authority required)</span><br>
-<br>
-<span class="dimmed">decisions:</span> <span class="num">23</span> <span class="dimmed">|</span> <span class="dimmed">autonomous:</span> <span class="num">91%</span> <span class="dimmed">|</span> <span class="dimmed">accuracy:</span> <span class="num">96%</span><br>
-<span class="dimmed">audit_trail:</span> <span class="accent-t">complete</span> <span class="dimmed">|</span> <span class="dimmed">governance:</span> <span class="accent-t">enforced</span><br>
-<br>
-<span class="comment">// New agent? Same 4 MCP tools. 11 days.</span>
-                    </div>
-                </div>
-            </div>
+    let x = pad;
+    const boxes = [];
 
-            <!-- Model agnostic badge -->
-            <div class="arch-model-badge">
-                <span>Claude</span>
-                <span class="sep"></span>
-                <span>GPT</span>
-                <span class="sep"></span>
-                <span>Gemini</span>
-                <span class="sep"></span>
-                <span>Llama</span>
-                <span class="sep"></span>
-                <span style="opacity:0.6;">Any model. Same graph. Zero knowledge loss on switch.</span>
-            </div>
-        </div>
-    </section>
+    // Data Sources
+    boxes.push({ x, y, w: w1, h, label: 'YOUR DATA', color: '#333', items: ['ERP', 'CRM', 'POS', 'WMS', 'BI Tools', 'Policy Docs'] });
+    x += w1 + gap;
 
+    // Intelligence Graph
+    boxes.push({ x, y, w: w2, h, label: 'INTELLIGENCE GRAPH', color: '#1B6B5A', isCore: true,
+        layers: [
+            { label: 'L1  ONTOLOGY', sub: 'What the business IS', color: '#2563eb' },
+            { label: 'L2  METRICS', sub: 'How it measures itself', color: '#0d9488' },
+            { label: 'L3  DECISIONS', sub: 'How it acts on what it knows', color: '#B8734A' }
+        ]
+    });
+    x += w2 + gap;
 
-    <!-- ============================== -->
-    <!-- SECTION 4: GRAPH DB VS IW -->
-    <!-- ============================== -->
-    <section class="ea-section ea-section-alt" id="graph-db">
-        <div class="container">
-            <div class="ea-section-label">THE INFRASTRUCTURE QUESTION</div>
-            <h2 class="ea-section-title">"We Already Have a<br>Graph Database."</h2>
-            <p class="ea-section-desc">
-                A graph database is a storage engine. Intelligence Warehouse is the decision intelligence layer. One is plumbing. The other is the application.
-            </p>
+    // MCP Server
+    boxes.push({ x, y, w: w3, h, label: 'MCP SERVER', color: '#0d9488',
+        tools: ['resolve_entity()', 'compute_metric()', 'evaluate_rule()', 'traverse_path()'],
+        toolColors: ['#2563eb', '#0d9488', '#B8734A', '#F5F5F5']
+    });
+    x += w3 + gap;
 
-            <!-- What you still need to build -->
-            <div class="neo-build-list">
-                <div class="neo-build-title">What a graph database doesn't give you</div>
-                <div class="neo-build-items">
-                    <div class="neo-build-item"><span class="x-mark">&times;</span> Business ontology with unified definitions</div>
-                    <div class="neo-build-item"><span class="x-mark">&times;</span> Tribal knowledge extraction engine</div>
-                    <div class="neo-build-item"><span class="x-mark">&times;</span> Executable decision rules with thresholds</div>
-                    <div class="neo-build-item"><span class="x-mark">&times;</span> Formula computation layer for metrics</div>
-                    <div class="neo-build-item"><span class="x-mark">&times;</span> Authority chains and governance</div>
-                    <div class="neo-build-item"><span class="x-mark">&times;</span> Cross-functional traversal for decision discovery</div>
-                    <div class="neo-build-item"><span class="x-mark">&times;</span> MCP server for agent orchestration</div>
-                    <div class="neo-build-item"><span class="x-mark">&times;</span> Full audit trail and explainability</div>
-                </div>
-            </div>
+    // Agents
+    boxes.push({ x, y, w: w4, h, label: 'YOUR AGENTS', color: '#555',
+        agents: ['Orchestrator', 'Pricing Agent', 'Supply Chain', 'Trade Marketing', 'Finance Agent', 'Agent #201...']
+    });
 
-            <!-- Side-by-side comparison -->
-            <div class="neo-comparison">
-                <div class="neo-col">
-                    <div class="neo-col-header">Graph Database</div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Purpose</div>
-                        <div class="neo-row-value">General-purpose graph storage and querying</div>
-                    </div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Node types</div>
-                        <div class="neo-row-value">Homogeneous &mdash; you define and manage the schema</div>
-                    </div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Query language</div>
-                        <div class="neo-row-value">Cypher / Gremlin &mdash; returns data to humans</div>
-                    </div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Decision support</div>
-                        <div class="neo-row-value">None &mdash; query results returned for interpretation</div>
-                    </div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Agent integration</div>
-                        <div class="neo-row-value">Custom SQL/Cypher wrappers &mdash; brittle, per-agent</div>
-                    </div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Tribal knowledge</div>
-                        <div class="neo-row-value">Manual schema design by your engineering team</div>
-                    </div>
-                </div>
-                <div class="neo-col">
-                    <div class="neo-col-header">Intelligence Warehouse</div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Purpose</div>
-                        <div class="neo-row-value">Enterprise decision intelligence infrastructure</div>
-                    </div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Node types</div>
-                        <div class="neo-row-value">Three-layer: Ontology &rarr; Metrics &rarr; Decisions</div>
-                    </div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Query language</div>
-                        <div class="neo-row-value">MCP tools &mdash; agents query semantically, not syntactically</div>
-                    </div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Decision support</div>
-                        <div class="neo-row-value">Rules executed autonomously with authority chains</div>
-                    </div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Agent integration</div>
-                        <div class="neo-row-value">4 MCP tools &mdash; universal, model-agnostic, reusable</div>
-                    </div>
-                    <div class="neo-row">
-                        <div class="neo-row-label">Tribal knowledge</div>
-                        <div class="neo-row-value">MORRIE &mdash; agentic extraction from domain experts</div>
-                    </div>
-                </div>
-            </div>
+    return boxes;
+}
 
-            <!-- Analogy -->
-            <div class="neo-analogy">
-                <div class="neo-analogy-text">
-                    "We're buying PostgreSQL &mdash; do we still need Salesforce?"
-                </div>
-                <div class="neo-analogy-sub">
-                    A graph database is a component. Intelligence Warehouse is the system. You wouldn't build Salesforce on top of PostgreSQL and call it a weekend project. The same logic applies here. The database is 5% of the value. The ontology, decision logic, traversal, governance, and agent orchestration are the other 95%.
-                </div>
-            </div>
-        </div>
-    </section>
+// Particles flowing between boxes
+const particles = [];
+const PARTICLE_COUNT = 50;
 
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+    particles.push({
+        progress: Math.random(),
+        speed: 0.001 + Math.random() * 0.003,
+        lane: Math.floor(Math.random() * 3), // 0-2: which gap to be in
+        yOffset: (Math.random() - 0.5) * 0.6,
+        size: 1.5 + Math.random() * 2.5,
+        alpha: 0.3 + Math.random() * 0.7,
+    });
+}
 
-    <!-- ============================== -->
-    <!-- CTA -->
-    <!-- ============================== -->
-    <section class="ea-cta" id="contact">
-        <div class="container">
-            <div class="ea-cta-inner">
-                <div class="ea-section-label">NEXT STEP</div>
-                <h2>See It Working on<br>Your Data</h2>
-                <p>We've deployed at 3 Fortune 50/100 companies. 96% decision accuracy. 6 weeks to production. Let us show you what it looks like on your use cases.</p>
-                <div class="ea-cta-actions">
-                    <a href="mailto:hello@intelligencewarehouse.com" class="btn btn-primary btn-lg">
-                        Request a Demo
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
-                    </a>
-                    <a href="case-studies.html" class="btn btn-outline btn-lg">View Case Studies</a>
-                </div>
-            </div>
-        </div>
-    </section>
+function drawArch(time) {
+    ctx.clearRect(0, 0, archW, archH);
 
+    const boxes = getBoxes();
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-inner">
-                <div class="footer-brand">
-                    <div class="nav-logo" style="margin-bottom:1rem;">
-                        <div class="logo-mark">iw<span class="logo-dot">.</span></div>
-                    </div>
-                    <p class="footer-tagline">The foundation AI agents need.</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-col"><h5>Platform</h5><a href="learn.html#architecture">Architecture</a><a href="learn.html#process">How It Works</a><a href="index.html#impact">Impact</a><a href="team.html">Team</a></div>
-                    <div class="footer-col"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="blog/">Blog</a><a href="#contact">Contact</a></div>
-                    <div class="footer-col"><h5>Resources</h5><a href="IW-Whitepaper.pdf" target="_blank">Technical Paper</a><a href="#">API Docs</a><a href="partners.html">Partners</a><a href="#">Security</a></div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <span>&copy; 2026 Intelligence Warehouse&trade;. All rights reserved.</span>
-                <div class="footer-legal"><a href="#">Privacy</a><a href="#">Terms</a></div>
-            </div>
-        </div>
-    </footer>
+    // Draw boxes
+    boxes.forEach((box, bi) => {
+        // Box background
+        ctx.fillStyle = bi === 1 ? 'rgba(27,107,90,0.08)' : 'rgba(255,255,255,0.03)';
+        ctx.strokeStyle = bi === 1 ? 'rgba(27,107,90,0.5)' : 'rgba(255,255,255,0.1)';
+        ctx.lineWidth = bi === 1 ? 2 : 1;
+        roundRect(ctx, box.x, box.y, box.w, box.h, 10);
 
-    <script src="main.js"></script>
+        // Label
+        ctx.fillStyle = box.color;
+        ctx.font = '600 10px Inter';
+        ctx.textAlign = 'center';
+        ctx.letterSpacing = '1px';
+        ctx.fillText(box.label, box.x + box.w / 2, box.y + 22);
+
+        // Items (box 0)
+        if (box.items) {
+            ctx.font = '500 13px Inter';
+            ctx.fillStyle = '#ccc';
+            box.items.forEach((item, i) => {
+                ctx.fillText(item, box.x + box.w / 2, box.y + 55 + i * 28);
+            });
+        }
+
+        // Layers (box 1)
+        if (box.layers) {
+            const layerH = (box.h - 50) / 3 - 8;
+            box.layers.forEach((layer, i) => {
+                const ly = box.y + 38 + i * (layerH + 8);
+                ctx.fillStyle = 'rgba(255,255,255,0.04)';
+                ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+                ctx.lineWidth = 1;
+                roundRect(ctx, box.x + 10, ly, box.w - 20, layerH, 6);
+
+                ctx.fillStyle = layer.color;
+                ctx.font = '700 11px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(layer.label, box.x + box.w / 2, ly + layerH * 0.4);
+                ctx.fillStyle = '#777';
+                ctx.font = '400 10px Inter';
+                ctx.fillText(layer.sub, box.x + box.w / 2, ly + layerH * 0.7);
+            });
+        }
+
+        // Tools (box 2)
+        if (box.tools) {
+            ctx.textAlign = 'left';
+            ctx.font = '600 11px JetBrains Mono';
+            const labelX = box.x + 14;
+            box.tools.forEach((tool, i) => {
+                ctx.fillStyle = '#222';
+                roundRect(ctx, box.x + 10, box.y + 45 + i * 50, box.w - 20, 38, 5);
+                ctx.fillStyle = box.toolColors[i];
+                ctx.font = '500 11px JetBrains Mono';
+                ctx.fillText(tool, labelX, box.y + 70 + i * 50);
+            });
+            // API / CLI label
+            ctx.fillStyle = '#888';
+            ctx.font = '500 11px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('API  ·  CLI', box.x + box.w / 2, box.y + box.h - 15);
+        }
+
+        // Agents (box 3)
+        if (box.agents) {
+            const agentColors = ['#B8734A', '#2563eb', '#0d9488', '#B8734A', '#999', '#444'];
+            ctx.textAlign = 'center';
+            box.agents.forEach((agent, i) => {
+                if (i === 0) {
+                    // Orchestrator - bigger
+                    ctx.fillStyle = 'rgba(27,107,90,0.15)';
+                    ctx.strokeStyle = 'rgba(27,107,90,0.4)';
+                    ctx.lineWidth = 1.5;
+                    roundRect(ctx, box.x + 10, box.y + 38, box.w - 20, 34, 6);
+                    ctx.fillStyle = '#1B6B5A';
+                    ctx.font = '700 12px Inter';
+                    ctx.fillText(agent, box.x + box.w / 2, box.y + 60);
+                } else {
+                    ctx.fillStyle = 'rgba(255,255,255,0.03)';
+                    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+                    ctx.lineWidth = 1;
+                    roundRect(ctx, box.x + 10, box.y + 56 + i * 36, box.w - 20, 30, 5);
+                    ctx.fillStyle = agentColors[i] || '#666';
+                    ctx.font = '500 11px Inter';
+                    ctx.fillText(agent, box.x + box.w / 2, box.y + 76 + i * 36);
+                }
+            });
+        }
+    });
+
+    // Draw connection arrows between boxes
+    for (let i = 0; i < 3; i++) {
+        const from = boxes[i];
+        const to = boxes[i + 1];
+        const x1 = from.x + from.w;
+        const x2 = to.x;
+        const cy = from.y + from.h / 2;
+
+        // Dashed line
+        ctx.strokeStyle = 'rgba(27,107,90,0.3)';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(x1 + 4, cy);
+        ctx.lineTo(x2 - 4, cy);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Arrowhead
+        ctx.fillStyle = 'rgba(27,107,90,0.6)';
+        ctx.beginPath();
+        ctx.moveTo(x2 - 4, cy);
+        ctx.lineTo(x2 - 12, cy - 5);
+        ctx.lineTo(x2 - 12, cy + 5);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    // Animate particles flowing through connections
+    particles.forEach(p => {
+        p.progress += p.speed;
+        if (p.progress > 1) {
+            p.progress = 0;
+            p.lane = Math.floor(Math.random() * 3);
+            p.yOffset = (Math.random() - 0.5) * 0.6;
+        }
+
+        const from = boxes[p.lane];
+        const to = boxes[p.lane + 1];
+        const x1 = from.x + from.w;
+        const x2 = to.x;
+        const cy = from.y + from.h / 2 + p.yOffset * 30;
+
+        const px = x1 + (x2 - x1) * p.progress;
+        const py = cy + Math.sin(p.progress * Math.PI * 3 + time * 0.001) * 4;
+
+        // Glow
+        const grad = ctx.createRadialGradient(px, py, 0, px, py, p.size * 3);
+        grad.addColorStop(0, `rgba(27,107,90,${p.alpha * 0.5})`);
+        grad.addColorStop(1, 'rgba(27,107,90,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(px, py, p.size * 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Dot
+        ctx.fillStyle = `rgba(36,132,111,${p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(px, py, p.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    requestAnimationFrame(drawArch);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+}
+
+requestAnimationFrame(drawArch);
+
+// ========================================
+// TERMINAL ANIMATION
+// ========================================
+const terminalLines = [
+    { type: 'prompt', text: '$ query "Should we markdown GlowMax Men 50ml in North zone?"' },
+    { type: 'comment', text: '' },
+    { type: 'info', text: '▸ STEP 1 — resolve_entity()' },
+    { type: 'output', text: '  GlowMax Men 50ml → SKU:GXM-50 → Men\'s Grooming → Skin Care' },
+    { type: 'output', text: '  North Zone → 3 regions → RSM: Priya M' },
+    { type: 'comment', text: '' },
+    { type: 'success', text: '▸ STEP 2 — compute_metric()' },
+    { type: 'output', text: '  DOI = 140 days  │  Sell-through = 22%  │  Margin = 30%' },
+    { type: 'output', text: '  Formula: Sell-through = 440 / 2000 × 100' },
+    { type: 'comment', text: '' },
+    { type: 'warn', text: '▸ STEP 3 — evaluate_rule()' },
+    { type: 'output', text: '  Rule D1: DOI > 120 ✓  AND  Sell-through < 30% ✓' },
+    { type: 'output', text: '  Margin tier 25–35% → Markdown 10% + Seasonal adj → 12%' },
+    { type: 'comment', text: '' },
+    { type: 'highlight', text: '▸ STEP 4 — traverse_path()' },
+    { type: 'output', text: '  Exception check: Stock > 100 ✓  Not new launch ✓  Not strategic ✓' },
+    { type: 'output', text: '  Authority: RSM proposes → ZSM approves' },
+    { type: 'comment', text: '' },
+    { type: 'success', text: '✓ RESULT: 12% markdown on GXM-50 → Routed to ZSM → Full audit trail' },
+];
+
+let terminalAnimated = false;
+
+const termObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && !terminalAnimated) {
+            terminalAnimated = true;
+            animateTerminal();
+        }
+    });
+}, { threshold: 0.3 });
+
+termObs.observe(document.getElementById('queryTerminal'));
+
+function animateTerminal() {
+    const body = document.getElementById('terminalBody');
+    body.innerHTML = '';
+
+    terminalLines.forEach((line, i) => {
+        setTimeout(() => {
+            const div = document.createElement('div');
+            div.className = 'terminal-line';
+            div.style.animationDelay = '0s';
+
+            if (line.text === '') {
+                div.innerHTML = '&nbsp;';
+            } else {
+                div.innerHTML = `<span class="${line.type}">${line.text}</span>`;
+            }
+
+            body.appendChild(div);
+
+            // Auto-scroll
+            body.scrollTop = body.scrollHeight;
+        }, i * 150);
+    });
+}
+
+// ========================================
+// SMOOTH SCROLL FOR NAV
+// ========================================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            const y = target.getBoundingClientRect().top + window.pageYOffset - 80;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    });
+});
+</script>
 </body>
 </html>
