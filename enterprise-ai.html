@@ -208,6 +208,21 @@
         .argument-body { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
         .argument-body strong { color: var(--text); }
 
+        /* HIDDEN COSTS */
+        .hidden-costs-grid { display: flex; flex-direction: column; gap: 0.75rem; }
+        .hidden-cost {
+            display: flex; gap: 1.25rem; padding: 1.25rem 1.5rem;
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+            transition: border-color 0.2s;
+        }
+        .hidden-cost:hover { border-color: rgba(239,68,68,0.2); }
+        .hidden-cost-num {
+            font-size: 1.5rem; font-weight: 900; color: var(--red); opacity: 0.4;
+            min-width: 2rem; padding-top: 0.1rem;
+        }
+        .hidden-cost-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .hidden-cost-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; }
+
         /* RESEARCH CARDS */
         .research-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
@@ -574,12 +589,59 @@
     <div class="q-header" data-animate>
         <span class="q-number">QUESTION 2</span>
     </div>
-    <h2 data-animate>Build or Buy?</h2>
+    <h2 data-animate>Should we build this internally<br>or buy a ready-made solution?</h2>
 
-    <!-- THE ARGUMENT FIRST -->
+    <!-- THE ARGUMENT -->
     <div class="argument-block" data-animate>
-        <p class="argument-lead">The short answer: <strong>Buy the infrastructure. Build the agents.</strong></p>
-        <p class="argument-body">Here's why. Every enterprise AI agent needs three things to make a correct decision: <strong>entity resolution</strong> (what am I looking at?), <strong>metric computation</strong> (what do the numbers say?), and <strong>decision rules</strong> (what should I do about it?). Today, each team builds this from scratch for every agent — extracting tribal knowledge, hard-coding business logic into prompts, rebuilding context pipelines. It works once. It breaks at scale. The infrastructure underneath the agents — the ontology, the metrics, the decision logic — is the same across all of them. Build that once, and every agent becomes a thin query layer on top.</p>
+        <p class="argument-lead">You could build a context graph in-house. <strong>Here's why most shouldn't.</strong></p>
+        <p class="argument-body">Building the intelligence layer — the ontology, metrics engine, decision rules, traversal, MCP orchestration, and audit infrastructure — is a 12–18 month engineering project before your first agent works. You need knowledge engineers, graph architects, and domain experts working full-time. That's before you solve extraction, governance, or cross-functional discovery. The question isn't whether it's possible. It's whether that's the best use of your engineering team's time when the infrastructure already exists.</p>
+    </div>
+
+    <!-- THE HIDDEN COSTS -->
+    <h3 data-animate style="margin-top:2.5rem; margin-bottom:1rem;">5 reasons internal builds fail at this</h3>
+
+    <div class="hidden-costs-grid" data-animate>
+        <div class="hidden-cost">
+            <div class="hidden-cost-num">1</div>
+            <div class="hidden-cost-content">
+                <div class="hidden-cost-title">It's not a software problem — it's a knowledge engineering problem</div>
+                <div class="hidden-cost-desc">Your engineers can build a graph database. But extracting the 10–25 decision rules that live in your SVP's head, codifying metric formulas with exception conditions, and mapping authority chains across business units? That requires a methodology (we call ours MORRIE) built from dozens of enterprise deployments.</div>
+            </div>
+        </div>
+        <div class="hidden-cost">
+            <div class="hidden-cost-num">2</div>
+            <div class="hidden-cost-content">
+                <div class="hidden-cost-title">12–18 months before your first agent works</div>
+                <div class="hidden-cost-desc">You need to design the three-layer architecture (ontology + metrics + decisions), build the traversal engine, create the MCP server, and wire up governance. That's a full platform team for a year. With IW, your first agent is live in 6 weeks.</div>
+            </div>
+        </div>
+        <div class="hidden-cost">
+            <div class="hidden-cost-num">3</div>
+            <div class="hidden-cost-content">
+                <div class="hidden-cost-title">Cross-functional traversal is the hardest part</div>
+                <div class="hidden-cost-desc">Any team can build a graph. The breakthrough is traversal — the graph walking across functions to discover decisions no single team could see. Supply chain's reorder connects to pricing's markdown connects to trade marketing's promotion. Building that discovery engine from scratch is a research problem, not an engineering task.</div>
+            </div>
+        </div>
+        <div class="hidden-cost">
+            <div class="hidden-cost-num">4</div>
+            <div class="hidden-cost-content">
+                <div class="hidden-cost-title">Maintenance compounds</div>
+                <div class="hidden-cost-desc">Business logic changes. Org structures shift. New KPIs get introduced. An internal build means your team is permanently maintaining the infrastructure instead of building agents on top of it. With IW, we handle the platform — you focus on value creation.</div>
+            </div>
+        </div>
+        <div class="hidden-cost">
+            <div class="hidden-cost-num">5</div>
+            <div class="hidden-cost-content">
+                <div class="hidden-cost-title">You lose the compounding advantage</div>
+                <div class="hidden-cost-desc">IW's graph has been refined across Fortune 50 deployments. Each deployment makes the extraction methodology faster, the architecture patterns sharper, the edge case library deeper. An internal build starts from zero. You're paying to learn lessons we've already learned.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- THE FLIP -->
+    <div class="argument-block" data-animate style="margin-top:2rem; border-left-color: var(--green);">
+        <p class="argument-lead" style="color:var(--green);">Build what's unique to you. Buy what's common underneath.</p>
+        <p class="argument-body">Your agents, your use cases, your competitive edge — that's yours to build. The ontology engine, metrics computation, decision rules framework, traversal, MCP orchestration, governance, and audit trail? That's infrastructure. You don't build your own database. You don't build your own cloud. Don't build your own context layer.</p>
     </div>
 
     <h3 data-animate style="margin-top:2.5rem; margin-bottom:1rem;">The research backs this up.</h3>
