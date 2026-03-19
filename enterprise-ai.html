@@ -182,6 +182,32 @@
         .big-stat-label { font-size: 1rem; font-weight: 600; margin-top: 0.5rem; }
         .big-stat-sub { color: var(--text-dim); font-size: 0.85rem; margin-top: 0.25rem; }
 
+        /* COST BREAKDOWN */
+        .cost-breakdown {
+            margin-top: 3rem; padding: 2.5rem; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: 12px;
+        }
+        .breakdown-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+        }
+        .breakdown-item {
+            padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .breakdown-label { font-size: 0.72rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
+        .breakdown-val { font-size: 1.3rem; font-weight: 800; color: var(--red); margin-bottom: 0.5rem; }
+        .breakdown-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+
+        /* BUILD VS BUY ARGUMENT */
+        .argument-block {
+            margin-top: 1.5rem; padding: 2rem 2.5rem;
+            background: var(--bg-card); border-radius: 12px;
+            border-left: 3px solid var(--accent);
+        }
+        .argument-lead { font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; }
+        .argument-body { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
+        .argument-body strong { color: var(--text); }
+
         /* RESEARCH CARDS */
         .research-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
@@ -210,36 +236,56 @@
         /* ARCHITECTURE */
         .arch-section { padding: 6rem 0; }
         .arch-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        .arch-fullstack {
+            display: grid; grid-template-columns: 0.8fr auto 1.5fr auto 1fr auto 1fr;
+            align-items: stretch; gap: 0; margin: 2.5rem 0 1rem;
+        }
+        .arch-arrow {
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: var(--accent); padding: 0 0.4rem;
+            opacity: 0.5;
+        }
+        .arch-panel {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px;
+            padding: 1rem; display: flex; flex-direction: column;
+        }
+        .arch-panel-header {
+            font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--text-dim); text-align: center;
+            margin-bottom: 0.75rem;
+        }
+        .arch-panel-footer {
+            font-size: 0.65rem; color: var(--text-dim); text-align: center;
+            margin-top: auto; padding-top: 0.5rem;
+        }
+
+        .arch-data-list { display: flex; flex-direction: column; gap: 0.35rem; flex: 1; }
+        .arch-data-item {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+            border-radius: 5px; padding: 0.35rem 0.5rem; text-align: center;
+            font-size: 0.78rem; color: var(--text-secondary);
+        }
+
+        .arch-graph-panel { border-color: rgba(27,107,90,0.3); }
         .arch-canvas-wrap {
-            position: relative; width: 100%; height: 420px;
-            margin: 3rem 0 1rem; background: var(--bg-card); border-radius: 16px;
-            border: 1px solid var(--border); overflow: hidden;
+            position: relative; width: 100%; flex: 1; min-height: 220px;
+            border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.3);
         }
         #archCanvas { width: 100%; height: 100%; }
 
-        .arch-labels {
-            display: flex; justify-content: space-between; padding: 0 3%;
-            margin-bottom: 2rem;
-        }
-        .arch-label {
-            text-align: center; font-size: 0.72rem; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim);
-        }
-        .arch-label span { display: block; color: var(--text-secondary); font-size: 0.68rem; font-weight: 400; text-transform: none; letter-spacing: 0; margin-top: 0.2rem; }
+        .arch-mcp-panel .terminal { flex: 1; }
 
-        .arch-tools {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
-            margin-top: 1rem;
+        .arch-agents-panel { gap: 0.3rem; }
+        .arch-agent-box {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+            border-radius: 5px; padding: 0.4rem 0.5rem; text-align: center;
+            font-size: 0.75rem; color: var(--text-secondary);
         }
-        .arch-tool {
-            background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
-            padding: 1rem; text-align: center;
+        .arch-agent-box.orchestrator {
+            background: rgba(27,107,90,0.1); border-color: var(--accent);
+            color: var(--accent); font-weight: 700;
         }
-        .arch-tool code {
-            font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 600;
-            display: block; margin-bottom: 0.4rem;
-        }
-        .arch-tool .desc { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; }
 
         .model-strip {
             text-align: center; margin-top: 1.5rem; color: var(--text-dim);
@@ -370,12 +416,12 @@
             nav { padding: 0.75rem 1rem; }
             .nav-links { display: none; }
             section { padding: 4rem 1.25rem; }
-            .comparison-grid, .research-grid, .still-build { grid-template-columns: 1fr; }
+            .comparison-grid, .research-grid, .still-build, .breakdown-grid { grid-template-columns: 1fr; }
             .big-stats { grid-template-columns: 1fr; gap: 1.5rem; }
             .timeline { grid-template-columns: 1fr 1fr; gap: 2rem; }
             .timeline::before { display: none; }
-            .arch-canvas-wrap { height: 300px; }
-            .arch-tools { grid-template-columns: 1fr 1fr; }
+            .arch-fullstack { grid-template-columns: 1fr; gap: 0.75rem; }
+            .arch-arrow { transform: rotate(90deg); padding: 0.25rem 0; }
             .cta-stats { grid-template-columns: 1fr 1fr; }
         }
 
@@ -491,6 +537,34 @@
     </div>
 
     <p class="bottom-line" data-animate><strong>Build the graph once.</strong> Every agent after that is marginal cost.</p>
+
+    <!-- ROI COST JUSTIFICATION -->
+    <div class="cost-breakdown" data-animate>
+        <h3 style="margin-bottom:1.25rem;">Where the $40K–$75K per agent comes from</h3>
+        <div class="breakdown-grid">
+            <div class="breakdown-item">
+                <div class="breakdown-label">Context Pipeline</div>
+                <div class="breakdown-val">$12K–$20K</div>
+                <div class="breakdown-desc">Each agent needs its own data connectors, schema mapping, and retrieval logic. None of it is reusable across agents.</div>
+            </div>
+            <div class="breakdown-item">
+                <div class="breakdown-label">Prompt Engineering</div>
+                <div class="breakdown-val">$8K–$15K</div>
+                <div class="breakdown-desc">Business logic, decision rules, and edge cases hand-coded into prompts. Breaks on every model update.</div>
+            </div>
+            <div class="breakdown-item">
+                <div class="breakdown-label">Testing & Iteration</div>
+                <div class="breakdown-val">$10K–$20K</div>
+                <div class="breakdown-desc">Weeks of hallucination debugging, accuracy tuning, edge case discovery. Repeated from zero for each agent.</div>
+            </div>
+            <div class="breakdown-item">
+                <div class="breakdown-label">Infra & Maintenance</div>
+                <div class="breakdown-val">$10K–$20K/yr</div>
+                <div class="breakdown-desc">Hosting, monitoring, model migration costs. Multiply by 200 agents, each with its own failure modes.</div>
+            </div>
+        </div>
+        <p class="bottom-line" data-animate style="margin-top:1.5rem;"><strong>With IW:</strong> The graph holds all context, rules, and logic. New agents just query it. The $40K collapses to ~$3K.</p>
+    </div>
 </section>
 
 <hr class="divider">
@@ -501,7 +575,14 @@
         <span class="q-number">QUESTION 2</span>
     </div>
     <h2 data-animate>Build or Buy?</h2>
-    <p class="subtitle" data-animate>Every major research firm answered this in 2025.</p>
+
+    <!-- THE ARGUMENT FIRST -->
+    <div class="argument-block" data-animate>
+        <p class="argument-lead">The short answer: <strong>Buy the infrastructure. Build the agents.</strong></p>
+        <p class="argument-body">Here's why. Every enterprise AI agent needs three things to make a correct decision: <strong>entity resolution</strong> (what am I looking at?), <strong>metric computation</strong> (what do the numbers say?), and <strong>decision rules</strong> (what should I do about it?). Today, each team builds this from scratch for every agent — extracting tribal knowledge, hard-coding business logic into prompts, rebuilding context pipelines. It works once. It breaks at scale. The infrastructure underneath the agents — the ontology, the metrics, the decision logic — is the same across all of them. Build that once, and every agent becomes a thin query layer on top.</p>
+    </div>
+
+    <h3 data-animate style="margin-top:2.5rem; margin-bottom:1rem;">The research backs this up.</h3>
 
     <div class="research-grid" data-animate>
         <div class="research-card">
@@ -544,36 +625,68 @@
         <h2 data-animate>How It Works</h2>
         <p class="subtitle" data-animate>Intelligence stays in the graph. Agents query it. Models are swappable.</p>
 
-        <!-- ANIMATED ARCHITECTURE DIAGRAM -->
-        <div class="arch-canvas-wrap" data-animate>
-            <canvas id="archCanvas"></canvas>
-        </div>
+        <!-- FULL-STACK ARCHITECTURE: 3 PANELS -->
+        <div class="arch-fullstack" data-animate>
+            <!-- PANEL 1: DATA SOURCES -->
+            <div class="arch-panel arch-data">
+                <div class="arch-panel-header">YOUR DATA</div>
+                <div class="arch-data-list">
+                    <div class="arch-data-item">ERP</div>
+                    <div class="arch-data-item">CRM</div>
+                    <div class="arch-data-item">POS</div>
+                    <div class="arch-data-item">WMS</div>
+                    <div class="arch-data-item">BI Tools</div>
+                    <div class="arch-data-item">Policy Docs</div>
+                </div>
+                <div class="arch-panel-footer">Already have this</div>
+            </div>
 
-        <div class="arch-labels" data-animate>
-            <div class="arch-label">Your Data<span>Already have this</span></div>
-            <div class="arch-label" style="color:var(--accent)">Intelligence Graph<span>We build this</span></div>
-            <div class="arch-label" style="color:var(--green)">MCP Server<span>We expose this</span></div>
-            <div class="arch-label">Your Agents<span>You build these</span></div>
-        </div>
+            <div class="arch-arrow">→</div>
 
-        <!-- MCP TOOLS -->
-        <h3 data-animate style="margin-top:2.5rem; margin-bottom:1rem;">4 Tools. Any LLM. Full Access.</h3>
-        <div class="arch-tools" data-animate>
-            <div class="arch-tool">
-                <code style="color:var(--blue)">resolve_entity()</code>
-                <div class="desc">Map any entity to its full hierarchy, relationships, and ownership</div>
+            <!-- PANEL 2: KNOWLEDGE GRAPH (Canvas) -->
+            <div class="arch-panel arch-graph-panel">
+                <div class="arch-panel-header" style="color:var(--accent)">INTELLIGENCE GRAPH</div>
+                <div class="arch-canvas-wrap">
+                    <canvas id="archCanvas"></canvas>
+                </div>
+                <div class="arch-panel-footer" style="color:var(--accent); font-weight:700;">We build this</div>
             </div>
-            <div class="arch-tool">
-                <code style="color:var(--green)">compute_metric()</code>
-                <div class="desc">Calculate any KPI at any granularity with traceable formulas</div>
+
+            <div class="arch-arrow">→</div>
+
+            <!-- PANEL 3: MCP SERVER (Terminal) -->
+            <div class="arch-panel arch-mcp-panel">
+                <div class="arch-panel-header" style="color:var(--green)">MCP SERVER · API · CLI</div>
+                <div class="terminal" style="margin:0; border-radius:8px;">
+                    <div class="terminal-bar" style="padding:0.5rem 0.75rem;">
+                        <div class="terminal-dot r" style="width:7px;height:7px;"></div>
+                        <div class="terminal-dot y" style="width:7px;height:7px;"></div>
+                        <div class="terminal-dot g" style="width:7px;height:7px;"></div>
+                        <div class="terminal-title" style="font-size:0.6rem;">mcp-server</div>
+                    </div>
+                    <div class="terminal-body" style="padding:0.75rem; font-size:0.7rem; line-height:1.6;">
+                        <div><span class="info">resolve_entity</span><span class="comment">(name)</span></div>
+                        <div><span class="success">compute_metric</span><span class="comment">(kpi, scope)</span></div>
+                        <div><span class="warn">evaluate_rule</span><span class="comment">(rule, ctx)</span></div>
+                        <div><span class="highlight">traverse_path</span><span class="comment">(src → *)</span></div>
+                        <div style="margin-top:0.5rem;"><span class="comment">$ Connected: Claude, GPT...</span></div>
+                    </div>
+                </div>
+                <div class="arch-panel-footer" style="color:var(--green); font-weight:700;">We expose this</div>
             </div>
-            <div class="arch-tool">
-                <code style="color:var(--copper)">evaluate_rule()</code>
-                <div class="desc">Execute decision rules with authority chains and exception handling</div>
-            </div>
-            <div class="arch-tool">
-                <code style="color:var(--text)">traverse_path()</code>
-                <div class="desc">Discover cross-functional decisions no team could see alone</div>
+
+            <div class="arch-arrow">→</div>
+
+            <!-- PANEL 4: AGENTS -->
+            <div class="arch-panel arch-agents-panel">
+                <div class="arch-panel-header">YOUR AGENTS</div>
+                <div class="arch-agent-box orchestrator">Orchestrator</div>
+                <div class="arch-agent-box" style="border-color:var(--blue);">Pricing Agent</div>
+                <div class="arch-agent-box" style="border-color:var(--teal);">Supply Chain</div>
+                <div class="arch-agent-box" style="border-color:var(--copper);">Trade Marketing</div>
+                <div class="arch-agent-box" style="border-color:var(--text-dim);">Finance Agent</div>
+                <div class="arch-agent-box" style="border-color:var(--text-dim); opacity:0.5;">Agent #201...</div>
+                <div class="arch-panel-footer"><strong>You build these</strong></div>
             </div>
         </div>
 
@@ -708,7 +821,7 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
 
 // ========================================
-// ARCHITECTURE CANVAS — ANIMATED FLOW
+// KNOWLEDGE GRAPH CANVAS — LIVE GRAPH
 // ========================================
 const archCanvas = document.getElementById('archCanvas');
 const ctx = archCanvas.getContext('2d');
@@ -728,246 +841,147 @@ function resizeArch() {
 resizeArch();
 window.addEventListener('resize', resizeArch);
 
-// Define boxes
-function getBoxes() {
-    const pad = archW * 0.03;
-    const gapFrac = 0.025;
-    const gap = archW * gapFrac;
-    const totalGap = gap * 3;
-    const totalPad = pad * 2;
-    const available = archW - totalPad - totalGap;
+// Knowledge graph nodes
+const graphNodes = [
+    // L1 Ontology (blue)
+    { label: 'Company', layer: 0, ring: 0 },
+    { label: 'Skin Care', layer: 0, ring: 1 },
+    { label: 'GlowMax', layer: 0, ring: 1 },
+    { label: 'North Zone', layer: 0, ring: 2 },
+    { label: 'SKU:GXM-50', layer: 0, ring: 2 },
+    { label: 'RSM: Priya', layer: 0, ring: 2 },
+    // L2 Metrics (teal)
+    { label: 'DOI', layer: 1, ring: 1 },
+    { label: 'Sell-Through', layer: 1, ring: 1 },
+    { label: 'Margin', layer: 1, ring: 2 },
+    // L3 Decisions (copper)
+    { label: 'Markdown Rule', layer: 2, ring: 1 },
+    { label: 'Reorder Rule', layer: 2, ring: 2 },
+    { label: 'Authority', layer: 2, ring: 2 },
+];
 
-    const w1 = available * 0.18;
-    const w2 = available * 0.32;
-    const w3 = available * 0.20;
-    const w4 = available * 0.30;
-    const h = archH * 0.7;
-    const y = archH * 0.12;
+const graphEdges = [
+    [0,1],[0,3],[1,2],[2,4],[3,5],[4,6],[4,7],[4,8],[6,9],[7,9],[8,9],[9,10],[9,11],[3,6],[5,11]
+];
 
-    let x = pad;
-    const boxes = [];
+const layerColors = ['#2563eb', '#0d9488', '#B8734A'];
+const layerNames = ['Ontology', 'Metrics', 'Decisions'];
 
-    // Data Sources
-    boxes.push({ x, y, w: w1, h, label: 'YOUR DATA', color: '#333', items: ['ERP', 'CRM', 'POS', 'WMS', 'BI Tools', 'Policy Docs'] });
-    x += w1 + gap;
+// Position nodes
+graphNodes.forEach((n, i) => {
+    const angle = (i / graphNodes.length) * Math.PI * 2 - Math.PI/2;
+    const r = n.ring === 0 ? 0 : n.ring === 1 ? 0.3 : 0.45;
+    n.baseX = 0.5 + Math.cos(angle) * r;
+    n.baseY = 0.5 + Math.sin(angle) * r;
+    n.x = n.baseX;
+    n.y = n.baseY;
+});
 
-    // Intelligence Graph
-    boxes.push({ x, y, w: w2, h, label: 'INTELLIGENCE GRAPH', color: '#1B6B5A', isCore: true,
-        layers: [
-            { label: 'L1  ONTOLOGY', sub: 'What the business IS', color: '#2563eb' },
-            { label: 'L2  METRICS', sub: 'How it measures itself', color: '#0d9488' },
-            { label: 'L3  DECISIONS', sub: 'How it acts on what it knows', color: '#B8734A' }
-        ]
-    });
-    x += w2 + gap;
-
-    // MCP Server
-    boxes.push({ x, y, w: w3, h, label: 'MCP SERVER', color: '#0d9488',
-        tools: ['resolve_entity()', 'compute_metric()', 'evaluate_rule()', 'traverse_path()'],
-        toolColors: ['#2563eb', '#0d9488', '#B8734A', '#F5F5F5']
-    });
-    x += w3 + gap;
-
-    // Agents
-    boxes.push({ x, y, w: w4, h, label: 'YOUR AGENTS', color: '#555',
-        agents: ['Orchestrator', 'Pricing Agent', 'Supply Chain', 'Trade Marketing', 'Finance Agent', 'Agent #201...']
-    });
-
-    return boxes;
-}
-
-// Particles flowing between boxes
-const particles = [];
-const PARTICLE_COUNT = 50;
-
-for (let i = 0; i < PARTICLE_COUNT; i++) {
-    particles.push({
+// Pulse particles along edges
+const edgeParticles = [];
+for (let i = 0; i < 20; i++) {
+    edgeParticles.push({
+        edge: Math.floor(Math.random() * graphEdges.length),
         progress: Math.random(),
-        speed: 0.001 + Math.random() * 0.003,
-        lane: Math.floor(Math.random() * 3), // 0-2: which gap to be in
-        yOffset: (Math.random() - 0.5) * 0.6,
-        size: 1.5 + Math.random() * 2.5,
-        alpha: 0.3 + Math.random() * 0.7,
+        speed: 0.003 + Math.random() * 0.005,
     });
 }
 
-function drawArch(time) {
+function drawGraph(time) {
     ctx.clearRect(0, 0, archW, archH);
+    const cx = archW / 2, cy = archH / 2;
+    const scale = Math.min(archW, archH) * 0.85;
 
-    const boxes = getBoxes();
-
-    // Draw boxes
-    boxes.forEach((box, bi) => {
-        // Box background
-        ctx.fillStyle = bi === 1 ? 'rgba(27,107,90,0.08)' : 'rgba(255,255,255,0.03)';
-        ctx.strokeStyle = bi === 1 ? 'rgba(27,107,90,0.5)' : 'rgba(255,255,255,0.1)';
-        ctx.lineWidth = bi === 1 ? 2 : 1;
-        roundRect(ctx, box.x, box.y, box.w, box.h, 10);
-
-        // Label
-        ctx.fillStyle = box.color;
-        ctx.font = '600 10px Inter';
-        ctx.textAlign = 'center';
-        ctx.letterSpacing = '1px';
-        ctx.fillText(box.label, box.x + box.w / 2, box.y + 22);
-
-        // Items (box 0)
-        if (box.items) {
-            ctx.font = '500 13px Inter';
-            ctx.fillStyle = '#ccc';
-            box.items.forEach((item, i) => {
-                ctx.fillText(item, box.x + box.w / 2, box.y + 55 + i * 28);
-            });
-        }
-
-        // Layers (box 1)
-        if (box.layers) {
-            const layerH = (box.h - 50) / 3 - 8;
-            box.layers.forEach((layer, i) => {
-                const ly = box.y + 38 + i * (layerH + 8);
-                ctx.fillStyle = 'rgba(255,255,255,0.04)';
-                ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-                ctx.lineWidth = 1;
-                roundRect(ctx, box.x + 10, ly, box.w - 20, layerH, 6);
-
-                ctx.fillStyle = layer.color;
-                ctx.font = '700 11px Inter';
-                ctx.textAlign = 'center';
-                ctx.fillText(layer.label, box.x + box.w / 2, ly + layerH * 0.4);
-                ctx.fillStyle = '#777';
-                ctx.font = '400 10px Inter';
-                ctx.fillText(layer.sub, box.x + box.w / 2, ly + layerH * 0.7);
-            });
-        }
-
-        // Tools (box 2)
-        if (box.tools) {
-            ctx.textAlign = 'left';
-            ctx.font = '600 11px JetBrains Mono';
-            const labelX = box.x + 14;
-            box.tools.forEach((tool, i) => {
-                ctx.fillStyle = '#222';
-                roundRect(ctx, box.x + 10, box.y + 45 + i * 50, box.w - 20, 38, 5);
-                ctx.fillStyle = box.toolColors[i];
-                ctx.font = '500 11px JetBrains Mono';
-                ctx.fillText(tool, labelX, box.y + 70 + i * 50);
-            });
-            // API / CLI label
-            ctx.fillStyle = '#888';
-            ctx.font = '500 11px Inter';
-            ctx.textAlign = 'center';
-            ctx.fillText('API  ·  CLI', box.x + box.w / 2, box.y + box.h - 15);
-        }
-
-        // Agents (box 3)
-        if (box.agents) {
-            const agentColors = ['#B8734A', '#2563eb', '#0d9488', '#B8734A', '#999', '#444'];
-            ctx.textAlign = 'center';
-            box.agents.forEach((agent, i) => {
-                if (i === 0) {
-                    // Orchestrator - bigger
-                    ctx.fillStyle = 'rgba(27,107,90,0.15)';
-                    ctx.strokeStyle = 'rgba(27,107,90,0.4)';
-                    ctx.lineWidth = 1.5;
-                    roundRect(ctx, box.x + 10, box.y + 38, box.w - 20, 34, 6);
-                    ctx.fillStyle = '#1B6B5A';
-                    ctx.font = '700 12px Inter';
-                    ctx.fillText(agent, box.x + box.w / 2, box.y + 60);
-                } else {
-                    ctx.fillStyle = 'rgba(255,255,255,0.03)';
-                    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
-                    ctx.lineWidth = 1;
-                    roundRect(ctx, box.x + 10, box.y + 56 + i * 36, box.w - 20, 30, 5);
-                    ctx.fillStyle = agentColors[i] || '#666';
-                    ctx.font = '500 11px Inter';
-                    ctx.fillText(agent, box.x + box.w / 2, box.y + 76 + i * 36);
-                }
-            });
-        }
+    // Gentle floating
+    graphNodes.forEach((n, i) => {
+        n.x = n.baseX + Math.sin(time * 0.0008 + i * 1.3) * 0.012;
+        n.y = n.baseY + Math.cos(time * 0.0006 + i * 0.9) * 0.012;
     });
 
-    // Draw connection arrows between boxes
-    for (let i = 0; i < 3; i++) {
-        const from = boxes[i];
-        const to = boxes[i + 1];
-        const x1 = from.x + from.w;
-        const x2 = to.x;
-        const cy = from.y + from.h / 2;
-
-        // Dashed line
-        ctx.strokeStyle = 'rgba(27,107,90,0.3)';
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4, 4]);
+    // Draw edges
+    graphEdges.forEach(([a, b]) => {
+        const na = graphNodes[a], nb = graphNodes[b];
+        const x1 = (na.x - 0.5) * scale + cx, y1 = (na.y - 0.5) * scale + cy;
+        const x2 = (nb.x - 0.5) * scale + cx, y2 = (nb.y - 0.5) * scale + cy;
+        ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(x1 + 4, cy);
-        ctx.lineTo(x2 - 4, cy);
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
         ctx.stroke();
-        ctx.setLineDash([]);
+    });
 
-        // Arrowhead
-        ctx.fillStyle = 'rgba(27,107,90,0.6)';
-        ctx.beginPath();
-        ctx.moveTo(x2 - 4, cy);
-        ctx.lineTo(x2 - 12, cy - 5);
-        ctx.lineTo(x2 - 12, cy + 5);
-        ctx.closePath();
-        ctx.fill();
-    }
-
-    // Animate particles flowing through connections
-    particles.forEach(p => {
+    // Draw particles along edges
+    edgeParticles.forEach(p => {
         p.progress += p.speed;
         if (p.progress > 1) {
             p.progress = 0;
-            p.lane = Math.floor(Math.random() * 3);
-            p.yOffset = (Math.random() - 0.5) * 0.6;
+            p.edge = Math.floor(Math.random() * graphEdges.length);
         }
+        const [a, b] = graphEdges[p.edge];
+        const na = graphNodes[a], nb = graphNodes[b];
+        const px = ((na.x + (nb.x - na.x) * p.progress) - 0.5) * scale + cx;
+        const py = ((na.y + (nb.y - na.y) * p.progress) - 0.5) * scale + cy;
 
-        const from = boxes[p.lane];
-        const to = boxes[p.lane + 1];
-        const x1 = from.x + from.w;
-        const x2 = to.x;
-        const cy = from.y + from.h / 2 + p.yOffset * 30;
-
-        const px = x1 + (x2 - x1) * p.progress;
-        const py = cy + Math.sin(p.progress * Math.PI * 3 + time * 0.001) * 4;
-
-        // Glow
-        const grad = ctx.createRadialGradient(px, py, 0, px, py, p.size * 3);
-        grad.addColorStop(0, `rgba(27,107,90,${p.alpha * 0.5})`);
+        const grad = ctx.createRadialGradient(px, py, 0, px, py, 6);
+        grad.addColorStop(0, 'rgba(27,107,90,0.6)');
         grad.addColorStop(1, 'rgba(27,107,90,0)');
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(px, py, p.size * 3, 0, Math.PI * 2);
+        ctx.arc(px, py, 6, 0, Math.PI * 2);
         ctx.fill();
 
-        // Dot
-        ctx.fillStyle = `rgba(36,132,111,${p.alpha})`;
+        ctx.fillStyle = 'rgba(36,132,111,0.9)';
         ctx.beginPath();
-        ctx.arc(px, py, p.size, 0, Math.PI * 2);
+        ctx.arc(px, py, 2, 0, Math.PI * 2);
         ctx.fill();
     });
 
-    requestAnimationFrame(drawArch);
-}
+    // Draw nodes
+    graphNodes.forEach((n, i) => {
+        const x = (n.x - 0.5) * scale + cx;
+        const y = (n.y - 0.5) * scale + cy;
+        const r = n.ring === 0 ? 18 : n.ring === 1 ? 12 : 9;
+        const color = layerColors[n.layer];
 
-function roundRect(ctx, x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-}
+        // Glow
+        const glow = ctx.createRadialGradient(x, y, 0, x, y, r * 2.5);
+        glow.addColorStop(0, color + '22');
+        glow.addColorStop(1, color + '00');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(x, y, r * 2.5, 0, Math.PI * 2);
+        ctx.fill();
 
-requestAnimationFrame(drawArch);
+        // Node
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Label
+        ctx.fillStyle = '#ddd';
+        ctx.font = `${r < 12 ? 8 : 9}px Inter`;
+        ctx.textAlign = 'center';
+        ctx.fillText(n.label, x, y + r + 12);
+    });
+
+    // Legend
+    ctx.font = '500 9px Inter';
+    layerNames.forEach((name, i) => {
+        const lx = 12, ly = 16 + i * 18;
+        ctx.fillStyle = layerColors[i];
+        ctx.beginPath();
+        ctx.arc(lx, ly, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#888';
+        ctx.textAlign = 'left';
+        ctx.fillText('L' + (i+1) + ' ' + name, lx + 10, ly + 3);
+    });
+
+    requestAnimationFrame(drawGraph);
+}
+requestAnimationFrame(drawGraph);
 
 // ========================================
 // TERMINAL ANIMATION
