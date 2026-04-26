@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How an IW gets built — 5 steps, 5 weeks, ~40 hours</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAFAF8;
+            --bg-elevated: #F3F0EA;
+            --card: #ffffff;
+            --text: #1A1A18;
+            --text-secondary: #52514D;
+            --text-dim: #8C8A85;
+            --text-faint: #C4C2BC;
+            --border: rgba(0,0,0,0.08);
+            --accent: #1B6B5A;
+            --accent-light: #24846F;
+            --accent-glow: rgba(27,107,90,0.10);
+            --copper: #B8734A;
+            --amber: #C68A2E;
+            --green: #1B854A;
+            --blue: #2E5BCB;
+            --purple: #6E47C1;
+            --red: #B8443D;
+            --teal: #0d9488;
+            --font: 'Inter', -apple-system, sans-serif;
+            --serif: 'DM Serif Display', Georgia, serif;
+            --mono: 'JetBrains Mono', monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font); background: var(--bg); color: var(--text);
+            -webkit-font-smoothing: antialiased; line-height: 1.5;
+        }
+
+        /* NAV */
+        nav {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1.5rem; height: 56px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 1.5rem;
+        }
+        .logo { font-family: var(--mono); font-weight: 700; font-size: 1.15rem; color: var(--text); text-decoration: none; }
+        .logo .dot { color: var(--accent); }
+        .nav-mid { display: flex; gap: 0.4rem; flex: 1; justify-content: center; }
+        .nav-mid a {
+            font-size: 0.82rem; color: var(--text-secondary);
+            text-decoration: none; padding: 0.4rem 0.75rem;
+            border-radius: 8px; transition: all 0.2s;
+        }
+        .nav-mid a:hover { color: var(--text); background: rgba(0,0,0,0.04); }
+        .nav-mid a.active { color: var(--text); background: rgba(0,0,0,0.04); font-weight: 600; }
+        .nav-deep {
+            font-family: var(--mono); font-size: 0.78rem;
+            color: var(--text-secondary); text-decoration: none;
+            padding: 0.4rem 0.85rem; border: 1px solid var(--border); border-radius: 6px;
+            transition: all 0.2s; white-space: nowrap;
+        }
+        .nav-deep:hover { color: var(--accent); border-color: var(--accent); }
+        @media (max-width: 800px) { .nav-mid { display: none; } }
+
+        /* HERO */
+        .hero {
+            max-width: 1500px; margin: 0 auto;
+            padding: 3.5rem 2rem 2rem;
+        }
+        .eyebrow {
+            font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+            color: var(--copper); text-transform: uppercase; letter-spacing: 0.16em;
+            margin-bottom: 0.85rem;
+        }
+        .hero h1 {
+            font-family: var(--serif); font-weight: 400;
+            font-size: clamp(2rem, 4.4vw, 3.3rem);
+            line-height: 1.05; letter-spacing: -0.02em;
+            color: var(--text); max-width: 1100px;
+        }
+        .hero h1 em {
+            font-style: normal; color: var(--accent);
+        }
+        .hero p {
+            margin-top: 1rem; color: var(--text-secondary);
+            font-size: 1.02rem; max-width: 720px;
+        }
+
+        /* TOTAL STATS */
+        .totals {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 1px; background: var(--border);
+            border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+            margin-top: 2.5rem; max-width: 800px;
+        }
+        .totals .t {
+            background: var(--card); padding: 1rem 1.25rem;
+        }
+        .t-num {
+            font-family: var(--serif); font-size: 1.7rem; line-height: 1;
+            color: var(--text);
+        }
+        .t-num.accent { color: var(--accent); }
+        .t-label {
+            font-family: var(--mono); font-size: 0.66rem; color: var(--text-dim);
+            text-transform: uppercase; letter-spacing: 0.12em; margin-top: 0.4rem;
+        }
+
+        /* STEPS — horizontal */
+        .steps-wrap {
+            max-width: 1500px; margin: 0 auto;
+            padding: 1.5rem 2rem 4rem;
+            overflow-x: auto;
+        }
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(260px, 1fr));
+            gap: 1rem;
+            min-width: max-content;
+            position: relative;
+        }
+        @media (max-width: 1300px) {
+            .steps { grid-template-columns: repeat(5, 260px); }
+        }
+
+        .step {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.25rem 1.1rem;
+            display: flex; flex-direction: column;
+            position: relative;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .step:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+        /* arrow connector */
+        .step:not(:last-child)::after {
+            content: '→';
+            position: absolute; right: -0.95rem; top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-faint);
+            font-family: var(--mono); font-size: 1.2rem;
+            background: var(--bg);
+            width: 22px; height: 22px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .step-head {
+            display: flex; align-items: baseline; justify-content: space-between;
+            margin-bottom: 0.35rem;
+        }
+        .step-num {
+            font-family: var(--serif); font-size: 1.8rem; line-height: 1;
+            color: var(--accent); letter-spacing: -0.02em;
+        }
+        .step-week {
+            font-family: var(--mono); font-size: 0.66rem; font-weight: 700;
+            color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em;
+        }
+
+        .step-title {
+            font-size: 1rem; font-weight: 700; color: var(--text);
+            line-height: 1.3; margin-top: 0.4rem; letter-spacing: -0.01em;
+        }
+
+        .step-time {
+            display: flex; gap: 0.4rem; margin-top: 0.5rem; flex-wrap: wrap;
+        }
+        .chip {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            padding: 0.18rem 0.55rem; border-radius: 100px;
+            font-family: var(--mono); font-size: 0.66rem;
+            background: var(--bg-elevated); color: var(--text-secondary);
+        }
+        .chip.iw { background: var(--accent-glow); color: var(--accent); }
+        .chip.you { background: rgba(184,115,74,0.10); color: var(--copper); }
+        .chip strong { font-weight: 700; }
+
+        .step-mini {
+            margin-top: 0.85rem; height: 200px;
+            background: var(--bg);
+            border: 1px solid var(--border); border-radius: 8px;
+            position: relative; overflow: hidden;
+        }
+        .step-mini svg { width: 100%; height: 100%; display: block; }
+
+        .step-bullets {
+            margin-top: 0.85rem;
+            font-family: var(--mono); font-size: 0.72rem;
+            color: var(--text-secondary); line-height: 1.55;
+        }
+        .step-bullets div { padding: 0.05rem 0; }
+        .step-bullets div::before {
+            content: '+ ';
+            color: var(--accent); font-weight: 700;
+        }
+
+        .step-foot {
+            margin-top: 0.75rem; padding-top: 0.6rem;
+            border-top: 1px dashed var(--border);
+            font-family: var(--mono); font-size: 0.66rem; color: var(--text-dim);
+            display: flex; justify-content: space-between;
+        }
+        .step-foot strong { color: var(--accent); font-weight: 700; }
+
+        /* FOOTER */
+        .deep-dive {
+            max-width: 1500px; margin: 2rem auto 4rem;
+            padding: 2rem; text-align: center;
+        }
+        .deep-dive a {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: var(--mono); font-size: 0.85rem;
+            color: var(--accent); text-decoration: none;
+            padding: 0.65rem 1.25rem;
+            border: 1px solid var(--accent); border-radius: 100px;
+            transition: all 0.2s;
+        }
+        .deep-dive a:hover { background: var(--accent); color: #fff; }
+
+        /* small helpers for mini graphs */
+        .lbl { font-family: 'Inter', sans-serif; font-size: 8.5px; fill: #1A1A18; }
+        .lbl-mono { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; fill: #52514D; }
+        .lbl-faint { fill: #8C8A85; }
+        .lbl-bold { font-weight: 700; }
+        .annot {
+            font-family: 'JetBrains Mono', monospace; font-size: 7px;
+            fill: #B8734A; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .edge { stroke: rgba(0,0,0,0.18); stroke-width: 1; fill: none; }
+        .edge-dashed { stroke-dasharray: 2 2; }
+        .edge-faint { stroke: rgba(0,0,0,0.08); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo">iw<span class="dot">.</span></a>
+    <div class="nav-mid">
+        <a href="learn.html">Why IW</a>
+        <a href="iw-overview.html" class="active">How It's Built</a>
+        <a href="demo.html">Demo</a>
+        <a href="cortex.html">Cortex</a>
+        <a href="case-studies.html">Case Studies</a>
+        <a href="partners.html">Partners</a>
+        <a href="team.html">Team</a>
+    </div>
+    <a href="how-iw-is-built.html" class="nav-deep">deep dive →</a>
+</nav>
+
+<section class="hero">
+    <div class="eyebrow">How IW is built · 1-page overview</div>
+    <h1>Five steps. <em>Five weeks.</em> About <em>40 hours</em> of your team's time.</h1>
+    <p>Reference build for NorthCo Foods — a ₹4,200 Cr CPG enterprise. Each step adds a layer to the standing graph. The graph below each step shows the macro elements introduced.</p>
+
+    <div class="totals">
+        <div class="t"><div class="t-num accent">5</div><div class="t-label">weeks elapsed</div></div>
+        <div class="t"><div class="t-num">~40</div><div class="t-label">hours from your team</div></div>
+        <div class="t"><div class="t-num">200</div><div class="t-label">nodes in the graph</div></div>
+        <div class="t"><div class="t-num">38</div><div class="t-label">systems connected</div></div>
+    </div>
+</section>
+
+<div class="steps-wrap">
+<div class="steps">
+
+<!-- ===================== STEP 1 ===================== -->
+<div class="step">
+    <div class="step-head">
+        <div class="step-num">01</div>
+        <div class="step-week">Week 1</div>
+    </div>
+    <div class="step-title">Base graph from CPG knowledge + public data</div>
+    <div class="step-time">
+        <span class="chip iw"><strong>IW</strong> 5 days</span>
+        <span class="chip you"><strong>You</strong> 2 hrs</span>
+    </div>
+    <div class="step-mini">
+        <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- top: CPG supergraph hub with industry pattern dots -->
+            <line class="edge" x1="60"  y1="35" x2="130" y2="35"/>
+            <line class="edge" x1="200" y1="35" x2="130" y2="35"/>
+            <line class="edge" x1="80"  y1="20" x2="130" y2="35"/>
+            <line class="edge" x1="180" y1="20" x2="130" y2="35"/>
+            <circle cx="60"  cy="35" r="4"  fill="#6E47C1" opacity="0.7"/>
+            <circle cx="80"  cy="20" r="4"  fill="#6E47C1" opacity="0.7"/>
+            <circle cx="180" cy="20" r="4"  fill="#6E47C1" opacity="0.7"/>
+            <circle cx="200" cy="35" r="4"  fill="#6E47C1" opacity="0.7"/>
+            <circle cx="130" cy="35" r="9"  fill="#6E47C1"/>
+            <text x="130" y="58" text-anchor="middle" class="lbl lbl-bold">CPG Supergraph</text>
+            <text x="130" y="68" text-anchor="middle" class="lbl-mono lbl-faint">SKU · Channel · Promo · Season</text>
+
+            <!-- arrow down -->
+            <line class="edge edge-dashed" x1="130" y1="78" x2="130" y2="98"/>
+
+            <!-- bottom: NorthCo + BUs + categories -->
+            <circle cx="130" cy="108" r="9" fill="#1B6B5A"/>
+            <text x="130" y="130" text-anchor="middle" class="lbl lbl-bold">NorthCo</text>
+
+            <line class="edge" x1="130" y1="117" x2="80"  y2="148"/>
+            <line class="edge" x1="130" y1="117" x2="180" y2="148"/>
+            <circle cx="80"  cy="148" r="6" fill="#1B854A"/>
+            <circle cx="180" cy="148" r="6" fill="#1B854A"/>
+            <text x="80"  y="166" text-anchor="middle" class="lbl">Foods BU</text>
+            <text x="180" y="166" text-anchor="middle" class="lbl">P-Care BU</text>
+
+            <line class="edge" x1="80"  y1="154" x2="55"  y2="180"/>
+            <line class="edge" x1="80"  y1="154" x2="105" y2="180"/>
+            <line class="edge" x1="180" y1="154" x2="155" y2="180"/>
+            <line class="edge" x1="180" y1="154" x2="205" y2="180"/>
+            <circle cx="55"  cy="180" r="3.5" fill="#0d9488"/>
+            <circle cx="105" cy="180" r="3.5" fill="#0d9488"/>
+            <circle cx="155" cy="180" r="3.5" fill="#0d9488"/>
+            <circle cx="205" cy="180" r="3.5" fill="#0d9488"/>
+            <text x="55"  y="195" text-anchor="middle" class="lbl-mono">snacks</text>
+            <text x="105" y="195" text-anchor="middle" class="lbl-mono">bevs</text>
+            <text x="155" y="195" text-anchor="middle" class="lbl-mono">soaps</text>
+            <text x="205" y="195" text-anchor="middle" class="lbl-mono">shamp.</text>
+
+            <!-- annotation -->
+            <text x="10" y="14" class="annot">FROM PUBLIC</text>
+            <text x="180" y="100" class="annot">+45 nodes</text>
+        </svg>
+    </div>
+    <div class="step-bullets">
+        <div>CPG industry brain bound</div>
+        <div>14 BUs, 11 categories, 2,140 SKUs</div>
+        <div>4 zones, 4 named competitors</div>
+    </div>
+    <div class="step-foot">
+        <span>graph total</span>
+        <span><strong>45</strong> nodes</span>
+    </div>
+</div>
+
+<!-- ===================== STEP 2 ===================== -->
+<div class="step">
+    <div class="step-head">
+        <div class="step-num">02</div>
+        <div class="step-week">Week 2</div>
+    </div>
+    <div class="step-title">SMEs + consultants thrash it out with stakeholders</div>
+    <div class="step-time">
+        <span class="chip iw"><strong>IW</strong> 5 days</span>
+        <span class="chip you"><strong>You</strong> 8 hrs</span>
+    </div>
+    <div class="step-mini">
+        <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- existing structure faded -->
+            <circle cx="130" cy="22" r="6" fill="#6E47C1" opacity="0.25"/>
+            <circle cx="130" cy="62" r="6" fill="#1B6B5A" opacity="0.25"/>
+            <line class="edge edge-faint" x1="130" y1="28" x2="130" y2="56"/>
+
+            <!-- TOP: new SKU levels -->
+            <line class="edge" x1="100" y1="62" x2="60"  y2="62"/>
+            <line class="edge" x1="60"  y1="62" x2="60"  y2="78"/>
+            <line class="edge" x1="60"  y1="78" x2="60"  y2="92"/>
+            <circle cx="60" cy="62" r="3.5" fill="#0d9488" opacity="0.25"/>
+            <circle cx="60" cy="78" r="4.5" fill="#0d9488"/>
+            <circle cx="60" cy="92" r="4.5" fill="#0d9488"/>
+            <text x="73" y="82" class="lbl lbl-bold">+ Variant</text>
+            <text x="73" y="96" class="lbl lbl-bold">+ Pack-Config</text>
+
+            <!-- MIDDLE: zones + states cluster -->
+            <text x="195" y="22" class="annot">+ ZONES + STATES</text>
+            <g transform="translate(195,55)">
+                <circle r="6" fill="#C68A2E"/>
+                <circle cx="-22" cy="-12" r="3" fill="#C68A2E" opacity="0.7"/>
+                <circle cx="22"  cy="-12" r="3" fill="#C68A2E" opacity="0.7"/>
+                <circle cx="-22" cy="12"  r="3" fill="#C68A2E" opacity="0.7"/>
+                <circle cx="22"  cy="12"  r="3" fill="#C68A2E" opacity="0.7"/>
+                <circle cx="-30" cy="-22" r="2" fill="#C68A2E" opacity="0.5"/>
+                <circle cx="30"  cy="-22" r="2" fill="#C68A2E" opacity="0.5"/>
+                <circle cx="-30" cy="22"  r="2" fill="#C68A2E" opacity="0.5"/>
+                <circle cx="30"  cy="22"  r="2" fill="#C68A2E" opacity="0.5"/>
+                <line class="edge" x1="0" y1="0" x2="-22" y2="-12"/>
+                <line class="edge" x1="0" y1="0" x2="22"  y2="-12"/>
+                <line class="edge" x1="0" y1="0" x2="-22" y2="12"/>
+                <line class="edge" x1="0" y1="0" x2="22"  y2="12"/>
+            </g>
+
+            <!-- LOWER LEFT: competitors -->
+            <text x="50" y="120" class="annot">+ COMPETITORS</text>
+            <circle cx="20"  cy="135" r="4" fill="#B8443D"/>
+            <circle cx="35"  cy="135" r="4" fill="#B8443D"/>
+            <circle cx="50"  cy="135" r="4" fill="#B8443D"/>
+            <circle cx="65"  cy="135" r="4" fill="#B8443D"/>
+            <circle cx="80"  cy="135" r="4" fill="#B8443D"/>
+            <circle cx="95"  cy="135" r="4" fill="#B8443D"/>
+            <text x="58" y="150" text-anchor="middle" class="lbl-mono">6 named</text>
+
+            <!-- LOWER RIGHT: DCs -->
+            <text x="195" y="120" class="annot">+ 6 DCs</text>
+            <g transform="translate(195,150)">
+                <rect x="-32" y="-6" width="11" height="11" rx="2" fill="#2E5BCB"/>
+                <rect x="-19" y="-6" width="11" height="11" rx="2" fill="#2E5BCB"/>
+                <rect x="-6"  y="-6" width="11" height="11" rx="2" fill="#2E5BCB"/>
+                <rect x="7"   y="-6" width="11" height="11" rx="2" fill="#2E5BCB"/>
+                <rect x="20"  y="-6" width="11" height="11" rx="2" fill="#2E5BCB"/>
+                <rect x="-12" y="8"  width="11" height="11" rx="2" fill="#2E5BCB"/>
+                <text x="0" y="33" text-anchor="middle" class="lbl-mono">Mum·Pune·Del·Chn·Blr·Kol</text>
+            </g>
+
+            <!-- annotation -->
+            <text x="10" y="14" class="annot">FROM SMEs</text>
+        </svg>
+    </div>
+    <div class="step-bullets">
+        <div>SKU hierarchy: 3 → 5 levels</div>
+        <div>4 zones × 7 states detailed</div>
+        <div>6 distribution centres named</div>
+    </div>
+    <div class="step-foot">
+        <span>graph total</span>
+        <span><strong>70</strong> nodes</span>
+    </div>
+</div>
+
+<!-- ===================== STEP 3 ===================== -->
+<div class="step">
+    <div class="step-head">
+        <div class="step-num">03</div>
+        <div class="step-week">Week 3</div>
+    </div>
+    <div class="step-title">Hydrate every node from 38 systems · resolve conflicts</div>
+    <div class="step-time">
+        <span class="chip iw"><strong>IW</strong> 5 days</span>
+        <span class="chip you"><strong>You</strong> 16 hrs</span>
+    </div>
+    <div class="step-mini">
+        <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- TOP ROW: sources -->
+            <text x="10" y="14" class="annot">38 SYSTEMS</text>
+            <g transform="translate(0,22)">
+                <rect x="14"  y="0" width="28" height="14" rx="2" fill="#9D7AC8"/>
+                <text x="28"  y="10" text-anchor="middle" class="lbl-mono" fill="#fff">SAP</text>
+                <rect x="48"  y="0" width="32" height="14" rx="2" fill="#9D7AC8"/>
+                <text x="64"  y="10" text-anchor="middle" class="lbl-mono" fill="#fff">Oracle</text>
+                <rect x="86"  y="0" width="32" height="14" rx="2" fill="#9D7AC8"/>
+                <text x="102" y="10" text-anchor="middle" class="lbl-mono" fill="#fff">Snowfl</text>
+                <rect x="124" y="0" width="28" height="14" rx="2" fill="#9D7AC8"/>
+                <text x="138" y="10" text-anchor="middle" class="lbl-mono" fill="#fff">Excel</text>
+                <rect x="158" y="0" width="32" height="14" rx="2" fill="#9D7AC8"/>
+                <text x="174" y="10" text-anchor="middle" class="lbl-mono" fill="#fff">Tableau</text>
+                <rect x="196" y="0" width="32" height="14" rx="2" fill="#9D7AC8"/>
+                <text x="212" y="10" text-anchor="middle" class="lbl-mono" fill="#fff">PowerBI</text>
+                <rect x="234" y="0" width="20" height="14" rx="2" fill="#9D7AC8"/>
+                <text x="244" y="10" text-anchor="middle" class="lbl-mono" fill="#fff">MCP</text>
+            </g>
+
+            <!-- arrows down (funnel) -->
+            <path class="edge edge-dashed" d="M 28 38 L 130 70"/>
+            <path class="edge edge-dashed" d="M 64 38 L 130 70"/>
+            <path class="edge edge-dashed" d="M 102 38 L 130 70"/>
+            <path class="edge edge-dashed" d="M 138 38 L 130 70"/>
+            <path class="edge edge-dashed" d="M 174 38 L 130 70"/>
+            <path class="edge edge-dashed" d="M 212 38 L 130 70"/>
+            <path class="edge edge-dashed" d="M 244 38 L 130 70"/>
+
+            <!-- MIDDLE: dense base metrics -->
+            <text x="35" y="78" class="annot">BASE METRICS · 55+</text>
+            <g transform="translate(60,90)">
+                <!-- a 8x4 dot grid -->
+                <g fill="#3da3a3">
+                    <circle cx="0"  cy="0"  r="2"/><circle cx="14" cy="0"  r="2"/>
+                    <circle cx="28" cy="0"  r="2"/><circle cx="42" cy="0"  r="2"/>
+                    <circle cx="56" cy="0"  r="2"/><circle cx="70" cy="0"  r="2"/>
+                    <circle cx="84" cy="0"  r="2"/><circle cx="98" cy="0"  r="2"/>
+                    <circle cx="112" cy="0" r="2"/><circle cx="126" cy="0" r="2"/>
+                    <circle cx="140" cy="0" r="2"/>
+                    <circle cx="0"  cy="10" r="2"/><circle cx="14" cy="10" r="2"/>
+                    <circle cx="28" cy="10" r="2.5" fill="#1B854A"/>
+                    <circle cx="42" cy="10" r="2"/><circle cx="56" cy="10" r="2"/>
+                    <circle cx="70" cy="10" r="2"/><circle cx="84" cy="10" r="2"/>
+                    <circle cx="98" cy="10" r="2"/>
+                    <circle cx="112" cy="10" r="2"/><circle cx="126" cy="10" r="2"/>
+                    <circle cx="140" cy="10" r="2"/>
+                    <circle cx="0"  cy="20" r="2"/><circle cx="14" cy="20" r="2"/>
+                    <circle cx="28" cy="20" r="2"/><circle cx="42" cy="20" r="2"/>
+                    <circle cx="56" cy="20" r="2"/><circle cx="70" cy="20" r="2"/>
+                    <circle cx="84" cy="20" r="2"/><circle cx="98" cy="20" r="2"/>
+                    <circle cx="112" cy="20" r="2"/><circle cx="126" cy="20" r="2"/>
+                    <circle cx="140" cy="20" r="2"/>
+                </g>
+                <!-- highlight cogs node -->
+                <text x="28" y="-3" text-anchor="middle" class="annot" fill="#C68A2E">⚠</text>
+            </g>
+
+            <!-- annotation: cogs conflict -->
+            <text x="245" y="98" text-anchor="end" class="lbl-mono">cogs ← SAP ✓</text>
+            <text x="245" y="108" text-anchor="end" class="lbl-mono lbl-faint">  Oracle, Excel</text>
+            <text x="245" y="118" text-anchor="end" class="lbl-mono lbl-faint">  ±5% cross-check</text>
+
+            <!-- arrows down -->
+            <path class="edge" d="M 100 130 L 90 150"/>
+            <path class="edge" d="M 130 130 L 130 150"/>
+            <path class="edge" d="M 160 130 L 170 150"/>
+
+            <!-- BOTTOM: derived metrics -->
+            <text x="35" y="148" class="annot">184 DERIVED · LINEAGE 100%</text>
+            <g transform="translate(60,165)">
+                <circle cx="0"  cy="0" r="5" fill="#1B854A"/>
+                <text x="0"  y="14" text-anchor="middle" class="lbl">forecast</text>
+                <circle cx="35" cy="0" r="5" fill="#1B854A"/>
+                <text x="35" y="14" text-anchor="middle" class="lbl">fill_rate</text>
+                <circle cx="70" cy="0" r="5" fill="#1B854A"/>
+                <text x="70" y="14" text-anchor="middle" class="lbl">otif</text>
+                <circle cx="105" cy="0" r="5" fill="#1B854A"/>
+                <text x="105" y="14" text-anchor="middle" class="lbl">margin</text>
+                <circle cx="140" cy="0" r="5" fill="#1B854A"/>
+                <text x="140" y="14" text-anchor="middle" class="lbl">DOH</text>
+            </g>
+        </svg>
+    </div>
+    <div class="step-bullets">
+        <div>38 connectors auto-written</div>
+        <div>23 source-of-truth conflicts resolved</div>
+        <div>184 derived metrics · 312k edges</div>
+    </div>
+    <div class="step-foot">
+        <span>graph total</span>
+        <span><strong>150</strong> nodes</span>
+    </div>
+</div>
+
+<!-- ===================== STEP 4 ===================== -->
+<div class="step">
+    <div class="step-head">
+        <div class="step-num">04</div>
+        <div class="step-week">Week 4</div>
+    </div>
+    <div class="step-title">Morrie elicits tacit rules from practitioners</div>
+    <div class="step-time">
+        <span class="chip iw"><strong>IW</strong> 5 days</span>
+        <span class="chip you"><strong>You</strong> 6 hrs</span>
+    </div>
+    <div class="step-mini">
+        <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- LEFT: practitioners -->
+            <text x="10" y="14" class="annot">23 PRACTITIONERS</text>
+            <g transform="translate(38,40)">
+                <circle r="9" fill="#fff" stroke="#52514D" stroke-width="1"/>
+                <circle cy="-3" r="3" fill="#52514D"/>
+                <path d="M -5 4 Q 0 1 5 4" stroke="#52514D" stroke-width="1.2" fill="none"/>
+                <text x="0" y="22" text-anchor="middle" class="lbl-mono">Sneha</text>
+            </g>
+            <g transform="translate(38,80)">
+                <circle r="9" fill="#fff" stroke="#52514D" stroke-width="1"/>
+                <circle cy="-3" r="3" fill="#52514D"/>
+                <path d="M -5 4 Q 0 1 5 4" stroke="#52514D" stroke-width="1.2" fill="none"/>
+                <text x="0" y="22" text-anchor="middle" class="lbl-mono">Anuj</text>
+            </g>
+            <g transform="translate(38,120)">
+                <circle r="9" fill="#fff" stroke="#52514D" stroke-width="1"/>
+                <circle cy="-3" r="3" fill="#52514D"/>
+                <path d="M -5 4 Q 0 1 5 4" stroke="#52514D" stroke-width="1.2" fill="none"/>
+                <text x="0" y="22" text-anchor="middle" class="lbl-mono">Ritu</text>
+            </g>
+            <g transform="translate(38,160)">
+                <text x="0" y="0" text-anchor="middle" class="lbl-mono lbl-faint">+ 20 more</text>
+            </g>
+
+            <!-- arrows to Morrie -->
+            <line class="edge" x1="50" y1="40" x2="120" y2="100"/>
+            <line class="edge" x1="50" y1="80" x2="120" y2="100"/>
+            <line class="edge" x1="50" y1="120" x2="120" y2="100"/>
+
+            <!-- CENTER: Morrie -->
+            <circle cx="130" cy="100" r="14" fill="#6E47C1"/>
+            <text x="130" y="103" text-anchor="middle" fill="#fff" class="lbl lbl-bold">M</text>
+            <text x="130" y="125" text-anchor="middle" class="lbl lbl-bold">Morrie</text>
+
+            <!-- arrows to tacit rules -->
+            <line class="edge edge-dashed" x1="145" y1="92"  x2="200" y2="50"/>
+            <line class="edge edge-dashed" x1="145" y1="100" x2="200" y2="80"/>
+            <line class="edge edge-dashed" x1="145" y1="108" x2="200" y2="110"/>
+            <line class="edge edge-dashed" x1="145" y1="115" x2="200" y2="140"/>
+
+            <!-- RIGHT: tacit rules -->
+            <text x="252" y="18" text-anchor="end" class="annot">+ 25 TYPED RULES</text>
+            <g transform="translate(200,50)">
+                <rect x="-5" y="-7" width="55" height="14" rx="3" fill="#6E47C1" opacity="0.12" stroke="#6E47C1"/>
+                <text x="22" y="3" text-anchor="middle" class="lbl-mono" fill="#6E47C1">tacit/418</text>
+            </g>
+            <g transform="translate(200,80)">
+                <rect x="-5" y="-7" width="55" height="14" rx="3" fill="#6E47C1" opacity="0.12" stroke="#6E47C1"/>
+                <text x="22" y="3" text-anchor="middle" class="lbl-mono" fill="#6E47C1">tacit/422</text>
+            </g>
+            <g transform="translate(200,110)">
+                <rect x="-5" y="-7" width="55" height="14" rx="3" fill="#6E47C1" opacity="0.12" stroke="#6E47C1"/>
+                <text x="22" y="3" text-anchor="middle" class="lbl-mono" fill="#6E47C1">tacit/507</text>
+            </g>
+            <g transform="translate(200,140)">
+                <rect x="-5" y="-7" width="55" height="14" rx="3" fill="#6E47C1" opacity="0.12" stroke="#6E47C1"/>
+                <text x="22" y="3" text-anchor="middle" class="lbl-mono" fill="#6E47C1">tacit/623</text>
+            </g>
+            <text x="227" y="165" text-anchor="middle" class="lbl-mono lbl-faint">+ 21 more</text>
+
+            <!-- "GO LIVE" badge -->
+            <rect x="100" y="178" width="60" height="14" rx="7" fill="#1B6B5A"/>
+            <text x="130" y="188" text-anchor="middle" class="lbl-mono" fill="#fff">IW · GO LIVE</text>
+        </svg>
+    </div>
+    <div class="step-bullets">
+        <div>2,840 tacit insights captured</div>
+        <div>25 typed TacitRules on the graph</div>
+        <div>IW released as v1.0.0 · 23 users</div>
+    </div>
+    <div class="step-foot">
+        <span>graph total</span>
+        <span><strong>175</strong> nodes</span>
+    </div>
+</div>
+
+<!-- ===================== STEP 5 ===================== -->
+<div class="step">
+    <div class="step-head">
+        <div class="step-num">05</div>
+        <div class="step-week">Week 5</div>
+    </div>
+    <div class="step-title">Auto-write OTP agents · open custom builder</div>
+    <div class="step-time">
+        <span class="chip iw"><strong>IW</strong> 5 days</span>
+        <span class="chip you"><strong>You</strong> 8 hrs</span>
+    </div>
+    <div class="step-mini">
+        <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- TOP: existing graph (faint backdrop) -->
+            <text x="10" y="14" class="annot">ON TOP OF LIVE IW</text>
+            <g opacity="0.25">
+                <circle cx="40"  cy="35" r="3" fill="#1B854A"/>
+                <circle cx="60"  cy="40" r="3" fill="#0d9488"/>
+                <circle cx="80"  cy="38" r="3" fill="#3da3a3"/>
+                <circle cx="100" cy="35" r="3" fill="#6E47C1"/>
+                <circle cx="120" cy="40" r="3" fill="#1B854A"/>
+                <circle cx="140" cy="35" r="3" fill="#0d9488"/>
+                <circle cx="160" cy="40" r="3" fill="#1B854A"/>
+                <circle cx="180" cy="35" r="3" fill="#6E47C1"/>
+                <circle cx="200" cy="40" r="3" fill="#3da3a3"/>
+                <circle cx="220" cy="38" r="3" fill="#0d9488"/>
+                <line class="edge-faint" stroke="rgba(0,0,0,0.06)" x1="40" y1="35" x2="220" y2="40"/>
+            </g>
+
+            <!-- MIDDLE: OTP layer -->
+            <text x="10" y="65" class="annot">OTP LAYER · 14 AGENTS</text>
+            <g transform="translate(0,75)">
+                <!-- orchestrators -->
+                <rect x="14" y="0" width="68" height="22" rx="4" fill="#B8734A" opacity="0.15" stroke="#B8734A"/>
+                <text x="48" y="9" text-anchor="middle" class="lbl-mono" fill="#B8734A">orchestrators</text>
+                <text x="48" y="18" text-anchor="middle" class="lbl-mono" fill="#B8734A">5 live</text>
+                <!-- traversals -->
+                <rect x="92" y="0" width="68" height="22" rx="4" fill="#B8734A" opacity="0.15" stroke="#B8734A"/>
+                <text x="126" y="9" text-anchor="middle" class="lbl-mono" fill="#B8734A">traversals</text>
+                <text x="126" y="18" text-anchor="middle" class="lbl-mono" fill="#B8734A">3 live</text>
+                <!-- planners -->
+                <rect x="170" y="0" width="76" height="22" rx="4" fill="#B8734A" opacity="0.15" stroke="#B8734A"/>
+                <text x="208" y="9" text-anchor="middle" class="lbl-mono" fill="#B8734A">planners</text>
+                <text x="208" y="18" text-anchor="middle" class="lbl-mono" fill="#B8734A">3 live · 3 review</text>
+            </g>
+
+            <!-- BOTTOM: custom agent builder -->
+            <text x="10" y="125" class="annot">+ AGENT BUILDER</text>
+            <g transform="translate(0,135)">
+                <rect x="14" y="0" width="232" height="34" rx="6" fill="#C68A2E" opacity="0.10" stroke="#C68A2E" stroke-dasharray="3 2"/>
+                <circle cx="32" cy="17" r="6" fill="#C68A2E"/>
+                <text x="32" y="20" text-anchor="middle" fill="#fff" class="lbl lbl-bold">A</text>
+                <text x="48" y="14" class="lbl lbl-bold" fill="#1A1A18">MonsoonSubstitutionAdvisor</text>
+                <text x="48" y="26" class="lbl-mono" fill="#52514D">built by Anuj · 18 min · honors tacit/418</text>
+            </g>
+
+            <!-- bottom annotation -->
+            <text x="130" y="190" text-anchor="middle" class="lbl-mono lbl-faint">9 custom agents shipped to date</text>
+        </svg>
+    </div>
+    <div class="step-bullets">
+        <div>14 OTP agents auto-written</div>
+        <div>11 approved live · 3 in review</div>
+        <div>1st custom agent shipped in 18 min</div>
+    </div>
+    <div class="step-foot">
+        <span>graph total</span>
+        <span><strong>200</strong> nodes</span>
+    </div>
+</div>
+
+</div>
+</div>
+
+<div class="deep-dive">
+    <a href="how-iw-is-built.html">See the deep-dive walkthrough · interactive 200-node graph →</a>
+</div>
+
+</body>
+</html>

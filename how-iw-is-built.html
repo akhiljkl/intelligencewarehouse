@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How an Intelligence Warehouse is built — NorthCo Foods, week by week</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAFAF8;
+            --bg-elevated: #F3F0EA;
+            --bg-deep: #EFEBE2;
+            --card: #ffffff;
+            --text: #1A1A18;
+            --text-secondary: #52514D;
+            --text-dim: #8C8A85;
+            --text-faint: #C4C2BC;
+            --border: rgba(0,0,0,0.08);
+            --accent: #1B6B5A;
+            --accent-light: #24846F;
+            --accent-glow: rgba(27,107,90,0.10);
+            --copper: #B8734A;
+            --amber: #C68A2E;
+            --green: #1B854A;
+            --blue: #2E5BCB;
+            --purple: #6E47C1;
+            --red: #B8443D;
+            --gray-node: #C4C2BC;
+            --font: 'Inter', -apple-system, sans-serif;
+            --serif: 'DM Serif Display', Georgia, serif;
+            --mono: 'JetBrains Mono', monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; }
+        body {
+            font-family: var(--font); background: var(--bg); color: var(--text);
+            -webkit-font-smoothing: antialiased; line-height: 1.55;
+            display: flex; flex-direction: column;
+        }
+
+        /* NAV */
+        nav {
+            flex-shrink: 0;
+            background: rgba(250,250,248,0.94); backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1.5rem; height: 52px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo { font-family: var(--mono); font-weight: 700; font-size: 1.15rem; color: var(--text); text-decoration: none; }
+        .logo .dot { color: var(--accent); }
+        .nav-meta {
+            font-family: var(--mono); font-size: 0.72rem; color: var(--text-dim);
+            display: flex; align-items: center; gap: 0.85rem;
+        }
+        .nav-meta strong { color: var(--text); font-weight: 600; }
+        .nav-meta .sep { color: var(--text-faint); }
+        .nav-back { color: var(--text-secondary); text-decoration: none; font-family: var(--mono); font-size: 0.78rem; }
+        .nav-back:hover { color: var(--accent); }
+
+        /* WEEK TABS — sticky top strip */
+        .weekbar {
+            flex-shrink: 0;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+        }
+        .weekbar-inner {
+            max-width: 1500px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem;
+        }
+        .week-tab {
+            display: grid; grid-template-columns: auto 1fr; gap: 0.6rem;
+            align-items: center;
+            padding: 0.55rem 0.85rem;
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: 8px; cursor: pointer;
+            transition: all 0.15s;
+            min-width: 0; text-align: left;
+        }
+        .week-tab:hover { border-color: var(--text-dim); background: var(--card); }
+        .week-tab.active {
+            border-color: var(--accent); background: var(--card);
+            box-shadow: 0 0 0 1px var(--accent), 0 2px 12px rgba(27,107,90,0.10);
+        }
+        .week-tab.done {
+            background: var(--accent-glow); border-color: rgba(27,107,90,0.20);
+        }
+        .week-num {
+            font-family: var(--mono); font-size: 0.66rem; font-weight: 700;
+            color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.12em;
+            min-width: 48px;
+        }
+        .week-tab.active .week-num { color: var(--accent); }
+        .week-tab.done .week-num { color: var(--accent); }
+        .week-label {
+            font-size: 0.86rem; font-weight: 600; color: var(--text-secondary);
+            line-height: 1.25;
+            min-width: 0;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+        }
+        .week-tab.active .week-label { color: var(--text); }
+        @media (max-width: 1280px) { .week-label { font-size: 0.78rem; } }
+        @media (max-width: 1100px) { .week-label { font-size: 0.74rem; } }
+
+        /* APP — two-pane with draggable divider */
+        .app {
+            flex: 1; min-height: 0;
+            display: grid;
+            grid-template-columns: var(--doc-w, 44%) 6px 1fr;
+        }
+        .resize-handle {
+            background: var(--border);
+            cursor: col-resize;
+            position: relative;
+            transition: background 0.15s;
+            z-index: 10;
+        }
+        .resize-handle:hover, .resize-handle.active { background: var(--accent); }
+        /* Larger hit area without changing visual width */
+        .resize-handle::before {
+            content: ''; position: absolute;
+            left: -4px; right: -4px; top: 0; bottom: 0;
+        }
+        /* Grip dots in the middle */
+        .resize-handle::after {
+            content: ''; position: absolute;
+            left: 1px; top: 50%; transform: translateY(-50%);
+            width: 4px; height: 36px;
+            background-image: radial-gradient(circle, var(--text-faint) 1px, transparent 1px);
+            background-size: 4px 5px;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .resize-handle:hover::after, .resize-handle.active::after {
+            background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+            opacity: 1;
+        }
+        body.resizing { cursor: col-resize !important; user-select: none !important; }
+        body.resizing * { user-select: none !important; pointer-events: none !important; }
+        body.resizing .resize-handle { pointer-events: auto !important; }
+
+        /* LEFT — DOC */
+        .doc {
+            border-right: 1px solid var(--border);
+            background: var(--bg);
+            overflow-y: auto;
+            padding: 2rem 2.25rem 4rem;
+            min-width: 0;
+        }
+        .doc::-webkit-scrollbar { width: 8px; }
+        .doc::-webkit-scrollbar-thumb { background: var(--border); border-radius: 100px; }
+
+        .week-content { display: none; }
+        .week-content.active { display: block; }
+
+        .week-head {
+            font-family: var(--mono); font-size: 0.7rem; font-weight: 700;
+            color: var(--copper); text-transform: uppercase; letter-spacing: 0.14em;
+            margin-bottom: 0.7rem;
+        }
+        .week-content h2 {
+            font-family: var(--serif); font-weight: 400;
+            font-size: 2.2rem; line-height: 1.1; letter-spacing: -0.02em;
+            color: var(--text);
+        }
+        .week-lede {
+            margin-top: 0.85rem; font-size: 1rem; color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .week-lede strong { color: var(--text); font-weight: 600; }
+
+        /* DEPENDS-ON BLOCK */
+        .deps {
+            margin-top: 1.5rem;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;
+        }
+        @media (max-width: 1500px) { .deps { grid-template-columns: 1fr; } }
+        .dep {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 0.75rem 1rem;
+            min-width: 0;
+        }
+        .dep-body { word-break: break-word; }
+        .dep-h {
+            font-family: var(--mono); font-size: 0.62rem; font-weight: 700;
+            color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em;
+            margin-bottom: 0.35rem;
+        }
+        .dep-body {
+            font-size: 0.84rem; color: var(--text); line-height: 1.45;
+        }
+        .dep-body code, code {
+            font-family: var(--mono); font-size: 0.86em;
+            background: var(--bg-elevated); padding: 0.05em 0.35em; border-radius: 4px;
+        }
+        .dep.in { border-left: 3px solid var(--copper); }
+        .dep.out { border-left: 3px solid var(--accent); }
+
+        /* SECTION HEADINGS */
+        .week-content h3 {
+            margin-top: 2.25rem; font-size: 0.78rem; font-weight: 700;
+            color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.14em;
+            font-family: var(--mono);
+        }
+        .week-content h4 {
+            margin-top: 1.5rem; font-size: 1.05rem; font-weight: 700;
+            color: var(--text); letter-spacing: -0.01em;
+        }
+        .week-content p {
+            margin-top: 0.7rem; font-size: 0.94rem; color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .week-content p strong { color: var(--text); font-weight: 600; }
+
+        /* numbered steps */
+        .week-content ol {
+            margin-top: 0.7rem; padding-left: 0;
+            counter-reset: step;
+            list-style: none;
+        }
+        .week-content ol li {
+            position: relative; padding-left: 1.6rem;
+            margin-bottom: 0.55rem; font-size: 0.94rem; line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        .week-content ol li::before {
+            counter-increment: step;
+            content: counter(step) ".";
+            position: absolute; left: 0;
+            font-family: var(--mono); color: var(--text-faint);
+            font-weight: 600; font-size: 0.85rem;
+        }
+        .week-content ol li strong { color: var(--text); font-weight: 600; }
+
+        .week-content ul { margin-top: 0.6rem; padding-left: 0.9rem; list-style: none; }
+        .week-content ul li {
+            position: relative; padding-left: 1rem; margin-bottom: 0.4rem;
+            font-size: 0.92rem; color: var(--text-secondary); line-height: 1.55;
+        }
+        .week-content ul li::before { content: '·'; position: absolute; left: 0; color: var(--text-faint); }
+
+        /* RUN BLOCK */
+        .run {
+            margin-top: 1.5rem; padding: 0.95rem 1.15rem;
+            background: var(--bg-elevated); border-left: 3px solid var(--copper);
+            border-radius: 4px;
+            font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;
+        }
+        .run-h {
+            font-family: var(--mono); font-size: 0.66rem; font-weight: 700;
+            color: var(--copper); text-transform: uppercase; letter-spacing: 0.14em;
+            margin-bottom: 0.4rem;
+        }
+        .run strong { color: var(--text); font-weight: 600; }
+        .run code { background: var(--card); }
+
+        /* SOURCE LIST */
+        .src-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;
+            margin-top: 0.7rem;
+        }
+        .src-pill {
+            display: flex; gap: 0.5rem; align-items: center;
+            padding: 0.5rem 0.7rem; background: var(--card);
+            border: 1px solid var(--border); border-radius: 7px;
+            font-family: var(--mono); font-size: 0.78rem;
+            min-width: 0;
+        }
+        .src-pill .sp-tag {
+            font-size: 0.6rem; font-weight: 700; color: var(--purple);
+            background: rgba(110,71,193,0.10); padding: 0.12rem 0.4rem;
+            border-radius: 100px; text-transform: uppercase; letter-spacing: 0.06em;
+            flex-shrink: 0;
+        }
+        .src-pill .sp-name {
+            color: var(--text); flex: 1; min-width: 0;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+
+        /* DEEP cogs walkthrough */
+        .cogs-flow {
+            margin-top: 1rem;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 10px; padding: 1.25rem;
+        }
+        .cf-h {
+            font-family: var(--mono); font-size: 0.66rem; font-weight: 700;
+            color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em;
+            margin-bottom: 0.7rem;
+        }
+        .cf-stage {
+            display: grid; grid-template-columns: 28px 1fr; gap: 0.7rem;
+            padding: 0.65rem 0;
+            border-top: 1px dashed var(--border);
+        }
+        .cf-stage:first-child { border-top: none; padding-top: 0; }
+        .cf-num {
+            font-family: var(--mono); font-size: 0.74rem; font-weight: 700;
+            color: var(--accent); text-align: center;
+            background: var(--accent-glow); border-radius: 6px; padding: 0.15rem;
+            width: 26px; height: 22px; display: flex; align-items: center; justify-content: center;
+        }
+        .cf-body { font-size: 0.92rem; color: var(--text); line-height: 1.55; }
+        .cf-body strong { font-weight: 700; }
+        .cf-body .src {
+            display: inline-block; padding: 0.08rem 0.4rem;
+            background: rgba(110,71,193,0.10); color: var(--purple);
+            font-family: var(--mono); font-size: 0.78rem;
+            border-radius: 4px; margin: 0 0.1rem;
+        }
+        .cf-body .field {
+            font-family: var(--mono); font-size: 0.82rem;
+            background: var(--bg-elevated); padding: 0.05rem 0.3rem; border-radius: 3px;
+            color: var(--text);
+        }
+        .cf-body .val { font-family: var(--mono); font-weight: 600; color: var(--accent); }
+        .cf-body .val.bad { color: var(--amber); }
+
+        .cf-conflict {
+            margin-top: 0.45rem; padding: 0.6rem 0.75rem;
+            background: var(--bg); border-left: 3px solid var(--amber);
+            border-radius: 4px; font-family: var(--mono); font-size: 0.78rem;
+        }
+        .cf-conflict-row {
+            display: flex; justify-content: space-between;
+            padding: 0.15rem 0; color: var(--text-secondary);
+        }
+        .cf-conflict-row.chosen { color: var(--accent); font-weight: 600; }
+        .cf-conflict-row.chosen::before { content: '◉ '; }
+        .cf-conflict-row:not(.chosen)::before { content: '○ '; color: var(--text-dim); }
+
+        .cf-code {
+            margin-top: 0.5rem; background: #FBFAF6;
+            border: 1px solid var(--border); border-radius: 6px;
+            padding: 0.7rem 0.85rem;
+            font-family: var(--mono); font-size: 0.76rem; line-height: 1.55;
+            color: var(--text); white-space: pre; overflow-x: auto;
+        }
+        .cf-code .k { color: var(--purple); }
+        .cf-code .s { color: var(--green); }
+        .cf-code .c { color: var(--text-dim); font-style: italic; }
+        .cf-code .n { color: var(--blue); }
+
+        .cf-arrow {
+            text-align: center; padding: 0.4rem 0;
+            font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint);
+        }
+
+        /* CHAT */
+        .chat { display: flex; flex-direction: column; gap: 0.55rem; margin-top: 0.7rem; }
+        .cm { display: flex; gap: 0.6rem; align-items: flex-start; }
+        .cm-av {
+            width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.66rem; font-weight: 700; font-family: var(--mono);
+        }
+        .cm-av.iw { background: var(--accent-glow); color: var(--accent); }
+        .cm-av.morrie { background: rgba(110,71,193,0.10); color: var(--purple); }
+        .cm-av.user { background: var(--bg-elevated); color: var(--text-secondary); }
+        .cm-bubble {
+            background: var(--card); border: 1px solid var(--border);
+            padding: 0.55rem 0.8rem; border-radius: 8px;
+            border-top-left-radius: 3px;
+            font-size: 0.84rem; line-height: 1.5; flex: 1;
+        }
+        .cm-name {
+            font-size: 0.62rem; font-weight: 700; color: var(--text-dim);
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 0.18rem; font-family: var(--mono);
+        }
+        .cm em { font-style: italic; font-weight: 500; color: var(--text); }
+
+        /* OTP CARDS */
+        .agent-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem; }
+        .agent-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 7px; padding: 0.55rem 0.85rem;
+            font-size: 0.84rem;
+        }
+        .agent-card.live { border-left: 3px solid var(--green); }
+        .agent-card.review { border-left: 3px solid var(--amber); }
+        .agent-card .ar { display: flex; justify-content: space-between; align-items: center; }
+        .agent-name { font-weight: 600; color: var(--text); }
+        .agent-tag {
+            font-family: var(--mono); font-size: 0.58rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            padding: 0.15rem 0.45rem; border-radius: 100px;
+        }
+        .agent-tag.live { background: rgba(27,133,74,0.10); color: var(--green); }
+        .agent-tag.review { background: rgba(198,138,46,0.10); color: var(--amber); }
+        .agent-fn {
+            font-family: var(--mono); font-size: 0.7rem; color: var(--text-dim);
+            margin-top: 0.2rem;
+            overflow-wrap: break-word; word-break: break-word;
+        }
+
+        /* RIGHT — GRAPH */
+        .graph-wrap {
+            position: relative; background: var(--card);
+            overflow: hidden;
+            overscroll-behavior: contain; touch-action: none;
+        }
+        #graph {
+            width: 100%; height: 100%; cursor: grab; display: block;
+            touch-action: none; user-select: none;
+        }
+        #graph:active { cursor: grabbing; }
+        #graph circle[data-id] { cursor: pointer; }
+
+        .g-overlay { position: absolute; pointer-events: none; }
+        .g-overlay > * { pointer-events: auto; }
+
+        .g-search {
+            top: 1rem; left: 1rem; right: 1rem;
+            display: flex; gap: 0.5rem; align-items: center;
+        }
+        .g-search input {
+            flex: 1; padding: 0.5rem 0.85rem;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(6px);
+            border: 1px solid var(--border); border-radius: 8px;
+            font-family: var(--mono); font-size: 0.8rem; color: var(--text);
+            outline: none;
+        }
+        .g-search input:focus { border-color: var(--accent); }
+
+        .g-stats {
+            position: absolute; top: 4rem; left: 1rem;
+            display: flex; gap: 0.4rem;
+        }
+        .g-stat {
+            padding: 0.4rem 0.65rem;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(6px);
+            border: 1px solid var(--border); border-radius: 7px;
+        }
+        .g-stat-num { font-family: var(--mono); font-size: 0.95rem; font-weight: 700; color: var(--text); line-height: 1; }
+        .g-stat-lbl { font-family: var(--mono); font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.18rem; }
+
+        .g-controls {
+            position: absolute; bottom: 1rem; left: 1rem; right: 1rem;
+            display: flex; gap: 0.4rem; align-items: center; justify-content: flex-end;
+        }
+        .g-zoom {
+            display: flex; gap: 0.2rem;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(6px);
+            border: 1px solid var(--border); border-radius: 8px;
+            padding: 0.3rem;
+        }
+        .g-zoom button {
+            width: 28px; height: 28px; padding: 0;
+            background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+            font-family: var(--mono); font-size: 0.85rem; font-weight: 600;
+            color: var(--text-secondary); cursor: pointer;
+        }
+        .g-zoom button:hover { color: var(--accent); border-color: var(--accent); }
+
+        .g-legend {
+            position: absolute; bottom: 4.5rem; left: 1rem;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(6px);
+            border: 1px solid var(--border); border-radius: 8px;
+            padding: 0.55rem 0.75rem;
+            display: flex; flex-direction: column; gap: 0.22rem;
+            max-width: 250px;
+        }
+        .legend-item {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-family: var(--mono); font-size: 0.68rem; color: var(--text-secondary);
+        }
+        .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+        /* DRAWER */
+        .drawer {
+            position: absolute; top: 0; right: 0; bottom: 0;
+            width: 360px; max-width: 86%;
+            background: var(--card); border-left: 1px solid var(--border);
+            transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.22,1,0.36,1);
+            display: flex; flex-direction: column;
+            box-shadow: -8px 0 24px rgba(0,0,0,0.04);
+            z-index: 5;
+        }
+        .drawer.open { transform: translateX(0); }
+        .drawer-head {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: flex-start; justify-content: space-between; gap: 0.6rem;
+        }
+        .drawer-title {
+            font-weight: 700; font-size: 1rem; color: var(--text); line-height: 1.3;
+            word-break: break-word; overflow-wrap: break-word;
+        }
+        .drawer-head > div:first-child { min-width: 0; flex: 1; }
+        .drawer-type {
+            font-family: var(--mono); font-size: 0.66rem; color: var(--text-dim);
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin-top: 0.15rem;
+        }
+        .drawer-close {
+            background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+            width: 26px; height: 26px; cursor: pointer;
+            font-family: var(--mono); font-size: 0.85rem; color: var(--text-secondary);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .drawer-close:hover { color: var(--text); border-color: var(--text-dim); }
+        .drawer-body { flex: 1; overflow-y: auto; padding: 1rem 1.25rem; }
+        .dr-section { margin-bottom: 1.1rem; }
+        .dr-h {
+            font-family: var(--mono); font-size: 0.62rem; font-weight: 700;
+            color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.12em;
+            margin-bottom: 0.4rem;
+        }
+        .dr-row {
+            display: grid; grid-template-columns: 100px 1fr; gap: 0.5rem;
+            padding: 0.28rem 0; font-family: var(--mono); font-size: 0.76rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .dr-row:last-child { border-bottom: none; }
+        .dr-key { color: var(--text-dim); }
+        .dr-val { color: var(--text); }
+        .dr-pill {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.18rem 0.55rem; background: var(--bg-elevated);
+            border-radius: 100px; font-family: var(--mono); font-size: 0.7rem;
+            color: var(--text-secondary); margin-right: 0.3rem; margin-bottom: 0.3rem;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        .dr-pill .pdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+        .dr-pill .pname {
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            min-width: 0;
+        }
+
+        @media (max-width: 1100px) {
+            html, body { overflow: auto; height: auto; }
+            .app { display: block; }
+            .doc { max-height: none; overflow: visible; padding: 1.5rem; }
+            .graph-wrap { height: 70vh; border-left: none; border-top: 1px solid var(--border); }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo">iw<span class="dot">.</span></a>
+    <div class="nav-meta">
+        <span>Reference build</span>
+        <span class="sep">·</span>
+        <strong>NorthCo Foods</strong>
+        <span class="sep">·</span>
+        <span>CPG · ₹4,200 Cr · 14 BUs</span>
+    </div>
+    <div style="display:flex;gap:0.85rem;align-items:center">
+        <a href="iw-overview.html" class="nav-back">← 1-page overview</a>
+        <a href="index.html" class="nav-back">home</a>
+    </div>
+</nav>
+
+<!-- WEEK TABS -->
+<div class="weekbar">
+    <div class="weekbar-inner" id="weekbar"></div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app">
+
+<!-- LEFT — DOC (one week visible) -->
+<div class="doc" id="doc">
+
+<!-- ============ WEEK 1 ============ -->
+<section class="week-content" data-week="1">
+    <div class="week-head">Week 1 · Days 1–5</div>
+    <h2>Build the base graph from public data and industry knowledge.</h2>
+    <p class="week-lede">
+        IW already carries a deep map of how a CPG company works — SKU pyramids, channels, trade promo, distributor economics, festivals, monsoon. NorthCo binds to that map. We then layer in everything that's already public about NorthCo — annual report, investor deck, org chart, product catalog, twelve months of press — so the graph reshapes into NorthCo specifically. The output is a <strong>base graph</strong>: structurally complete, no internal data yet.
+    </p>
+
+    <div class="deps">
+        <div class="dep in"><div class="dep-h">depends on</div><div class="dep-body">Nothing. This is the start.</div></div>
+        <div class="dep out"><div class="dep-h">produces</div><div class="dep-body"><strong>Base graph</strong> · CPG supergraph bound to <code>iw://northco/</code> + enterprise V0: 14 BUs, 11 categories, 2,140 SKUs, 4 zones, 4 named competitors. ~45 nodes total. Carried forward into Week 2 as the thing SMEs work on.</div></div>
+    </div>
+
+    <h3>What happens</h3>
+    <ol>
+        <li><strong>Pick the industry, sub-vertical, geography.</strong> CDO selects CPG → Foods + Personal Care → India. Takes 15 minutes.</li>
+        <li><strong>The CPG brain activates.</strong> 8,400 standard things every CPG has — SKU hierarchy, channel types, promo mechanics, festival calendar, weather effects on demand — all become available as templates.</li>
+        <li><strong>IW reads NorthCo's public footprint.</strong> Annual report (320 pages), Q3 investor deck, public org chart, product catalog scrape, 12 months of press releases.</li>
+        <li><strong>The CPG template reshapes into NorthCo.</strong> Generic "Brand → Pack → SKU" becomes NorthCo's actual brands. Generic "geographic zones" becomes NorthCo's actual North/South/East/West. Competitors get named: Haldiram, PepsiCo, ITC Foods, Britannia.</li>
+        <li><strong>30-min CDO review.</strong> Confirms anything the public sources got wrong (typically 2–4 corrections).</li>
+    </ol>
+
+    <h3>Who does what</h3>
+    <p><strong>IW</strong> does the loading and extraction (4 days wall-clock, runs in background). <strong>The CDO</strong> spends 1 hour total — 15 min to pick the industry, 30 min to review the V0, 15 min to confirm the four corrections.</p>
+
+    <h3>Public sources used</h3>
+    <div class="src-grid">
+        <div class="src-pill"><span class="sp-tag">PDF</span><span class="sp-name">Annual Report 2024 · 320 pp</span></div>
+        <div class="src-pill"><span class="sp-tag">PDF</span><span class="sp-name">Investor Day Q3'25</span></div>
+        <div class="src-pill"><span class="sp-tag">WEB</span><span class="sp-name">Org chart · 14 BUs</span></div>
+        <div class="src-pill"><span class="sp-tag">WEB</span><span class="sp-name">Product catalog · 2,140 SKUs</span></div>
+        <div class="src-pill"><span class="sp-tag">RSS</span><span class="sp-name">Press releases · 12 mo</span></div>
+        <div class="src-pill"><span class="sp-tag">JSON</span><span class="sp-name">LinkedIn org · 4,800 employees</span></div>
+    </div>
+
+    <div class="run">
+        <div class="run-h">NorthCo · Week 1 outcome</div>
+        <strong>45 nodes</strong> in the standing graph (24 industry patterns + 21 enterprise nodes). CPG supergraph bound at <code>iw://northco/</code>. Foods + Personal Care sub-verticals active. <strong>14 BUs, 11 categories, 2,140 SKUs, 4 zones, 4 named competitors</strong>. CDO time spent: <strong>1 hour</strong>. IW wall-clock: <strong>4 days, 6 hours</strong>.
+    </div>
+</section>
+
+<!-- ============ WEEK 2 ============ -->
+<section class="week-content" data-week="2">
+    <div class="week-head">Week 2 · Days 6–10</div>
+    <h2>SMEs and consultants thrash out the graph with NorthCo's stakeholders.</h2>
+    <p class="week-lede">
+        The base graph from Week 1 is roughly right but generic. Now <strong>SMEs and consultants thrash it out</strong> with NorthCo's actual stakeholders — Anuj (demand), Vinod (supply chain), Ritu (category) — fixing what's wrong, adding what's missing, and confirming what's specific to how NorthCo operates. IW asks only the questions that move the graph; the SMEs answer in plain conversation. Three stakeholders × two sessions × ~80 min each. No code, no schema design.
+    </p>
+
+    <div class="deps">
+        <div class="dep in"><div class="dep-h">depends on</div><div class="dep-body"><strong>Week 1's base graph</strong> — there has to be something concrete to thrash out. The CPG industry knowledge tells IW which questions are worth asking.</div></div>
+        <div class="dep out"><div class="dep-h">produces</div><div class="dep-body"><strong>Refined graph</strong> · 5-level SKU hierarchy (added Variant + Pack-Config), 4 zones × 7 states, 6 named competitors, 6 distribution centres, owner mappings on every node. ~70 nodes total. Carried forward into Week 3 as the structure that needs data.</div></div>
+    </div>
+
+    <h3>How IW asks only useful questions</h3>
+    <ol>
+        <li><strong>It scores every part of the V0 for uncertainty.</strong> Where is the binding weak? Where do public sources contradict? Where does the CPG template offer multiple options?</li>
+        <li><strong>It generates only the highest-value questions.</strong> Each question is scored by how much the graph would change based on the answer. Top 12 get asked.</li>
+        <li><strong>It routes each question to the right person.</strong> Demand questions go to the demand lead. Supply questions to supply chain. Categories to category managers.</li>
+        <li><strong>It schedules around their day jobs.</strong> 80-min sessions, two per SME, spread across the week.</li>
+    </ol>
+
+    <h3>Real session — Anuj K., Demand Lead</h3>
+    <div class="chat">
+        <div class="cm iw"><div class="cm-av iw">IW</div><div class="cm-bubble"><div class="cm-name">IW</div>Most CPG firms in your sub-vertical add a <em>Variant</em> level for trade promotion accounting. Add to NorthCo?</div></div>
+        <div class="cm user"><div class="cm-av user">A</div><div class="cm-bubble"><div class="cm-name">Anuj K.</div>Yes — and we also need <em>Pack-Configuration</em> below Pack, used only for modern trade.</div></div>
+        <div class="cm iw"><div class="cm-av iw">IW</div><div class="cm-bubble"><div class="cm-name">IW</div>Logged. Apply to all 14 BUs or only Foods + Personal Care?</div></div>
+        <div class="cm user"><div class="cm-av user">A</div><div class="cm-bubble"><div class="cm-name">Anuj K.</div>Foods + Personal Care only. Hotels and Paperboards run different.</div></div>
+    </div>
+
+    <h3>What got added</h3>
+    <ul>
+        <li>Two new SKU hierarchy levels — Variant and Pack-Configuration</li>
+        <li>Six named distribution centres — Mumbai, Pune, Delhi, Chennai, Bengaluru, Kolkata</li>
+        <li>Seven state-level geographies under the four zones</li>
+        <li>Two more named competitors — Parle, Mondelez</li>
+        <li>Owner mappings — who in NorthCo owns each part of the graph</li>
+    </ul>
+
+    <div class="run">
+        <div class="run-h">NorthCo · Week 2 outcome</div>
+        <strong>+25 new nodes</strong> (graph now 70). 12 candidate questions generated; Anuj resolved 7, Vinod 3, Ritu 2. SKU hierarchy extended from 3 to 5 levels. SME time across 3 people: <strong>7 hr 48 min</strong>. Zero code written.
+    </div>
+</section>
+
+<!-- ============ WEEK 3 — DEEP ============ -->
+<section class="week-content" data-week="3">
+    <div class="week-head">Week 3 · Days 11–15</div>
+    <h2>Connect data to every node — IW writes its own connectors and resolves conflicts. (Hydration.)</h2>
+    <p class="week-lede">
+        The refined graph from Week 2 has structure but no real numbers in it yet. This week IW <strong>hydrates every node</strong> — plugs into all 38 of NorthCo's systems (SAP, Oracle, Snowflake, Excel, Tableau, PowerBI, MCP servers), writes the connector code itself, and stops when two systems disagree on the same number. The SME picks which source is canonical. Then the ontology compiles: 184 derived metrics, full lineage on every one, no recomputation at query time.
+    </p>
+
+    <div class="deps">
+        <div class="dep in"><div class="dep-h">depends on</div><div class="dep-body"><strong>Week 2's refined graph</strong> — IW has to know what nodes exist before it can fill them with data, and which SME owns each node before it can route a conflict for resolution.</div></div>
+        <div class="dep out"><div class="dep-h">produces</div><div class="dep-body"><strong>Hydrated graph + compiled ontology</strong> · 47k populated object instances, 312k edges, 184 derived metrics, 100% lineage coverage, 23 source-of-truth decisions logged. ~150 nodes total. Carried forward into Week 4 as the data Morrie reads anomalies from.</div></div>
+    </div>
+
+    <h3>Sources connected (all 38)</h3>
+    <div class="src-grid">
+        <div class="src-pill"><span class="sp-tag">ERP</span><span class="sp-name">SAP S/4HANA</span></div>
+        <div class="src-pill"><span class="sp-tag">ERP</span><span class="sp-name">Oracle EBS (legacy plants)</span></div>
+        <div class="src-pill"><span class="sp-tag">DWH</span><span class="sp-name">Snowflake (sales + promo)</span></div>
+        <div class="src-pill"><span class="sp-tag">XLS</span><span class="sp-name">Excel · Plant Controller (×4)</span></div>
+        <div class="src-pill"><span class="sp-tag">BI</span><span class="sp-name">Tableau · 32 dashboards</span></div>
+        <div class="src-pill"><span class="sp-tag">BI</span><span class="sp-name">PowerBI · 18 reports</span></div>
+        <div class="src-pill"><span class="sp-tag">MCP</span><span class="sp-name">MCP · Promo server</span></div>
+        <div class="src-pill"><span class="sp-tag">MCP</span><span class="sp-name">MCP · Weather feed</span></div>
+        <div class="src-pill"><span class="sp-tag">API</span><span class="sp-name">Nielsen · monthly</span></div>
+        <div class="src-pill"><span class="sp-tag">API</span><span class="sp-name">Kantar · syndicated panel</span></div>
+    </div>
+    <p style="font-family:var(--mono);font-size:0.72rem;color:var(--text-dim);margin-top:0.4rem">28 more sources abbreviated · full list at <code>iw://northco/sources/</code></p>
+
+    <h3>Worked example: how one node — <code>cogs_per_sku</code> — gets populated</h3>
+    <p>To make the data ingestion concrete, here is exactly how IW populates a single node from three disagreeing systems.</p>
+
+    <div class="cogs-flow">
+        <div class="cf-h">Node: <code>cogs_per_sku</code> · why it matters</div>
+        <p style="margin-top:0;font-size:0.88rem;line-height:1.55;color:var(--text-secondary)">Cost of goods per SKU per period. Feeds into <strong>contribution_margin</strong>, <strong>ebitda_per_sku</strong>, <strong>promo_roi</strong>, the demand forecast, and three OTP agents. If this is wrong, everything downstream is wrong.</p>
+
+        <div class="cf-stage">
+            <div class="cf-num">1</div>
+            <div class="cf-body">
+                <strong>IW finds three candidate sources.</strong> Looking at the connector registry, three systems have fields that map to "cost per SKU":
+                <ul style="margin-top:0.4rem">
+                    <li><span class="src">SAP S/4HANA</span> · table <span class="field">/BIC/COGS_M</span> · field <span class="field">STD_COST</span> — finance's standard cost (monthly close)</li>
+                    <li><span class="src">Oracle EBS</span> · table <span class="field">CST_ITEM_COSTS</span> · field <span class="field">ITEM_COST</span> — the legacy plants that haven't migrated to SAP</li>
+                    <li><span class="src">Excel · plant ctrl</span> · workbook <span class="field">cogs_master.xlsx</span> — the plant controller's reconciliation sheet, manually maintained</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="cf-arrow">↓</div>
+
+        <div class="cf-stage">
+            <div class="cf-num">2</div>
+            <div class="cf-body">
+                <strong>IW pulls a sample from each.</strong> For SKU <span class="field">NCF·SNK·CRSP·150g</span> in period 2026-03:
+                <div class="cf-conflict">
+                    <div class="cf-conflict-row">SAP S/4HANA &nbsp;&nbsp; ₹148.20</div>
+                    <div class="cf-conflict-row">Oracle EBS &nbsp;&nbsp; ₹152.80</div>
+                    <div class="cf-conflict-row">Excel · plant ctrl &nbsp;&nbsp; ₹147.60</div>
+                </div>
+                The three sources disagree by up to <span class="val bad">3.5%</span>. Default tolerance is ±5%, so this almost passes silently — but cost feeds margin, and margin feeds 17 other places, so IW raises a conflict.
+            </div>
+        </div>
+
+        <div class="cf-arrow">↓</div>
+
+        <div class="cf-stage">
+            <div class="cf-num">3</div>
+            <div class="cf-body">
+                <strong>IW asks Anuj which is the source of truth.</strong> Not silently picks one. The question goes to the SME mapped to <code>cogs_per_sku</code> in Week 2 — Anuj K. (Demand Lead, also accountable for margin reporting).
+                <div class="chat" style="margin-top:0.5rem">
+                    <div class="cm iw"><div class="cm-av iw">IW</div><div class="cm-bubble" style="font-size:0.82rem"><div class="cm-name">IW</div>Three sources disagree on <code>cogs_per_sku</code> by 3.5%. SAP=₹148.20, Oracle=₹152.80, Excel=₹147.60. Which is canonical?</div></div>
+                    <div class="cm user"><div class="cm-av user">A</div><div class="cm-bubble" style="font-size:0.82rem"><div class="cm-name">Anuj K.</div>SAP. Finance owns the monthly close — that's the auditable number. Oracle is the old plants and they're rolling onto SAP this year. Excel is reconciliation, useful for cross-check but not source of truth.</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cf-arrow">↓</div>
+
+        <div class="cf-stage">
+            <div class="cf-num">4</div>
+            <div class="cf-body">
+                <strong>IW writes the connector code itself.</strong> Based on Anuj's decision, IW emits a Python connector that pulls from SAP, cross-checks Oracle and Excel within ±5% tolerance, and reopens the conflict if any future sync goes outside that.
+                <div class="cf-code"><span class="c"># auto-written · iw://northco/connectors/cogs_per_sku.py</span>
+<span class="k">def</span> <span class="n">populate_cogs_per_sku</span>():
+    sap = sap_client.<span class="n">query</span>(
+        <span class="s">"SELECT MATNR sku_id, STD_COST cost_value, "</span>
+        <span class="s">"       CURR_KEY currency, FISCPER period "</span>
+        <span class="s">"FROM /BIC/COGS_M WHERE FISCPER = LATEST_CLOSED()"</span>
+    )
+    oracle = oracle_client.<span class="n">query</span>(
+        <span class="s">"SELECT INVENTORY_ITEM_ID, ITEM_COST FROM CST_ITEM_COSTS"</span>
+    )
+    excel = excel_source.<span class="n">read</span>(<span class="s">"cogs_master.xlsx"</span>)
+
+    <span class="c"># SAP is canonical (sot-014, anuj.k 2026-04-09)</span>
+    <span class="c"># Oracle + Excel kept as cross-checks at ±5%</span>
+    <span class="k">return</span> reconcile(
+        primary=sap,
+        crosschecks=[oracle, excel],
+        tolerance=<span class="n">0.05</span>,
+        on_breach=<span class="s">"reopen_conflict"</span>,
+    )</div>
+            </div>
+        </div>
+
+        <div class="cf-arrow">↓</div>
+
+        <div class="cf-stage">
+            <div class="cf-num">5</div>
+            <div class="cf-body">
+                <strong>Anuj verifies the generated code.</strong> One-click "verify" in the IW UI. The connector is committed to version control and the node populates with SAP's value. <span class="val">cogs_per_sku = ₹148.20</span> · <em>verified by anuj.k · 2026-04-09 14:22</em>.
+            </div>
+        </div>
+
+        <div class="cf-arrow">↓</div>
+
+        <div class="cf-stage">
+            <div class="cf-num">6</div>
+            <div class="cf-body">
+                <strong>It now powers the rest of the graph.</strong> Every downstream node gets the canonical value with full lineage:
+                <ul style="margin-top:0.4rem">
+                    <li><code>contribution_margin</code> = <code>list_price − cogs_per_sku − promo_spend</code></li>
+                    <li><code>ebitda_per_sku</code> uses it via the margin chain</li>
+                    <li><code>promo_roi</code> uses it to compute incremental margin per ₹ promo spent</li>
+                    <li>The <strong>TradePromoPlanner</strong> agent (built in Week 5) reads it via <code>SkuHealthTraversal</code></li>
+                </ul>
+                If SAP ever drifts beyond 5% from Oracle, the conflict reopens and Anuj is paged. Decision logged at <code>iw://northco/decisions/sot/sot-014</code>.
+            </div>
+        </div>
+    </div>
+
+    <h3>Same pattern, 22 more times</h3>
+    <p>The same flow runs for the other 22 conflicts that exceeded tolerance — supplier lead time (SAP MM vs Oracle), DC capacity (WMS vs planning sheet), promo uplift (Tableau Nielsen-backed vs trade marketing's sheet), customer OTIF (PowerBI golden record vs SAP SD), distributor margin (trade terms doc vs Snowflake), and 18 more. Mean time-to-resolution: <strong>18 minutes per conflict</strong>.</p>
+
+    <h3>Then the ontology compiles</h3>
+    <p>Once all base nodes are populated, IW computes the <strong>184 derived metrics</strong> — forecast, fill rate, OTIF, days-on-hand, contribution margin, breakage rate, and so on. Each derived value stores its formula, the source nodes it came from, and the version of each source binding. <strong>Forward and reverse lineage is materialised</strong> — no recomputation at query time.</p>
+
+    <div class="run">
+        <div class="run-h">NorthCo · Week 3 outcome</div>
+        <strong>38 sources</strong> bound. <strong>47,021 object instances</strong> populated. <strong>+80 new nodes</strong> in the standing graph (sources + base metrics). <strong>184 reconciliation events; 23 exceeded tolerance</strong> and required SME resolution. Mean time-to-resolution: <strong>18 minutes</strong>. <strong>312,408 edges</strong> materialised. <strong>184 derived metrics</strong> with 100% lineage coverage. Anuj's total time across the week: <strong>16 hours</strong>.
+    </div>
+</section>
+
+<!-- ============ WEEK 4 ============ -->
+<section class="week-content" data-week="4">
+    <div class="week-head">Week 4 · Days 16–20</div>
+    <h2>Morrie elicits tacit knowledge from practitioners — the rules they use that no system records.</h2>
+    <p class="week-lede">
+        The hydrated graph shows Mumbai breakage at 18% versus a 4% network average. The data doesn't say why. <strong>Morrie</strong> — IW's elicitation agent — asks Sneha, the practitioner who owns that node. She tells him: monsoon humidity warps the cardboard divider, the new ASRS aisles cause forklift hits on turn-3. That becomes a typed rule on the graph: <em>+14% safety buffer for Mumbai monsoon glass</em>. Twenty-three such sessions across NorthCo's practitioners. The graph absorbs the operating wisdom that lives in people, not systems. Then IW commits live.
+    </p>
+
+    <div class="deps">
+        <div class="dep in"><div class="dep-h">depends on</div><div class="dep-body"><strong>Week 3's hydrated data</strong> — Morrie needs real anomalies to know what's worth asking about. <strong>Owner mappings from Week 2</strong> tell Morrie who to ask for each node.</div></div>
+        <div class="dep out"><div class="dep-h">produces</div><div class="dep-body"><strong>Tacit-rule layer + live IW</strong> · 2,840 captured insights, 25 typed <code>TacitRule</code>s, IW released as <code>iw://northco/v1.0.0</code> with read access to 23 named users. ~175 nodes total. Carried forward into Week 5 as the rule set agents must honour.</div></div>
+    </div>
+
+    <h3>How Morrie picks who to ask, what to ask</h3>
+    <ol>
+        <li><strong>Detect anomalies.</strong> For every metric, flag values that deviate from peer-group, supergraph priors, or historical baseline beyond a configured threshold.</li>
+        <li><strong>Generate one question per anomaly.</strong> Plain language. Includes the data context — so the practitioner knows what triggered the question.</li>
+        <li><strong>Route to the right practitioner.</strong> Based on owner mappings (from Week 2), org chart proximity, and prior session history. Morrie balances workload — never asks one person more than 4 questions in a week.</li>
+        <li><strong>Ask for a 15-minute window.</strong> No mandatory meeting. Async (typed) or live (voice transcribed). Practitioner chooses.</li>
+        <li><strong>Adapt as it goes.</strong> Morrie's next question depends on the previous answer. Graph state visible alongside the chat — practitioner can correct it directly.</li>
+        <li><strong>Commit as a typed rule.</strong> Each insight becomes a <code>TacitRule</code> with a trigger predicate, an action, an owner, and explicit links to the nodes it affects.</li>
+    </ol>
+
+    <h3>Real session — Sneha K., Mumbai planner · 14 min</h3>
+    <p style="font-family:var(--mono);font-size:0.78rem;color:var(--text-dim);background:var(--bg-elevated);padding:0.5rem 0.7rem;border-radius:6px"><strong style="color:var(--text)">Anomaly:</strong> breakage_rate(dc=mumbai, sku∈glass_bottles) = 18.4% vs network mean 4.1% (z = 4.7)</p>
+    <div class="chat">
+        <div class="cm morrie"><div class="cm-av morrie">M</div><div class="cm-bubble"><div class="cm-name">Morrie</div>Mumbai DC shows 18% breakage on glass-bottle SKUs, vs 4% network average. The data doesn't tell me why. What's happening on the ground?</div></div>
+        <div class="cm user"><div class="cm-av user">S</div><div class="cm-bubble"><div class="cm-name">Sneha K.</div>Two things. New ASRS — tighter aisles, forklift hits pallets on turn-3. And monsoon humidity warps the cardboard divider, so bottles shift in transit.</div></div>
+        <div class="cm morrie"><div class="cm-av morrie">M</div><div class="cm-bubble"><div class="cm-name">Morrie</div>Logging. So forecast safety buffer <em>+14% for Mumbai monsoon glass</em> — apply to Pune too since same DC ships?</div></div>
+        <div class="cm user"><div class="cm-av user">S</div><div class="cm-bubble"><div class="cm-name">Sneha K.</div>Yes. Confirmed.</div></div>
+    </div>
+
+    <h3>Some of the 25 typed rules captured</h3>
+    <ul>
+        <li><strong>tacit/418</strong> · Mumbai monsoon glass +14% safety buffer (Sneha)</li>
+        <li><strong>tacit/422</strong> · Festival demand 8-week pre-build pattern (Anuj)</li>
+        <li><strong>tacit/491</strong> · Demand planner override after long-monsoon weeks (Vinod)</li>
+        <li><strong>tacit/507</strong> · Personal Care humidity-sensitive SKU substitution (Ritu)</li>
+        <li><strong>tacit/623</strong> · Cricket schedule beverage spike, IPL window (marketing)</li>
+        <li><strong>tacit/641</strong> · South India filter-coffee seasonality (regional sales)</li>
+        <li><strong>tacit/688</strong> · Modern trade Q4 negotiation pattern (key accounts)</li>
+        <li><strong>tacit/712</strong> · Distributor channel-stuffing detection (sales ops)</li>
+        <li><strong>tacit/734</strong> · Diwali credit terms exception window (finance)</li>
+        <li><strong>tacit/751</strong> · ASRS Mumbai turn-3 forklift hit pattern (Sneha)</li>
+        <li>15 more · full list at <code>iw://northco/tacit/</code></li>
+    </ul>
+
+    <h3>Then IW goes live</h3>
+    <p>End of week 4: validation passes confirm structural integrity, lineage completeness, and tacit-data linkage. IW is released as <code>iw://northco/v1.0.0</code>. Read access to 23 named users across demand, supply, and category. Write access only via SME-vetted action types. CDO + Demand Lead sign-off in 52 minutes.</p>
+
+    <div class="run">
+        <div class="run-h">NorthCo · Week 4 outcome</div>
+        Morrie ran <strong>23 practitioner sessions</strong>, mean session length <strong>15.6 min</strong>. Captured <strong>2,840 tacit insights</strong> committed as <strong>25 typed rules</strong>. <strong>+25 new nodes</strong> in the graph (one per rule, linked to the metrics they affect). Total practitioner time: <strong>5 hr 58 min</strong>. IW released as v1.0.0. Five weeks elapsed since kickoff.
+    </div>
+</section>
+
+<!-- ============ WEEK 5 ============ -->
+<section class="week-content" data-week="5">
+    <div class="week-head">Week 5 · Days 21–25</div>
+    <h2>IW writes its own orchestrator, traversal, and planner agents. Your team builds custom agents on top.</h2>
+    <p class="week-lede">
+        With the live IW in hand, IW generates its own standing set of <strong>orchestrators</strong> (route a task into sub-tasks), <strong>traversals</strong> (walk a sub-graph and return a structured result), and <strong>planners</strong> (propose action sequences under a goal). 14 OTP agents in total — Demand-Forecast, SKU-Health, Stockout-Risk, Trade-Promo, and 10 more — derived from the graph itself and honouring the tacit rules from Week 4. Engineers approve 11 the same week; 3 stay in review. Then the agent builder opens to designated business users. <strong>Anuj ships his first custom agent in 18 minutes</strong>, no engineer required.
+    </p>
+
+    <div class="deps">
+        <div class="dep in"><div class="dep-h">depends on</div><div class="dep-body"><strong>Week 4's live IW</strong> — every agent inherits the full graph, derivations, and typed tacit rules. The action-type registry from Week 3 defines what agents are permitted to do.</div></div>
+        <div class="dep out"><div class="dep-h">produces</div><div class="dep-body"><strong>OTP layer + agent builder</strong> · 14 OTP agents generated (11 live, 3 in review), agent builder open to 9 designated business users, first custom agent (<code>MonsoonSubstitutionAdvisor</code>) shipped. ~200 nodes total.</div></div>
+    </div>
+
+    <h3>The three agent kinds</h3>
+    <ul>
+        <li><strong>Orchestrator</strong> — receives a task or query, decomposes into sub-tasks, routes results. <em>Example: DemandForecastOrchestrator.</em></li>
+        <li><strong>Traversal</strong> — walks a defined sub-graph and returns a structured result. No external action. <em>Example: SkuHealthTraversal — walks SKU → COGS, margin, velocity, breakage.</em></li>
+        <li><strong>Planner</strong> — given a goal and constraints, proposes an action sequence. Calls action types under the user's permissions, never silently. <em>Example: TradePromoPlanner.</em></li>
+    </ul>
+
+    <h3>The 14 OTP agents IW generated</h3>
+    <div class="agent-list">
+        <div class="agent-card live"><div class="ar"><div class="agent-name">DemandForecastOrchestrator</div><div class="agent-tag live">live</div></div><div class="agent-fn">routes(query) → traversal(SKU, DC, Season) → planner(buffer)</div></div>
+        <div class="agent-card live"><div class="ar"><div class="agent-name">SkuHealthTraversal</div><div class="agent-tag live">live</div></div><div class="agent-fn">walks(SKU) → cogs · margin · velocity · breakage</div></div>
+        <div class="agent-card live"><div class="ar"><div class="agent-name">StockoutRiskOrchestrator</div><div class="agent-tag live">live</div></div><div class="agent-fn">monitors(DOH × demand_vol) → flags 7d ahead</div></div>
+        <div class="agent-card review"><div class="ar"><div class="agent-name">TradePromoPlanner</div><div class="agent-tag review">in review</div></div><div class="agent-fn">plans(promo) → uplift · cannibalization · ROI</div></div>
+        <div class="agent-card review"><div class="ar"><div class="agent-name">DistributorAllocationPlanner</div><div class="agent-tag review">in review</div></div><div class="agent-fn">allocates(stock, distributors) → fairness · velocity</div></div>
+        <div class="agent-card live"><div class="ar"><div class="agent-name">PriceElasticityOrchestrator</div><div class="agent-tag live">live</div></div><div class="agent-fn">measures(price × demand) → elasticity by SKU/zone</div></div>
+        <div class="agent-card live"><div class="ar"><div class="agent-name">MonsoonRiskOrchestrator</div><div class="agent-tag live">live</div></div><div class="agent-fn">honors(tacit/418) → flags monsoon-vulnerable SKUs</div></div>
+        <div class="agent-card live"><div class="ar"><div class="agent-name">SecondarySalesTraversal</div><div class="agent-tag live">live</div></div><div class="agent-fn">walks(distributor → retailer → consumer)</div></div>
+        <div class="agent-card live"><div class="ar"><div class="agent-name">FestivalReadinessPlanner</div><div class="agent-tag live">live</div></div><div class="agent-fn">honors(tacit/422) → 8-week pre-build plan</div></div>
+        <div class="agent-card review"><div class="ar"><div class="agent-name">ModernTradeNegotiator</div><div class="agent-tag review">in review</div></div><div class="agent-fn">supports(buyer meetings) → margin · listing · activation</div></div>
+    </div>
+    <p style="font-family:var(--mono);font-size:0.72rem;color:var(--text-dim);margin-top:0.4rem">4 more abbreviated · full registry at <code>iw://northco/agents/</code></p>
+
+    <h3>Then the agent builder opens</h3>
+    <p>Designated business users — initially 9 across demand, supply, category, and trade marketing — get the agent builder. Custom agents declare a trigger, the OTP agents they inherit, the actions they may invoke, and the owner. <strong>Inherited OTP agents carry their tool contracts and tacit-rule honoring forward</strong> — the new agent does not re-encode any of that.</p>
+
+    <h3>Anuj's first custom agent — 18 minutes</h3>
+    <div class="cf-code">CustomAgent(
+  name      = <span style="color:var(--green)">"MonsoonSubstitutionAdvisor"</span>,
+  trigger   = <span style="color:var(--green)">"forecast_var > 0.12 AND season == 'monsoon'"</span>,
+  inherits  = [<span style="color:var(--copper)">SkuHealthTraversal</span>, <span style="color:var(--copper)">StockoutRiskOrchestrator</span>, <span style="color:var(--copper)">TradePromoPlanner</span>],
+  honors    = [<span style="color:var(--green)">"tacit/418"</span>],   <span style="color:var(--text-dim);font-style:italic">// Sneha's monsoon buffer rule</span>
+  actions   = [<span style="color:var(--copper)">SuggestSubstitute</span>, <span style="color:var(--copper)">NotifyDemandDesk</span>],
+  output    = (substitute_sku, qty, channel, eta),
+  owner     = <span style="color:var(--green)">"demand-planning@northco"</span>,
+)</div>
+    <p>Live to the demand desk by lunch. The monsoon buffer (<code>tacit/418</code>) is honoured automatically because <code>StockoutRiskOrchestrator</code> already honours it — no re-encoding.</p>
+
+    <div class="run">
+        <div class="run-h">NorthCo · Week 5 outcome</div>
+        <strong>14 OTP agents generated</strong> from the graph. Engineer review across 8 hours: <strong>11 approved live, 3 in review</strong>. <strong>+23 new nodes</strong> in the graph (14 OTP + 9 custom). First custom agent shipped in <strong>18 minutes</strong> with no engineering involvement. As of report date, NorthCo has shipped <strong>9 custom agents</strong> on the builder; mean build time <strong>27 minutes</strong>.
+    </div>
+</section>
+
+</div>
+<!-- /doc -->
+
+<!-- DRAGGABLE DIVIDER -->
+<div class="resize-handle" id="resizeHandle" title="Drag to resize"></div>
+
+<!-- RIGHT — GRAPH -->
+<div class="graph-wrap">
+    <svg id="graph"></svg>
+
+    <div class="g-search g-overlay">
+        <input id="searchInput" type="text" placeholder="Search nodes — try 'cogs', 'forecast', 'morrie'…">
+    </div>
+
+    <div class="g-stats">
+        <div class="g-stat"><div class="g-stat-num" id="sNodes">0</div><div class="g-stat-lbl">nodes lit</div></div>
+        <div class="g-stat"><div class="g-stat-num" id="sEdges">0</div><div class="g-stat-lbl">edges lit</div></div>
+        <div class="g-stat"><div class="g-stat-num" id="sWeek">—</div><div class="g-stat-lbl">active week</div></div>
+    </div>
+
+    <div class="g-legend" id="gLegend"></div>
+
+    <div class="g-controls">
+        <div class="g-zoom">
+            <button id="zoomOut">−</button>
+            <button id="zoomReset">⊡</button>
+            <button id="zoomIn">+</button>
+        </div>
+    </div>
+
+    <div class="drawer" id="drawer">
+        <div class="drawer-head">
+            <div>
+                <div class="drawer-title" id="drTitle">—</div>
+                <div class="drawer-type" id="drType">—</div>
+            </div>
+            <button class="drawer-close" id="drClose">✕</button>
+        </div>
+        <div class="drawer-body" id="drBody"></div>
+    </div>
+</div>
+
+</div>
+<!-- /app -->
+
+<script>
+// ============================================================
+// NODE TYPES + COLORS
+// ============================================================
+const TYPES = {
+    industry:    { c: '#6E47C1', label: 'industry pattern',     r: 7  },
+    company:     { c: '#1B6B5A', label: 'enterprise root',      r: 11 },
+    bu:          { c: '#1B854A', label: 'business unit',        r: 8  },
+    org:         { c: '#1B854A', label: 'org function',         r: 6  },
+    category:    { c: '#0d9488', label: 'category / SKU class', r: 6  },
+    sku:         { c: '#2E5BCB', label: 'distribution centre',  r: 6  },
+    geography:   { c: '#C68A2E', label: 'geography',            r: 5  },
+    competitor:  { c: '#B8443D', label: 'competitor',           r: 5  },
+    source:      { c: '#9D7AC8', label: 'data source',          r: 8  },
+    base:        { c: '#3da3a3', label: 'base metric (data)',   r: 4  },
+    metric:      { c: '#1B854A', label: 'derived metric',       r: 5  },
+    tacit:       { c: '#6E47C1', label: 'tacit rule (Morrie)',  r: 6  },
+    otp:         { c: '#B8734A', label: 'OTP agent',            r: 9  },
+    agent:       { c: '#C68A2E', label: 'custom agent',         r: 8  }
+};
+
+// ============================================================
+// THE GRAPH — ~220 nodes, prebuilt
+// ============================================================
+const NODES = [
+    // ============== WEEK 1 — INDUSTRY (24) ==============
+    { id:'cpg',         n:'CPG Supergraph',           t:'industry',  w:1, props:{ entities:8400, processes:142 } },
+    { id:'sku-pat',     n:'SKU Pyramid',              t:'industry',  w:1, props:{ levels:5 } },
+    { id:'channel-pat', n:'Channel Mix',              t:'industry',  w:1, props:{ classes:4 } },
+    { id:'promo-pat',   n:'Trade Promo',              t:'industry',  w:1, props:{ types:6 } },
+    { id:'season-pat',  n:'Seasonality',              t:'industry',  w:1, props:{ events_yr:14 } },
+    { id:'rtm-pat',     n:'Route-to-Market',          t:'industry',  w:1, props:{ tiers:3 } },
+    { id:'comp-pat',    n:'Competitor Pattern',       t:'industry',  w:1 },
+    { id:'tradem-pat',  n:'Trade Marketing',          t:'industry',  w:1 },
+    { id:'distr-econ',  n:'Distributor Economics',    t:'industry',  w:1 },
+    { id:'cat-mgmt',    n:'Category Management',      t:'industry',  w:1 },
+    { id:'brand-arch',  n:'Brand Architecture',       t:'industry',  w:1 },
+    { id:'mt-pat',      n:'Modern Trade Pattern',     t:'industry',  w:1 },
+    { id:'gt-pat',      n:'General Trade Pattern',    t:'industry',  w:1 },
+    { id:'ecomm-pat',   n:'E-Commerce Pattern',       t:'industry',  w:1 },
+    { id:'ltv-pat',     n:'Customer Lifetime',        t:'industry',  w:1 },
+    { id:'fest-pat',    n:'Festival Calendar',        t:'industry',  w:1 },
+    { id:'wx-pat',      n:'Weather Effects',          t:'industry',  w:1 },
+    { id:'nielsen-pat', n:'Nielsen Patterns',         t:'industry',  w:1 },
+    { id:'price-arch',  n:'Pricing Architecture',     t:'industry',  w:1 },
+    { id:'margin-pyr',  n:'Margin Pyramid',           t:'industry',  w:1 },
+    { id:'promo-roi-p', n:'Promo ROI Pattern',        t:'industry',  w:1 },
+    { id:'innov-pat',   n:'Innovation Pipeline',      t:'industry',  w:1 },
+    { id:'qual-pat',    n:'Quality Pattern',          t:'industry',  w:1 },
+    { id:'log-pat',     n:'Logistics Pattern',        t:'industry',  w:1 },
+
+    // ============== WEEK 1 — ENTERPRISE V0 (21) ==============
+    { id:'northco',     n:'NorthCo Foods Ltd',        t:'company', w:1, props:{ revenue:'₹4,200 Cr', bus:14 } },
+    { id:'foods-bu',    n:'Foods BU',                 t:'bu',      w:1, props:{ revenue_share:'42%' } },
+    { id:'pcare-bu',    n:'Personal Care BU',         t:'bu',      w:1, props:{ revenue_share:'31%' } },
+    { id:'hotels-bu',   n:'Hotels BU',                t:'bu',      w:1 },
+    { id:'paper-bu',    n:'Paperboards BU',           t:'bu',      w:1 },
+    { id:'agri-bu',     n:'Agri BU',                  t:'bu',      w:1 },
+    { id:'snacks',      n:'Snacks',                   t:'category',w:1, props:{ skus:840 } },
+    { id:'beverages',   n:'Beverages',                t:'category',w:1, props:{ skus:412 } },
+    { id:'frozen',      n:'Frozen Foods',             t:'category',w:1, props:{ skus:180 } },
+    { id:'packaged',    n:'Packaged Foods',           t:'category',w:1, props:{ skus:340 } },
+    { id:'soaps',       n:'Soaps',                    t:'category',w:1, props:{ skus:230 } },
+    { id:'shampoos',    n:'Shampoos',                 t:'category',w:1, props:{ skus:140 } },
+    { id:'skincare',    n:'Skincare',                 t:'category',w:1, props:{ skus:96 } },
+    { id:'haircare',    n:'Haircare',                 t:'category',w:1, props:{ skus:78 } },
+    { id:'oral',        n:'Oral Care',                t:'category',w:1, props:{ skus:62 } },
+    { id:'brands',      n:'Brand Portfolio',          t:'org',     w:1, props:{ brands:12 } },
+    { id:'sales-org',   n:'Sales Organisation',       t:'org',     w:1 },
+    { id:'sc-org',      n:'Supply Chain',             t:'org',     w:1 },
+    { id:'mkt-org',     n:'Marketing',                t:'org',     w:1 },
+    { id:'distr-base',  n:'Distributor Base',         t:'org',     w:1, props:{ count:1840 } },
+    { id:'mt-base',     n:'Modern Trade Accounts',    t:'org',     w:1, props:{ count:42 } },
+
+    // ============== WEEK 2 — SME REFINED (25) ==============
+    { id:'variant',     n:'Variant Level',            t:'category',w:2 },
+    { id:'pack-cfg',    n:'Pack-Config Level',        t:'category',w:2 },
+    { id:'north-zone',  n:'North Zone',               t:'geography',w:2 },
+    { id:'south-zone',  n:'South Zone',               t:'geography',w:2 },
+    { id:'west-zone',   n:'West Zone',                t:'geography',w:2 },
+    { id:'east-zone',   n:'East Zone',                t:'geography',w:2 },
+    { id:'maharashtra', n:'Maharashtra',              t:'geography',w:2 },
+    { id:'karnataka',   n:'Karnataka',                t:'geography',w:2 },
+    { id:'tamilnadu',   n:'Tamil Nadu',               t:'geography',w:2 },
+    { id:'delhincr',    n:'Delhi NCR',                t:'geography',w:2 },
+    { id:'wb',          n:'West Bengal',              t:'geography',w:2 },
+    { id:'gujarat',     n:'Gujarat',                  t:'geography',w:2 },
+    { id:'kerala',      n:'Kerala',                   t:'geography',w:2 },
+    { id:'haldiram',    n:'Haldiram',                 t:'competitor',w:2 },
+    { id:'pepsi',       n:'PepsiCo (Frito-Lay)',      t:'competitor',w:2 },
+    { id:'itc',         n:'ITC Foods',                t:'competitor',w:2 },
+    { id:'britannia',   n:'Britannia',                t:'competitor',w:2 },
+    { id:'parle',       n:'Parle',                    t:'competitor',w:2 },
+    { id:'mondelez',    n:'Mondelez',                 t:'competitor',w:2 },
+    { id:'dc-mum',      n:'DC · Mumbai',              t:'sku',     w:2, props:{ pallets:4800 } },
+    { id:'dc-pune',     n:'DC · Pune',                t:'sku',     w:2, props:{ pallets:2200 } },
+    { id:'dc-del',      n:'DC · Delhi',               t:'sku',     w:2, props:{ pallets:3600 } },
+    { id:'dc-chn',      n:'DC · Chennai',             t:'sku',     w:2, props:{ pallets:2900 } },
+    { id:'dc-blr',      n:'DC · Bengaluru',           t:'sku',     w:2, props:{ pallets:3100 } },
+    { id:'dc-kol',      n:'DC · Kolkata',             t:'sku',     w:2, props:{ pallets:2400 } },
+
+    // ============== WEEK 3 — SOURCES (10) ==============
+    { id:'sap',         n:'SAP S/4HANA',              t:'source',  w:3, props:{ class:'ERP' } },
+    { id:'oracle',      n:'Oracle EBS',               t:'source',  w:3, props:{ class:'ERP·legacy' } },
+    { id:'snowflake',   n:'Snowflake',                t:'source',  w:3, props:{ class:'Warehouse' } },
+    { id:'excel-pl',    n:'Excel · Plant Ctrl',       t:'source',  w:3, props:{ class:'File' } },
+    { id:'excel-pr',    n:'Excel · Promo',            t:'source',  w:3, props:{ class:'File' } },
+    { id:'excel-fin',   n:'Excel · Finance',          t:'source',  w:3, props:{ class:'File' } },
+    { id:'tableau',     n:'Tableau',                  t:'source',  w:3, props:{ class:'BI' } },
+    { id:'powerbi',     n:'PowerBI',                  t:'source',  w:3, props:{ class:'BI' } },
+    { id:'mcp-promo',   n:'MCP · Promo Server',       t:'source',  w:3, props:{ class:'MCP' } },
+    { id:'mcp-wx',      n:'MCP · Weather',            t:'source',  w:3, props:{ class:'MCP' } },
+
+    // ============== WEEK 3 — BASE METRICS (~55) ==============
+    { id:'cogs',        n:'cogs_per_sku',             t:'base',    w:3, props:{ sot:'SAP', conflicts:1 } },
+    { id:'std-cost',    n:'std_cost',                 t:'base',    w:3 },
+    { id:'actual-cost', n:'actual_cost',              t:'base',    w:3 },
+    { id:'landed-cost', n:'landed_cost',              t:'base',    w:3 },
+    { id:'sku-master',  n:'sku_master',               t:'base',    w:3 },
+    { id:'velocity-d28',n:'sku_velocity_d28',         t:'base',    w:3 },
+    { id:'velocity-d91',n:'sku_velocity_d91',         t:'base',    w:3 },
+    { id:'dc-cap',      n:'dc_capacity',              t:'base',    w:3 },
+    { id:'dc-util',     n:'dc_utilization',           t:'base',    w:3 },
+    { id:'dc-throughput',n:'dc_throughput',           t:'base',    w:3 },
+    { id:'lead-time',   n:'supplier_lead_time_d',     t:'base',    w:3, props:{ conflicts:1 } },
+    { id:'sup-otif',    n:'supplier_otif',            t:'base',    w:3 },
+    { id:'sup-qual',    n:'supplier_quality',         t:'base',    w:3 },
+    { id:'primary-sales',n:'primary_sales',           t:'base',    w:3 },
+    { id:'secondary-sales',n:'secondary_sales',       t:'base',    w:3 },
+    { id:'tertiary-sales',n:'tertiary_sales',         t:'base',    w:3 },
+    { id:'distr-inv',   n:'distributor_inventory',    t:'base',    w:3 },
+    { id:'retail-inv',  n:'retailer_inventory',       t:'base',    w:3 },
+    { id:'in-transit',  n:'in_transit_inventory',     t:'base',    w:3 },
+    { id:'cust-otif',   n:'customer_otif',            t:'base',    w:3, props:{ conflicts:1 } },
+    { id:'on-time-disp',n:'on_time_dispatch',         t:'base',    w:3 },
+    { id:'fr-in',       n:'fill_rate_in',             t:'base',    w:3 },
+    { id:'fr-out',      n:'fill_rate_out',            t:'base',    w:3 },
+    { id:'line-fill',   n:'line_fill',                t:'base',    w:3 },
+    { id:'breakage-log',n:'breakage_log',             t:'base',    w:3 },
+    { id:'returns',     n:'return_rate',              t:'base',    w:3 },
+    { id:'scrap-rate',  n:'scrap_rate',               t:'base',    w:3 },
+    { id:'batch-q',     n:'batch_quality',            t:'base',    w:3 },
+    { id:'expiry',      n:'expiry_loss',              t:'base',    w:3 },
+    { id:'mkt-spend',   n:'marketing_spend',          t:'base',    w:3 },
+    { id:'brand-share', n:'brand_share',              t:'base',    w:3 },
+    { id:'sov',         n:'share_of_voice',           t:'base',    w:3 },
+    { id:'sos',         n:'share_of_shelf',           t:'base',    w:3 },
+    { id:'nielsen',     n:'nielsen_offtake',          t:'base',    w:3 },
+    { id:'kantar',      n:'kantar_panel',             t:'base',    w:3 },
+    { id:'wx-humid',    n:'weather_humidity',         t:'base',    w:3 },
+    { id:'wx-temp',     n:'weather_temp',             t:'base',    w:3 },
+    { id:'monsoon-idx', n:'monsoon_index',            t:'base',    w:3 },
+    { id:'fest-dates',  n:'festival_dates',           t:'base',    w:3 },
+    { id:'promo-cal',   n:'promo_calendar',           t:'base',    w:3, props:{ conflicts:1 } },
+    { id:'promo-spend', n:'promo_spend',              t:'base',    w:3 },
+    { id:'raw-uplift',  n:'raw_uplift',               t:'base',    w:3 },
+    { id:'base-vel',    n:'base_velocity',            t:'base',    w:3 },
+    { id:'price-master',n:'pricing_master',           t:'base',    w:3 },
+    { id:'list-price',  n:'list_price',               t:'base',    w:3 },
+    { id:'promo-price', n:'promo_price',              t:'base',    w:3 },
+    { id:'mrp',         n:'mrp',                      t:'base',    w:3 },
+    { id:'trade-terms', n:'trade_terms',              t:'base',    w:3 },
+    { id:'distr-margin',n:'distributor_margin',       t:'base',    w:3, props:{ conflicts:1 } },
+    { id:'retail-margin',n:'retailer_margin',         t:'base',    w:3 },
+    { id:'complaint',   n:'complaint_log',            t:'base',    w:3 },
+    { id:'ingredient',  n:'ingredient_costs',         t:'base',    w:3 },
+    { id:'packaging',   n:'packaging_costs',          t:'base',    w:3 },
+    { id:'freight',     n:'freight_costs',            t:'base',    w:3 },
+
+    // ============== WEEK 3 — DERIVED METRICS (18) ==============
+    { id:'forecast',    n:'forecast_qty',             t:'metric',  w:3, props:{ derived:'velocity·season·promo·tacit' } },
+    { id:'fillrate',    n:'fill_rate',                t:'metric',  w:3 },
+    { id:'otif',        n:'otif',                     t:'metric',  w:3 },
+    { id:'perf-order',  n:'perfect_order_rate',       t:'metric',  w:3 },
+    { id:'doh',         n:'days_on_hand',             t:'metric',  w:3 },
+    { id:'inv-turn',    n:'inventory_turn',           t:'metric',  w:3 },
+    { id:'stockout',    n:'stockout_freq',            t:'metric',  w:3 },
+    { id:'cm',          n:'contribution_margin',      t:'metric',  w:3 },
+    { id:'gm',          n:'gross_margin',             t:'metric',  w:3 },
+    { id:'ebitda',      n:'ebitda_per_sku',           t:'metric',  w:3 },
+    { id:'breakage',    n:'breakage_rate',            t:'metric',  w:3 },
+    { id:'return-pct',  n:'return_pct',               t:'metric',  w:3 },
+    { id:'scrap-cost',  n:'scrap_cost',               t:'metric',  w:3 },
+    { id:'promo-roi',   n:'promo_roi',                t:'metric',  w:3 },
+    { id:'cannib',      n:'cannibalization',          t:'metric',  w:3 },
+    { id:'elast',       n:'price_elasticity',         t:'metric',  w:3 },
+    { id:'mape',        n:'forecast_mape',            t:'metric',  w:3 },
+    { id:'bias',        n:'forecast_bias',            t:'metric',  w:3 },
+
+    // ============== WEEK 4 — TACIT RULES (25) ==============
+    { id:'t-mum-glass', n:'tacit/418 · Mumbai monsoon glass +14%',     t:'tacit', w:4, props:{ owner:'sneha.k' } },
+    { id:'t-pune-glass',n:'tacit/419 · Pune monsoon glass +14%',       t:'tacit', w:4, props:{ owner:'sneha.k' } },
+    { id:'t-fest-8wk',  n:'tacit/422 · Festival 8-week pre-build',     t:'tacit', w:4, props:{ owner:'anuj.k' } },
+    { id:'t-override',  n:'tacit/491 · Planner override pattern',      t:'tacit', w:4, props:{ owner:'demand-team' } },
+    { id:'t-pcare-hum', n:'tacit/507 · P-Care humidity SKUs',          t:'tacit', w:4, props:{ owner:'ritu.s' } },
+    { id:'t-mt-q4',     n:'tacit/523 · MT Q4 negotiation pattern',     t:'tacit', w:4, props:{ owner:'key-accounts' } },
+    { id:'t-blr-rain',  n:'tacit/541 · Bengaluru rain-shadow',         t:'tacit', w:4, props:{ owner:'south-rsm' } },
+    { id:'t-chn-cyc',   n:'tacit/562 · Chennai cyclone window',        t:'tacit', w:4, props:{ owner:'south-rsm' } },
+    { id:'t-coffee',    n:'tacit/584 · South coffee seasonality',      t:'tacit', w:4, props:{ owner:'category' } },
+    { id:'t-cricket',   n:'tacit/623 · Cricket schedule beverage',     t:'tacit', w:4, props:{ owner:'marketing' } },
+    { id:'t-ramadan',   n:'tacit/634 · Ramadan beverage shift',        t:'tacit', w:4, props:{ owner:'north-rsm' } },
+    { id:'t-winter',    n:'tacit/641 · Winter chyawanprash',           t:'tacit', w:4, props:{ owner:'north-rsm' } },
+    { id:'t-summer-rev',n:'tacit/655 · Summer cold-drink rev logistics',t:'tacit',w:4, props:{ owner:'sc-team' } },
+    { id:'t-wedding',   n:'tacit/667 · North wedding season',          t:'tacit', w:4, props:{ owner:'north-rsm' } },
+    { id:'t-east-fest', n:'tacit/678 · East festival cluster',         t:'tacit', w:4, props:{ owner:'east-rsm' } },
+    { id:'t-corp-gift', n:'tacit/688 · West corporate gifting',        t:'tacit', w:4, props:{ owner:'west-rsm' } },
+    { id:'t-asrs',      n:'tacit/712 · ASRS Mumbai turn-3 hits',       t:'tacit', w:4, props:{ owner:'sneha.k' } },
+    { id:'t-pune-cold', n:'tacit/720 · Pune cold storage humidity',    t:'tacit', w:4, props:{ owner:'sc-team' } },
+    { id:'t-stuff',     n:'tacit/728 · Distributor channel stuffing',  t:'tacit', w:4, props:{ owner:'sales-ops' } },
+    { id:'t-wholesale', n:'tacit/734 · Wholesale 28-day cycle',        t:'tacit', w:4, props:{ owner:'sales-ops' } },
+    { id:'t-eom-push',  n:'tacit/742 · Retail end-of-month push',      t:'tacit', w:4, props:{ owner:'sales-ops' } },
+    { id:'t-ecomm-7d',  n:'tacit/751 · E-comm 7-day promo cycle',      t:'tacit', w:4, props:{ owner:'ecomm-team' } },
+    { id:'t-mt-margin', n:'tacit/762 · MT trade margin negotiation',   t:'tacit', w:4, props:{ owner:'key-accounts' } },
+    { id:'t-diwali-cr', n:'tacit/770 · Diwali credit terms exception', t:'tacit', w:4, props:{ owner:'finance' } },
+    { id:'t-holi',      n:'tacit/783 · Holi color powder spike',       t:'tacit', w:4, props:{ owner:'north-rsm' } },
+
+    // ============== WEEK 5 — OTP AGENTS (14) ==============
+    { id:'otp-fcst',    n:'DemandForecastOrchestrator',     t:'otp', w:5, props:{ kind:'orchestrator', status:'live' } },
+    { id:'otp-skuh',    n:'SkuHealthTraversal',             t:'otp', w:5, props:{ kind:'traversal',    status:'live' } },
+    { id:'otp-stock',   n:'StockoutRiskOrchestrator',       t:'otp', w:5, props:{ kind:'orchestrator', status:'live' } },
+    { id:'otp-promo',   n:'TradePromoPlanner',              t:'otp', w:5, props:{ kind:'planner',      status:'in review' } },
+    { id:'otp-distrib', n:'DistributorAllocationPlanner',   t:'otp', w:5, props:{ kind:'planner',      status:'in review' } },
+    { id:'otp-elast',   n:'PriceElasticityOrchestrator',    t:'otp', w:5, props:{ kind:'orchestrator', status:'live' } },
+    { id:'otp-launch',  n:'NewLaunchPlanner',               t:'otp', w:5, props:{ kind:'planner',      status:'live' } },
+    { id:'otp-comp',    n:'CompetitiveResponsePlanner',     t:'otp', w:5, props:{ kind:'planner',      status:'in review' } },
+    { id:'otp-monsoon', n:'MonsoonRiskOrchestrator',        t:'otp', w:5, props:{ kind:'orchestrator', status:'live' } },
+    { id:'otp-mt',      n:'ModernTradeNegotiator',          t:'otp', w:5, props:{ kind:'planner',      status:'live' } },
+    { id:'otp-sec',     n:'SecondarySalesTraversal',        t:'otp', w:5, props:{ kind:'traversal',    status:'live' } },
+    { id:'otp-scrap',   n:'ScrapReductionPlanner',          t:'otp', w:5, props:{ kind:'planner',      status:'live' } },
+    { id:'otp-fest',    n:'FestivalReadinessPlanner',       t:'otp', w:5, props:{ kind:'planner',      status:'live' } },
+    { id:'otp-channel', n:'ChannelRebalancePlanner',        t:'otp', w:5, props:{ kind:'planner',      status:'live' } },
+
+    // ============== WEEK 5 — CUSTOM AGENTS (9) ==============
+    { id:'a-monsoon',   n:'MonsoonSubstitutionAdvisor',     t:'agent', w:5, props:{ owner:'demand-planning', built:'18 min' } },
+    { id:'a-cannib',    n:'PromoCannibalizationGuard',      t:'agent', w:5, props:{ owner:'trade-mktg', built:'24 min' } },
+    { id:'a-channel',   n:'ChannelMarginRebalancer',        t:'agent', w:5, props:{ owner:'category', built:'31 min' } },
+    { id:'a-prefest',   n:'PreFestivalBuildAdvisor',        t:'agent', w:5, props:{ owner:'demand-planning', built:'19 min' } },
+    { id:'a-distrib',   n:'DistributorOutstandingTracker',  t:'agent', w:5, props:{ owner:'finance', built:'42 min' } },
+    { id:'a-launch',    n:'NewSKULaunchCoach',              t:'agent', w:5, props:{ owner:'innovation', built:'35 min' } },
+    { id:'a-weekly',    n:'WeeklyDemandReviewBot',          t:'agent', w:5, props:{ owner:'demand-planning', built:'22 min' } },
+    { id:'a-stock',     n:'StockHealthDailyDigest',         t:'agent', w:5, props:{ owner:'sc-team', built:'14 min' } },
+    { id:'a-bu-margin', n:'BU-Level Margin Coach',          t:'agent', w:5, props:{ owner:'cfo-office', built:'48 min' } },
+];
+
+// ============================================================
+// EDGES — ~400+
+// ============================================================
+const EDGES = [];
+function E(a, b) { EDGES.push([a, b]); }
+
+// Week 1 — industry internals
+['sku-pat','channel-pat','promo-pat','season-pat','rtm-pat','comp-pat','tradem-pat','distr-econ','cat-mgmt','brand-arch','mt-pat','gt-pat','ecomm-pat','ltv-pat','fest-pat','wx-pat','nielsen-pat','price-arch','margin-pyr','promo-roi-p','innov-pat','qual-pat','log-pat'].forEach(id => E('cpg', id));
+E('mt-pat','channel-pat'); E('gt-pat','channel-pat'); E('ecomm-pat','channel-pat');
+E('promo-roi-p','promo-pat'); E('fest-pat','season-pat'); E('wx-pat','season-pat');
+E('margin-pyr','price-arch');
+
+// Week 1 — enterprise V0
+E('cpg','northco');
+['foods-bu','pcare-bu','hotels-bu','paper-bu','agri-bu'].forEach(id => E('northco', id));
+['sales-org','sc-org','mkt-org','brands','distr-base','mt-base'].forEach(id => E('northco', id));
+['snacks','beverages','frozen','packaged'].forEach(id => E('foods-bu', id));
+['soaps','shampoos','skincare','haircare','oral'].forEach(id => E('pcare-bu', id));
+['snacks','beverages','frozen','packaged','soaps','shampoos','skincare','haircare','oral'].forEach(id => E('sku-pat', id));
+['snacks','beverages','soaps','shampoos'].forEach(id => E('brand-arch', id));
+E('sales-org','distr-base'); E('sales-org','mt-base');
+E('distr-econ','distr-base'); E('mt-pat','mt-base');
+
+// Week 2 — SME refinements
+E('snacks','variant'); E('beverages','variant'); E('soaps','variant'); E('shampoos','variant');
+E('variant','pack-cfg');
+['north-zone','south-zone','west-zone','east-zone'].forEach(z => E('northco', z));
+E('north-zone','delhincr'); E('north-zone','wb');
+E('south-zone','karnataka'); E('south-zone','tamilnadu'); E('south-zone','kerala');
+E('west-zone','maharashtra'); E('west-zone','gujarat');
+E('east-zone','wb');
+['snacks','beverages','frozen','packaged'].forEach(c => {
+    E(c,'north-zone'); E(c,'south-zone'); E(c,'west-zone'); E(c,'east-zone');
+});
+E('soaps','north-zone'); E('soaps','south-zone'); E('shampoos','south-zone');
+['haldiram','pepsi','itc','britannia','parle','mondelez'].forEach(c => E(c,'snacks'));
+E('mondelez','beverages'); E('parle','packaged');
+E('maharashtra','dc-mum'); E('maharashtra','dc-pune');
+E('delhincr','dc-del'); E('tamilnadu','dc-chn'); E('karnataka','dc-blr'); E('wb','dc-kol');
+
+// Week 3 — sources to base metrics
+E('sap','cogs'); E('oracle','cogs'); E('excel-pl','cogs');
+E('sap','std-cost'); E('oracle','actual-cost'); E('excel-pl','landed-cost');
+E('sap','sku-master'); E('snowflake','velocity-d28'); E('snowflake','velocity-d91');
+E('sap','dc-cap'); E('sap','dc-util'); E('sap','dc-throughput');
+E('sap','lead-time'); E('oracle','lead-time'); E('sap','sup-otif'); E('sap','sup-qual');
+E('snowflake','primary-sales'); E('snowflake','secondary-sales'); E('snowflake','tertiary-sales');
+E('sap','distr-inv'); E('mcp-promo','retail-inv'); E('sap','in-transit');
+E('powerbi','cust-otif'); E('sap','cust-otif'); E('sap','on-time-disp');
+E('sap','fr-in'); E('sap','fr-out'); E('sap','line-fill');
+E('sap','breakage-log'); E('sap','returns'); E('sap','scrap-rate');
+E('sap','batch-q'); E('sap','expiry');
+E('powerbi','mkt-spend'); E('tableau','brand-share'); E('mcp-promo','sov'); E('tableau','sos');
+E('snowflake','nielsen'); E('snowflake','kantar');
+E('mcp-wx','wx-humid'); E('mcp-wx','wx-temp'); E('mcp-wx','monsoon-idx');
+E('mcp-promo','fest-dates'); E('mcp-promo','promo-cal'); E('excel-pr','promo-cal');
+E('excel-pr','promo-spend'); E('tableau','raw-uplift'); E('snowflake','base-vel');
+E('sap','price-master'); E('sap','list-price'); E('excel-pr','promo-price'); E('sap','mrp');
+E('excel-fin','trade-terms'); E('excel-fin','distr-margin'); E('snowflake','distr-margin');
+E('excel-fin','retail-margin'); E('powerbi','complaint');
+E('sap','ingredient'); E('sap','packaging'); E('sap','freight');
+
+// Week 3 — base metrics to graph nodes
+E('cogs','snacks'); E('cogs','beverages'); E('cogs','soaps');
+E('dc-cap','dc-mum'); E('dc-cap','dc-pune'); E('dc-cap','dc-del'); E('dc-cap','dc-chn'); E('dc-cap','dc-blr'); E('dc-cap','dc-kol');
+E('primary-sales','distr-base'); E('secondary-sales','distr-base'); E('tertiary-sales','mt-base');
+E('promo-cal','variant'); E('promo-spend','variant');
+
+// Week 3 — base → derived
+E('cogs','cm'); E('list-price','cm'); E('promo-spend','cm');
+E('cogs','gm'); E('list-price','gm'); E('cogs','ebitda');
+E('velocity-d28','forecast'); E('promo-cal','forecast'); E('dc-cap','forecast'); E('fest-dates','forecast');
+E('forecast','fillrate'); E('dc-cap','fillrate'); E('fr-out','fillrate');
+E('fillrate','otif'); E('on-time-disp','otif');
+E('otif','perf-order'); E('cust-otif','perf-order');
+E('dc-cap','doh'); E('velocity-d28','doh');
+E('doh','inv-turn'); E('velocity-d28','stockout');
+E('breakage-log','breakage'); E('returns','return-pct'); E('scrap-rate','scrap-cost');
+E('raw-uplift','promo-roi'); E('promo-spend','promo-roi'); E('cm','promo-roi');
+E('raw-uplift','cannib'); E('promo-cal','cannib');
+E('list-price','elast'); E('velocity-d28','elast');
+E('forecast','mape'); E('forecast','bias');
+
+// Week 4 — tacit rules anchored to relevant nodes
+E('t-mum-glass','dc-mum'); E('t-mum-glass','beverages'); E('t-mum-glass','forecast');
+E('t-pune-glass','dc-pune'); E('t-pune-glass','beverages'); E('t-pune-glass','forecast');
+E('t-fest-8wk','fest-dates'); E('t-fest-8wk','forecast'); E('t-fest-8wk','promo-cal');
+E('t-override','forecast'); E('t-override','mape');
+E('t-pcare-hum','soaps'); E('t-pcare-hum','shampoos'); E('t-pcare-hum','wx-humid');
+E('t-mt-q4','mt-base'); E('t-mt-q4','distr-margin');
+E('t-blr-rain','dc-blr'); E('t-blr-rain','wx-humid');
+E('t-chn-cyc','dc-chn'); E('t-chn-cyc','tamilnadu');
+E('t-coffee','beverages'); E('t-coffee','south-zone');
+E('t-cricket','beverages'); E('t-cricket','fest-dates');
+E('t-ramadan','beverages'); E('t-ramadan','north-zone');
+E('t-winter','packaged'); E('t-winter','north-zone');
+E('t-summer-rev','beverages'); E('t-summer-rev','wx-temp');
+E('t-wedding','packaged'); E('t-wedding','delhincr');
+E('t-east-fest','wb'); E('t-east-fest','fest-dates');
+E('t-corp-gift','packaged'); E('t-corp-gift','maharashtra');
+E('t-asrs','dc-mum'); E('t-asrs','breakage-log');
+E('t-pune-cold','dc-pune'); E('t-pune-cold','wx-humid');
+E('t-stuff','distr-base'); E('t-stuff','primary-sales'); E('t-stuff','secondary-sales');
+E('t-wholesale','distr-base'); E('t-wholesale','secondary-sales');
+E('t-eom-push','tertiary-sales'); E('t-eom-push','mt-base');
+E('t-ecomm-7d','ecomm-pat'); E('t-ecomm-7d','promo-cal');
+E('t-mt-margin','distr-margin'); E('t-mt-margin','mt-base');
+E('t-diwali-cr','fest-dates'); E('t-diwali-cr','distr-base');
+E('t-holi','snacks'); E('t-holi','north-zone');
+
+// Week 5 — OTP agents to graph
+E('otp-fcst','forecast'); E('otp-fcst','t-mum-glass'); E('otp-fcst','t-fest-8wk'); E('otp-fcst','dc-cap');
+E('otp-skuh','cogs'); E('otp-skuh','cm'); E('otp-skuh','breakage'); E('otp-skuh','snacks');
+E('otp-stock','doh'); E('otp-stock','fillrate'); E('otp-stock','t-mum-glass'); E('otp-stock','stockout');
+E('otp-promo','promo-cal'); E('otp-promo','promo-roi'); E('otp-promo','cannib');
+E('otp-distrib','distr-base'); E('otp-distrib','primary-sales'); E('otp-distrib','t-stuff');
+E('otp-elast','elast'); E('otp-elast','list-price');
+E('otp-launch','sku-master'); E('otp-launch','innov-pat');
+E('otp-comp','brand-share'); E('otp-comp','sov'); E('otp-comp','haldiram');
+E('otp-monsoon','t-mum-glass'); E('otp-monsoon','t-pune-glass'); E('otp-monsoon','monsoon-idx');
+E('otp-mt','mt-base'); E('otp-mt','t-mt-margin'); E('otp-mt','distr-margin');
+E('otp-sec','secondary-sales'); E('otp-sec','distr-base');
+E('otp-scrap','scrap-cost'); E('otp-scrap','batch-q');
+E('otp-fest','fest-dates'); E('otp-fest','t-fest-8wk'); E('otp-fest','t-east-fest');
+E('otp-channel','channel-pat'); E('otp-channel','distr-base'); E('otp-channel','mt-base');
+
+// Week 5 — Custom agents inherit OTP
+E('a-monsoon','otp-skuh'); E('a-monsoon','otp-stock'); E('a-monsoon','otp-promo'); E('a-monsoon','t-mum-glass');
+E('a-cannib','otp-promo'); E('a-cannib','otp-elast');
+E('a-channel','otp-channel'); E('a-channel','otp-mt');
+E('a-prefest','otp-fest'); E('a-prefest','otp-fcst');
+E('a-distrib','otp-distrib'); E('a-distrib','distr-margin');
+E('a-launch','otp-launch'); E('a-launch','otp-elast');
+E('a-weekly','otp-fcst'); E('a-weekly','otp-skuh');
+E('a-stock','otp-stock'); E('a-stock','otp-skuh');
+E('a-bu-margin','otp-skuh'); E('a-bu-margin','foods-bu'); E('a-bu-margin','pcare-bu');
+
+// Build map + edge objects with week (max of endpoints)
+const NODE_BY_ID = Object.fromEntries(NODES.map(n => [n.id, n]));
+const EDGE_OBJS = EDGES.map(([a, b]) => ({
+    source: a, target: b,
+    w: Math.max(NODE_BY_ID[a]?.w || 99, NODE_BY_ID[b]?.w || 99)
+}));
+
+// ============================================================
+// LAYOUT
+// ============================================================
+let W = 800, H = 600;
+function layout() {
+    const wrap = document.querySelector('.graph-wrap');
+    const r = wrap.getBoundingClientRect();
+    W = r.width; H = r.height;
+
+    // initial seed: cluster by week
+    let placedFresh = 0;
+    NODES.forEach((n, i) => {
+        if (n.x != null) return;
+        const wk = n.w || 1;
+        const sectorAngle = ((wk - 1) / 5) * Math.PI * 2 - Math.PI/2;
+        const sectorSpread = Math.PI * 0.45;
+        const inSector = (i % 23) / 23;
+        const a = sectorAngle + (inSector - 0.5) * sectorSpread;
+        const radius = Math.min(W, H) * (0.18 + (i % 7) * 0.04);
+        n.x = W/2 + Math.cos(a) * radius;
+        n.y = H/2 + Math.sin(a) * radius;
+        n.vx = 0; n.vy = 0;
+        placedFresh++;
+    });
+    // If positions already exist (resize case), nudge nodes to re-center under new W/H,
+    // then run fewer iterations — preserves user's mental map of the graph.
+    if (placedFresh === 0) {
+        const cx = NODES.reduce((s,n) => s + n.x, 0) / NODES.length;
+        const cy = NODES.reduce((s,n) => s + n.y, 0) / NODES.length;
+        const dx = W/2 - cx, dy = H/2 - cy;
+        NODES.forEach(n => { n.x += dx; n.y += dy; n.vx = 0; n.vy = 0; });
+    }
+    const iters = placedFresh > 0 ? 180 : 60;
+
+    const N = NODES.length;
+    for (let iter = 0; iter < iters; iter++) {
+        // repulsion
+        for (let i = 0; i < N; i++) {
+            for (let j = i+1; j < N; j++) {
+                const dx = NODES[j].x - NODES[i].x;
+                const dy = NODES[j].y - NODES[i].y;
+                let dist = Math.sqrt(dx*dx + dy*dy) || 1;
+                const force = 950 / (dist * dist);
+                const fx = (dx/dist) * force, fy = (dy/dist) * force;
+                NODES[i].vx -= fx; NODES[i].vy -= fy;
+                NODES[j].vx += fx; NODES[j].vy += fy;
+            }
+        }
+        // attraction
+        EDGE_OBJS.forEach(e => {
+            const a = NODE_BY_ID[e.source], b = NODE_BY_ID[e.target];
+            if (!a || !b) return;
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+            const f = (dist - 75) * 0.012;
+            a.vx += (dx/dist)*f; a.vy += (dy/dist)*f;
+            b.vx -= (dx/dist)*f; b.vy -= (dy/dist)*f;
+        });
+        // gravity + damping
+        NODES.forEach(n => {
+            n.vx += (W/2 - n.x) * 0.0028;
+            n.vy += (H/2 - n.y) * 0.0028;
+            n.x += n.vx * 0.20; n.y += n.vy * 0.20;
+            n.vx *= 0.78; n.vy *= 0.78;
+            n.x = Math.max(40, Math.min(W-40, n.x));
+            n.y = Math.max(40, Math.min(H-40, n.y));
+        });
+    }
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+let activeWeek = 1;
+let zoom = 1, panX = 0, panY = 0;
+let hoverId = null;
+
+function render() {
+    const svg = document.getElementById('graph');
+    svg.setAttribute('viewBox', `${-panX/zoom} ${-panY/zoom} ${W/zoom} ${H/zoom}`);
+
+    let html = '';
+
+    // edges
+    let litEdges = 0;
+    EDGE_OBJS.forEach(e => {
+        const a = NODE_BY_ID[e.source], b = NODE_BY_ID[e.target];
+        if (!a || !b) return;
+        const lit = e.w <= activeWeek;
+        const dashed = (a.t === 'source' || b.t === 'source' || a.t === 'tacit' || b.t === 'tacit');
+        const stroke = lit ? 'rgba(0,0,0,0.16)' : 'rgba(0,0,0,0.04)';
+        html += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"
+            stroke="${stroke}" stroke-width="${lit ? 0.9 : 0.6}"
+            ${dashed ? 'stroke-dasharray="3 3"' : ''}/>`;
+        if (lit) litEdges++;
+    });
+
+    // nodes
+    let litNodes = 0;
+    NODES.forEach(n => {
+        const lit = n.w <= activeWeek;
+        const isActiveWeek = n.w === activeWeek;
+        const r = (TYPES[n.t]?.r || 5);
+        const c = lit ? TYPES[n.t].c : 'var(--gray-node)';
+        const opacity = lit ? (isActiveWeek ? 1 : 0.75) : 0.30;
+        const strokeWidth = isActiveWeek ? 1.5 : 0.5;
+        const strokeColor = isActiveWeek ? c : 'rgba(255,255,255,0.7)';
+
+        html += `<circle data-id="${n.id}" cx="${n.x}" cy="${n.y}" r="${r}"
+            fill="${c}" opacity="${opacity}"
+            stroke="${strokeColor}" stroke-width="${strokeWidth}"/>`;
+
+        // Labels: only active-week nodes always; others on hover
+        const showLabel = isActiveWeek || n.id === hoverId ||
+                          n.t === 'company' || n.t === 'industry' && n.id === 'cpg' ||
+                          n.t === 'otp' || n.t === 'agent';
+        if (showLabel && lit) {
+            const fs = (n.t === 'company' || n.id === 'cpg') ? 11 : 9;
+            html += `<text x="${n.x}" y="${n.y + r + 11}" text-anchor="middle"
+                fill="#1A1A18" opacity="${isActiveWeek ? 1 : 0.85}"
+                font-size="${fs}" font-weight="${isActiveWeek ? '600' : '500'}"
+                font-family="Inter, sans-serif" pointer-events="none">${
+                n.n.length > 28 ? n.n.slice(0,26)+'…' : n.n
+            }</text>`;
+        }
+
+        if (lit) litNodes++;
+    });
+
+    svg.innerHTML = html;
+
+    svg.querySelectorAll('circle[data-id]').forEach(el => {
+        el.addEventListener('click', (e) => {
+            e.stopPropagation(); e.preventDefault();
+            openDrawer(el.dataset.id);
+        });
+        el.addEventListener('mouseenter', () => { hoverId = el.dataset.id; render(); });
+        el.addEventListener('mouseleave', () => { hoverId = null; render(); });
+    });
+
+    document.getElementById('sNodes').textContent = litNodes;
+    document.getElementById('sEdges').textContent = litEdges;
+    document.getElementById('sWeek').textContent = activeWeek ? `0${activeWeek}` : '—';
+
+    // legend
+    const litTypes = [...new Set(NODES.filter(n => n.w <= activeWeek).map(n => n.t))];
+    document.getElementById('gLegend').innerHTML = litTypes.map(t =>
+        `<div class="legend-item"><div class="legend-dot" style="background:${TYPES[t].c}"></div>${TYPES[t].label}</div>`
+    ).join('');
+}
+
+// ============================================================
+// PAN + ZOOM
+// ============================================================
+const svgEl = document.getElementById('graph');
+let panning = false; let panStart = null;
+
+svgEl.addEventListener('mousedown', (e) => {
+    if (e.target.tagName === 'circle') { e.preventDefault(); return; }
+    e.preventDefault();
+    panning = true; panStart = { x: e.clientX, y: e.clientY, panX, panY };
+});
+window.addEventListener('mouseup', () => { panning = false; });
+window.addEventListener('mousemove', (e) => {
+    if (!panning) return;
+    panX = panStart.panX + (e.clientX - panStart.x);
+    panY = panStart.panY + (e.clientY - panStart.y);
+    render();
+});
+document.querySelector('.graph-wrap').addEventListener('wheel', (e) => {
+    e.preventDefault(); e.stopPropagation();
+    const delta = e.deltaY > 0 ? 0.92 : 1.08;
+    zoom = Math.max(0.4, Math.min(3, zoom * delta));
+    render();
+}, { passive: false });
+
+document.getElementById('zoomIn').onclick    = () => { zoom = Math.min(3, zoom * 1.2); render(); };
+document.getElementById('zoomOut').onclick   = () => { zoom = Math.max(0.4, zoom * 0.83); render(); };
+document.getElementById('zoomReset').onclick = () => { zoom = 1; panX = 0; panY = 0; render(); };
+
+// ============================================================
+// DRAWER
+// ============================================================
+function openDrawer(id) {
+    const n = NODE_BY_ID[id];
+    const t = TYPES[n.t];
+    document.getElementById('drTitle').textContent = n.n;
+    document.getElementById('drType').textContent = `${t.label} · added in week ${n.w}`;
+
+    const inEdges = EDGE_OBJS.filter(e => e.target === id).map(e => NODE_BY_ID[e.source]);
+    const outEdges = EDGE_OBJS.filter(e => e.source === id).map(e => NODE_BY_ID[e.target]);
+
+    let html = '';
+
+    if (n.props && Object.keys(n.props).length) {
+        html += `<div class="dr-section"><div class="dr-h">properties</div>`;
+        Object.entries(n.props).forEach(([k,v]) => {
+            html += `<div class="dr-row"><div class="dr-key">${k}</div><div class="dr-val">${v}</div></div>`;
+        });
+        html += `</div>`;
+    }
+
+    if (inEdges.length) {
+        html += `<div class="dr-section"><div class="dr-h">upstream (${inEdges.length})</div>`;
+        inEdges.slice(0, 12).forEach(u => html += `<span class="dr-pill" title="${u.n}"><span class="pdot" style="background:${TYPES[u.t].c}"></span><span class="pname">${u.n.length > 28 ? u.n.slice(0,26)+'…' : u.n}</span></span>`);
+        if (inEdges.length > 12) html += `<span class="dr-pill">+${inEdges.length-12} more</span>`;
+        html += `</div>`;
+    }
+    if (outEdges.length) {
+        html += `<div class="dr-section"><div class="dr-h">downstream (${outEdges.length})</div>`;
+        outEdges.slice(0, 12).forEach(d => html += `<span class="dr-pill" title="${d.n}"><span class="pdot" style="background:${TYPES[d.t].c}"></span><span class="pname">${d.n.length > 28 ? d.n.slice(0,26)+'…' : d.n}</span></span>`);
+        if (outEdges.length > 12) html += `<span class="dr-pill">+${outEdges.length-12} more</span>`;
+        html += `</div>`;
+    }
+
+    html += `<div class="dr-section"><div class="dr-h">address</div><div class="dr-row"><div class="dr-key">uri</div><div class="dr-val" style="word-break:break-all">iw://northco/${n.t}/${n.id}</div></div></div>`;
+
+    document.getElementById('drBody').innerHTML = html;
+    document.getElementById('drawer').classList.add('open');
+}
+document.getElementById('drClose').addEventListener('click', () => {
+    document.getElementById('drawer').classList.remove('open');
+});
+
+// ============================================================
+// SEARCH
+// ============================================================
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    const q = e.target.value.trim().toLowerCase();
+    if (!q) return;
+    const m = NODES.find(n =>
+        n.n.toLowerCase().includes(q) ||
+        n.id.toLowerCase().includes(q) ||
+        n.t.toLowerCase().includes(q)
+    );
+    if (!m) return;
+    panX = (W/2 - m.x); panY = (H/2 - m.y);
+    render();
+    openDrawer(m.id);
+});
+
+// ============================================================
+// WEEK TABS
+// ============================================================
+const WEEKS = [
+    { n: 1, label: 'Base graph' },
+    { n: 2, label: 'SMEs thrash it out' },
+    { n: 3, label: 'Hydrate each node' },
+    { n: 4, label: 'Morrie' },
+    { n: 5, label: 'Turn on agents' }
+];
+
+function renderWeekTabs() {
+    const wrap = document.getElementById('weekbar');
+    wrap.innerHTML = WEEKS.map(w => `
+        <button class="week-tab" data-week="${w.n}">
+            <div class="week-num">Week ${w.n}</div>
+            <div class="week-label">${w.label}</div>
+        </button>
+    `).join('');
+    wrap.querySelectorAll('.week-tab').forEach(b => {
+        b.addEventListener('click', () => setWeek(+b.dataset.week));
+    });
+}
+
+function setWeek(n) {
+    activeWeek = n;
+    document.querySelectorAll('.week-tab').forEach(b => {
+        const bn = +b.dataset.week;
+        b.classList.toggle('active', bn === n);
+        b.classList.toggle('done', bn < n);
+    });
+    document.querySelectorAll('.week-content').forEach(s => {
+        s.classList.toggle('active', +s.dataset.week === n);
+    });
+    document.getElementById('doc').scrollTop = 0;
+    render();
+}
+
+// ============================================================
+// DRAGGABLE DIVIDER — resize doc / graph
+// ============================================================
+(function setupResize() {
+    const handle = document.getElementById('resizeHandle');
+    const app = document.querySelector('.app');
+    const doc = document.querySelector('.doc');
+    let resizing = false, startX = 0, startW = 0;
+
+    handle.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        resizing = true;
+        startX = e.clientX;
+        startW = doc.getBoundingClientRect().width;
+        handle.classList.add('active');
+        document.body.classList.add('resizing');
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!resizing) return;
+        const total = window.innerWidth;
+        const minDoc = 360, minGraph = 360;
+        const newW = Math.max(minDoc, Math.min(total - minGraph - 6, startW + (e.clientX - startX)));
+        app.style.gridTemplateColumns = `${newW}px 6px 1fr`;
+    });
+
+    window.addEventListener('mouseup', () => {
+        if (!resizing) return;
+        resizing = false;
+        handle.classList.remove('active');
+        document.body.classList.remove('resizing');
+        // Re-equilibrate the graph at the new width — keeps current node positions as seed,
+        // force-sim adjusts to new bounds in 180 iterations (<200ms for ~200 nodes).
+        layout(); render();
+    });
+
+    // Double-click to reset to default 44/56 split
+    handle.addEventListener('dblclick', () => {
+        app.style.gridTemplateColumns = '';  // back to var(--doc-w, 44%)
+        layout(); render();
+    });
+})();
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('resize', () => {
+    NODES.forEach(n => { n.x = null; });
+    layout(); render();
+});
+renderWeekTabs();
+layout();
+render();
+setWeek(1);
+
+// ============================================================
+// AUTOPLAY MODE — ?autoplay=1
+// Plays iw-voiceover.mp3 (must be in same folder) and advances
+// weeks at the script's timing marks. Used for screen recording.
+// ============================================================
+if (new URLSearchParams(location.search).get('autoplay') === '1') {
+    // Build the audio + start overlay
+    const audio = document.createElement('audio');
+    audio.src = 'iw-voiceover.mp3';
+    audio.preload = 'auto';
+    document.body.appendChild(audio);
+
+    const startBtn = document.createElement('button');
+    startBtn.textContent = '▶  Start 90-second walkthrough';
+    Object.assign(startBtn.style, {
+        position: 'fixed', inset: '0', margin: 'auto', width: 'fit-content', height: 'fit-content',
+        padding: '1.25rem 2.5rem', borderRadius: '100px', border: 'none',
+        background: '#1B6B5A', color: '#fff', fontSize: '1.05rem', fontWeight: '600',
+        fontFamily: 'JetBrains Mono, monospace', cursor: 'pointer', zIndex: '9999',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.18)'
+    });
+    document.body.appendChild(startBtn);
+
+    // Autoplay schedule — matches the voiceover (~93s)
+    // Times in ms when each week becomes active.
+    const SCHEDULE = [
+        { t: 0,     do: () => setWeek(1) },
+        { t: 25000, do: () => setWeek(2) },
+        { t: 39000, do: () => setWeek(3) },
+        { t: 55000, do: () => setWeek(4) },
+        { t: 74000, do: () => setWeek(5) },
+    ];
+
+    startBtn.addEventListener('click', () => {
+        startBtn.remove();
+        audio.play();
+        SCHEDULE.forEach(s => setTimeout(s.do, s.t));
+    });
+}
+</script>
+
+</body>
+</html>
